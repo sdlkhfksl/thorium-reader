@@ -109,6 +109,7 @@ declare namespace typed_i18n {
   (_: "app.window", __?: {}): { readonly "showLibrary": string };
   (_: "app.window.showLibrary", __?: {}): string;
   (_: "catalog", __?: {}): {
+  readonly "AddToFavorites": string,
   readonly "about": { readonly "title": string },
   readonly "addBookToLib": string,
   readonly "addTags": string,
@@ -185,11 +186,13 @@ declare namespace typed_i18n {
   readonly "publisher": string,
   readonly "readBook": string,
   readonly "released": string,
+  readonly "removeFromFavorites": string,
   readonly "sort": string,
   readonly "tag": string,
   readonly "tags": string,
   readonly "update": string
 };
+  (_: "catalog.AddToFavorites", __?: {}): string;
   (_: "catalog.about", __?: {}): { readonly "title": string };
   (_: "catalog.about.title", __?: {}): string;
   (_: "catalog.addBookToLib", __?: {}): string;
@@ -336,6 +339,7 @@ declare namespace typed_i18n {
   (_: "catalog.publisher", __?: {}): string;
   (_: "catalog.readBook", __?: {}): string;
   (_: "catalog.released", __?: {}): string;
+  (_: "catalog.removeFromFavorites", __?: {}): string;
   (_: "catalog.sort", __?: {}): string; (_: "catalog.tag", __?: {}): string;
   (_: "catalog.tags", __?: {}): string;
   (_: "catalog.update", __?: {}): string;
