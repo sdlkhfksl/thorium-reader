@@ -910,7 +910,7 @@
             "cancel": "Отменить",
             "disclaimer": "Настройки приложения по умолчанию были разработаны на основе физического расположения клавиш на раскладке QWERTY",
             "editUserJson": "Редактировать файл пользователя...",
-            "exportToHTML": "",
+            "exportToHTML": "Экспорт в HTML",
             "keyboardShortcuts": "Горячие клавиши",
             "list": {
                 "AddBookmarkWithLabel": {
@@ -1138,8 +1138,7 @@
             "noShortcutFound": "Горячая клавиша с этой меткой не найдена",
             "resetDefaults": "Сбросить (загрузка по умолчанию)",
             "save": "Сохранить",
-            "searchPlaceholder": "Введите текст для поиска горячей клавиши",
-            "exportToHTML": "Экспорт в HTML"
+            "searchPlaceholder": "Введите текст для поиска горячей клавиши"
         },
         "language": {
             "languageChoice": "Выбор языка"

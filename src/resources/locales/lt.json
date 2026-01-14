@@ -910,7 +910,7 @@
             "cancel": "Nutraukti",
             "disclaimer": "Programos numatytieji nustatymai buvo sukurti atsižvelgiant į fizinę klavišų vietą QWERTY klaviatūroje",
             "editUserJson": "Keisti naudotojo failą...",
-            "exportToHTML": "",
+            "exportToHTML": "Eksportuoti į HTML",
             "keyboardShortcuts": "Spartieji klavišai",
             "list": {
                 "AddBookmarkWithLabel": {
@@ -1138,8 +1138,7 @@
             "noShortcutFound": "Sparčiųjų klavišų su tokia etikete nerasta",
             "resetDefaults": "Atkurti numatytuosius",
             "save": "Įrašyti",
-            "searchPlaceholder": "Įveskite, kad ieškotumėte sparčiojo klavišo",
-            "exportToHTML": "Eksportuoti į HTML"
+            "searchPlaceholder": "Įveskite, kad ieškotumėte sparčiojo klavišo"
         },
         "language": {
             "languageChoice": "Kalba"
