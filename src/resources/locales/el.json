@@ -50,7 +50,7 @@
         }
     },
     "catalog": {
-        "AddToFavorites": "",
+        "AddToFavorites": "Προσθήκη στα αγαπημένα",
         "about": {
             "title": "Σχετικά {{- appName}}"
         },
@@ -129,7 +129,7 @@
         "publisher": "Εκδότης",
         "readBook": "Ανάγνωση",
         "released": "Δημοσιεύθηκε στις",
-        "removeFromFavorites": "",
+        "removeFromFavorites": "Αφαίρεση από τα αγαπημένα",
         "sort": "Ταξινόμηση με",
         "tag": "Ετικέτα",
         "tags": "Ετικέτες",
@@ -358,12 +358,12 @@
                 "descriptive": "Η δημοσίευση αυτή ισχυρίζεται ότι ανταποκρίνεται"
             },
             "conformance-details-epub-accessibility-1-0": {
-                "compact": "EPUB Accessibility 1.0",
-                "descriptive": "EPUB Accessibility 1.0"
+                "compact": "EPUB Προσβασιμότητα 1.0",
+                "descriptive": "EPUB Προσβασιμότητα 1.0"
             },
             "conformance-details-epub-accessibility-1-1": {
-                "compact": "EPUB Accessibility 1.1",
-                "descriptive": "EPUB Accessibility 1.1"
+                "compact": "EPUB Προσβασιμότητα 1.1",
+                "descriptive": "EPUB Προσβασιμότητα 1.1"
             },
             "conformance-details-level-a": {
                 "compact": "Επίπεδο A",
@@ -382,11 +382,11 @@
             },
             "conformance-details-wcag-2-1": {
                 "compact": "WCAG 2.1",
-                "descriptive": "Web Content Accessibility Guidelines (WCAG) 2.1"
+                "descriptive": "Οδηγίες προσβασιμότητας περιεχομένου Web (WCAG) 2.1"
             },
             "conformance-details-wcag-2-2": {
                 "compact": "WCAG 2.2",
-                "descriptive": "Web Content Accessibility Guidelines (WCAG) 2.2"
+                "descriptive": "Οδηγίες προσβασιμότητας περιεχομένου Web (WCAG) 2.2"
             },
             "conformance-no": {
                 "compact": "Καμία διαθέσιμη πληροφορία",
@@ -910,7 +910,7 @@
             "cancel": "Ακύρωση",
             "disclaimer": "Οι προεπιλογές της εφαρμογής σχεδιάστηκαν με βάση τη φυσική θέση των πλήκτρων σε μια διάταξη QWERTY",
             "editUserJson": "Επεξεργασία αρχείου χρήστη...",
-            "exportToHTML": "",
+            "exportToHTML": "Εξαγωγή σε HTML",
             "keyboardShortcuts": "Συντομεύσεις πληκτρολογίου",
             "list": {
                 "AddBookmarkWithLabel": {
