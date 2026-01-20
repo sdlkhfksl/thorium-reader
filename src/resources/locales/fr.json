@@ -139,14 +139,14 @@
         "annotations": {
             "descAuthor": "par {{- author}}",
             "descCreator": "créées par",
-            "descList_one": "{{- count}} note {{- creator}} sera importée vers {{- title}} {{- author}}",
             "descList_many": "{{- count}} note(s) {{- creator}} seront importées vers {{- title}} {{- author}}",
+            "descList_one": "{{- count}} note {{- creator}} sera importée vers {{- title}} {{- author}}",
             "descList_other": "{{- count}} notes {{- creator}} seront importées vers {{- title}} {{- author}}",
-            "descNewer_one": "{{- count}} conflit: une note associée à la publication est plus récente",
             "descNewer_many": "{{- count}} conflits: certaines notes associées à la publication sont plus récentes",
+            "descNewer_one": "{{- count}} conflit: une note associée à la publication est plus récente",
             "descNewer_other": "{{- count}} conflits: certaines notes associées à la publication sont plus récentes",
-            "descOlder_one": "{{- count}} conflit: une note associée à la publication est plus ancienne",
             "descOlder_many": "{{- count}} conflits: certaines notes associées à la publication sont plus anciennes",
+            "descOlder_one": "{{- count}} conflit: une note associée à la publication est plus ancienne",
             "descOlder_other": "{{- count}} conflits: certaines notes associées à la publication sont plus anciennes",
             "descTitle": "Titre de la liste de notes : ",
             "importAll": "Importer toutes les notes",
@@ -163,12 +163,12 @@
             }
         },
         "deleteAnnotations": "Supprimer la note",
-        "deleteAnnotationsText_one": "Voulez-vous supprimer {{- count}} note ?",
         "deleteAnnotationsText_many": "Voulez-vous supprimer {{- count}} note(s) ?",
+        "deleteAnnotationsText_one": "Voulez-vous supprimer {{- count}} note ?",
         "deleteAnnotationsText_other": "Voulez-vous supprimer {{- count}} notes ?",
         "deleteBookmarks": "Supprimer les marque-pages ?",
-        "deleteBookmarksText_one": "Êtes-vous certain de vouloir supprimer {{- count}} marque-page ?",
         "deleteBookmarksText_many": "Êtes-vous certain de vouloir supprimer {{- count}} marque-page(s) ?",
+        "deleteBookmarksText_one": "Êtes-vous certain de vouloir supprimer {{- count}} marque-page ?",
         "deleteBookmarksText_other": "Êtes-vous certain de vouloir supprimer {{- count}} marque-pages ?",
         "deleteFeed": "Supprimer ce catalogue ?",
         "deletePublication": "Supprimer ce livre ?",
@@ -205,16 +205,16 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "Cacher la passphrase",
             "hint": "Indice : ",
             "open": "Ouvrir",
             "password": "Mot de passe",
             "sentence": "Entrez la clé LCP associée à cette publication :",
+            "showPassphrase": "Montrer la passphrase",
             "urlHint": "Vous avez oublié votre phrase d'accès ? Trouvez de l'aide avec ce lien",
             "whatIsLcp?": "Qu'est-ce que LCP ?",
             "whatIsLcpInfoDetails": "LCP signifie 'Licensed Content Protection'. Il s'agit d'une technologie de protection des libres numériques contre la copie pirate, souvent appelée DRM. Ouvrir un livre protégé par LCP nécessite une clé LCP, c'est à dire un ou plusieurs mots séparés par des espaces. LCP est un standard ouvert, qui équilibre facilité d'usage et demandes des éditeurs. ",
-            "whatIsLcpInfoDetailsLink": "Pour en savoir plus, cliquez ce lien, qui renvoie vers le site web de EDRLab.",
-            "showPassphrase": "Montrer la passphrase",
-            "hidePassphrase": "Cacher la passphrase"
+            "whatIsLcpInfoDetailsLink": "Pour en savoir plus, cliquez ce lien, qui renvoie vers le site web de EDRLab."
         }
     },
     "message": {
@@ -780,8 +780,8 @@
         },
         "picker": {
             "search": {
-                "founds_one": "{{- count}} correspondance",
                 "founds_many": "{{- count}} correspondance(s)",
+                "founds_one": "{{- count}} correspondance",
                 "founds_other": "{{- count}} correspondances",
                 "input": "Texte à trouver",
                 "next": "Suivant",

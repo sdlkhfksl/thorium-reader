@@ -200,16 +200,16 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "Piilota salasana",
             "hint": "Vihje:",
             "open": "Avaa",
             "password": "Salasana",
             "sentence": "Julkaisun avaamiseen tarvitaan LCP-salasana",
+            "showPassphrase": "Näytä salasana",
             "urlHint": "Unohtuiko salasana? Lisätietoja:",
             "whatIsLcp?": "Mikä on LCP?",
             "whatIsLcpInfoDetails": "LCP (Licensed Content Protection) on sisällön suojaustapa.",
-            "whatIsLcpInfoDetailsLink": "Lisätietoja on EDRLabin sivustolla.",
-            "showPassphrase": "Näytä salasana",
-            "hidePassphrase": "Piilota salasana"
+            "whatIsLcpInfoDetailsLink": "Lisätietoja on EDRLabin sivustolla."
         }
     },
     "message": {
