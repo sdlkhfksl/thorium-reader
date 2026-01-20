@@ -220,10 +220,12 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "",
             "hint": "تلميح:",
             "open": "فتح",
             "password": "عبارة المرور",
             "sentence": "لفتح هذا المنشور، تحتاج إلى عبارة مرور LCP",
+            "showPassphrase": "",
             "urlHint": "هل نسيت عبارة مرورك؟ اضغط هنا للحصول على الدعم.",
             "whatIsLcp?": "ما هي LCP؟",
             "whatIsLcpInfoDetails": "ترمز LCP إلى 'حماية المحتوى المرخَّص'.",

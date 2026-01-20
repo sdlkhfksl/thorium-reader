@@ -210,10 +210,12 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "",
             "hint": "Nápověda:",
             "open": "Otevřít",
             "password": "Heslová fráze",
             "sentence": "K otevření této publikace je třeba zadat heslovou frázi protokolu LCP",
+            "showPassphrase": "",
             "urlHint": "Zapomněli jste svou heslovou frázi? Po získání podpory klikněte zde.",
             "whatIsLcp?": "Co je LCP?",
             "whatIsLcpInfoDetails": "LCP znamená „Licensed Content Protection“.",

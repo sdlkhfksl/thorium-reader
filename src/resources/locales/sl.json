@@ -210,10 +210,12 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "",
             "hint": "Namig: ",
             "open": "Odpri",
             "password": "Geslo",
             "sentence": "Za odprtje publikacije vnesi LCP geslo: ",
+            "showPassphrase": "",
             "urlHint": "Pozabljeno geslo? Tu lahko poiščeš pomoč",
             "whatIsLcp?": "Kaj je LCP?",
             "whatIsLcpInfoDetails": "LCP je kratica za 'Licensed Content Protection'.",

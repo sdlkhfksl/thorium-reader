@@ -205,10 +205,12 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "",
             "hint": "Dica:",
             "open": "Abrir",
             "password": "Frase-passe",
             "sentence": "Este documento necessita de uma frase-passe PCL para ser aberto",
+            "showPassphrase": "",
             "urlHint": "Esqueceu-se da sua frase-passe? Clique aqui para ajuda.",
             "whatIsLcp?": "O que é PCL?",
             "whatIsLcpInfoDetails": "PCL significa 'Proteção de Conteúdo Licenciado'.",

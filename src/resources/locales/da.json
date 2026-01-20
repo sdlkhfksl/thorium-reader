@@ -200,10 +200,12 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "",
             "hint": "Hint til nøgleord:",
             "open": "Åben",
             "password": "Nøgleord",
             "sentence": "Denne bog kræver et LCP-nøgleord for at åbnes",
+            "showPassphrase": "",
             "urlHint": "Har du glemt dit nøgleord? Få hjælp her.",
             "whatIsLcp?": "Hvad er LCP?",
             "whatIsLcpInfoDetails": "LCP står for 'Licensed Content Protection'.",

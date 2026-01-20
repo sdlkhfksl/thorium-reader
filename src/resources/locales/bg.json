@@ -200,10 +200,12 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "",
             "hint": "Подсказка:",
             "open": "Отвори",
             "password": "Парола",
             "sentence": "Тази публикация се нуждае от LCP парола, за да бъде отворена: ",
+            "showPassphrase": "",
             "urlHint": "Забравили сте паролата си? Намерете помощ тук.",
             "whatIsLcp?": "",
             "whatIsLcpInfoDetails": "",

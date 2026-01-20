@@ -200,10 +200,12 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "",
             "hint": "Adierazi : ",
             "open": "",
             "password": "Pasahitza",
             "sentence": "Argitalpen honek LCP pasahitza behar du irekitzeko: ",
+            "showPassphrase": "",
             "urlHint": "Pasahitza ahaztu duzu? Bilatu laguntza hemen",
             "whatIsLcp?": "Zer da LCP?",
             "whatIsLcpInfoDetails": "LCP \"Lizentziadun edukien babesa\" esan nahi du.",

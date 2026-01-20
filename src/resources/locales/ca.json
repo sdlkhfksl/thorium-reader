@@ -205,10 +205,12 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "",
             "hint": "Suggeriment : ",
             "open": "",
             "password": "Contrassenya",
             "sentence": "Aquesta publicació requereix una contrassenya LCP per obrir-se: ",
+            "showPassphrase": "",
             "urlHint": "Has olvidat la contrassenya? Clica si necessites ajuda",
             "whatIsLcp?": "Què és LCP?",
             "whatIsLcpInfoDetails": "LCP significa 'Protecció del contingut llicenciat'.",

@@ -195,10 +195,12 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "",
             "hint": "ヒント：",
             "open": "開く",
             "password": "パスワード",
             "sentence": "この本を開くためにはLCPパスワードが必要です",
+            "showPassphrase": "",
             "urlHint": "パスワードを忘れましたか？ サポートに確認してください。",
             "whatIsLcp?": "LCPとはなんですか？",
             "whatIsLcpInfoDetails": "LCPはLicensed Content Protectionの略です。",

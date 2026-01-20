@@ -210,10 +210,12 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "",
             "hint": "Užuomina:",
             "open": "Atverti",
             "password": "Slaptafrazė",
             "sentence": "Šiam leidiniui atverti reikalinga LCP slaptafrazė",
+            "showPassphrase": "",
             "urlHint": "Pamiršote slaptafrazę? Pagalbos ieškokite čia.",
             "whatIsLcp?": "LCP - kas tai?",
             "whatIsLcpInfoDetails": "LCP yra termino „Licensed Content Protection“ (licencijuoto turinio apsauga) santrumpa.",

@@ -200,10 +200,12 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "",
             "hint": "İpucu:",
             "open": "Aç",
             "password": "Parola",
             "sentence": "Bu eserin açılabilmesi için bir LCP parolası gerekir",
+            "showPassphrase": "",
             "urlHint": "Parolanızı mı unuttunuz? Destek almak için buraya tıklayın.",
             "whatIsLcp?": "LCP nedir?",
             "whatIsLcpInfoDetails": "LCP, 'Licensed Content Protection', Lisanslı İçerik Koruması anlamına gelir.",

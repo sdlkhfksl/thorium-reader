@@ -195,10 +195,12 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "",
             "hint": "提示：",
             "open": "打开",
             "password": "密码",
             "sentence": "此出版物需要 LCP 密码才能打开：",
+            "showPassphrase": "",
             "urlHint": "忘记密码？点击此处获取帮助。",
             "whatIsLcp?": "什么是LCP？",
             "whatIsLcpInfoDetails": "LCP 表示“许可内容保护”。",

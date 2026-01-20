@@ -205,10 +205,12 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "",
             "hint": "Dica :",
             "open": "Abrir",
             "password": "Senha",
             "sentence": "Insira a senha desta publicação protegida por LCP",
+            "showPassphrase": "",
             "urlHint": "Esqueceu sua senha? O suporte está disponível.",
             "whatIsLcp?": "O que é LCP?",
             "whatIsLcpInfoDetails": "LCP significa 'Proteção de Conteúdo Licenciado'.",

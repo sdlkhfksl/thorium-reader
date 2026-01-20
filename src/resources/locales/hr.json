@@ -205,10 +205,12 @@
     },
     "library": {
         "lcp": {
+            "hidePassphrase": "",
             "hint": "Podsjetnik: ",
             "open": "",
             "password": "Zaporka",
             "sentence": "Ova građa treba LCP zaporku za otvaranje:",
+            "showPassphrase": "",
             "urlHint": "Zaboravljena zaporka? Pomoć",
             "whatIsLcp?": "",
             "whatIsLcpInfoDetails": "",
