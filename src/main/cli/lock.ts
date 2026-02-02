@@ -15,6 +15,7 @@ import { getLibraryWindowFromDi } from "readium-desktop/main/di";
 import { commandLineMainEntry } from ".";
 import { getOpenFileFromCliChannel } from "../event";
 import { isOpenUrl, setOpenUrl } from "./url";
+import { _APP_NAME, _APP_VERSION, _PACK_NAME } from "readium-desktop/preprocessor-directives";
 
 // Logger
 const filename = "readium-desktop:main:lock";
@@ -112,6 +113,10 @@ export function lockInstance() {
                 memory_usage: process.memoryUsage(),
                 argv: process.argv,
                 MSWindowsStore: process.windowsStore,
+                thoriumAppName: _APP_NAME,
+                thoriumAppVersion: _APP_VERSION,
+                thoriumPackName: _PACK_NAME,
+                thoriumUserDataPath: userDataPath,
             }, null, 4)}\n`;
 
             // Someone tried to run a second instance, we should focus our window.
