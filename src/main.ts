@@ -7,6 +7,7 @@
 
 import debug_ from "debug";
 import * as path from "path";
+import * as fs from "fs";
 import { commandLineMainEntry } from "readium-desktop/main/cli";
 
 import { setLcpNativePluginPath } from "@r2-lcp-js/parser/epub/lcp";
@@ -95,4 +96,39 @@ if (__TH__IS_VSCODE_LAUNCH__) {
     commandLineMainEntry(); // call main fct
 }
 
-debug("Process version:", process.versions);
+const processInfoStr = JSON.stringify({
+    node_version: process.version,
+    pid: process.pid,
+    platform: process.platform,
+    arch: process.arch,
+    uptime_seconds: process.uptime(),
+    memory_usage: process.memoryUsage(),
+    argv: process.argv,
+    MSWindowsStore: process.windowsStore,
+}, null, 4);
+
+debug("Process info:", processInfoStr);
+
+const userDataPath = app.getPath("userData");
+const folderPath = path.join(
+    userDataPath,
+    "app-logs",
+);
+const PROCESS_LOGS = "processLogs.txt";
+const appLogs = path.join(
+    folderPath,
+    PROCESS_LOGS,
+);
+
+if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath);
+}
+
+let dump = "#############################################\n";
+dump += "MAIN-INSTANCE:\n";
+dump += `Date: ${(new Date()).toISOString()}\n`;
+// dump += 
+
+dump += `Process: ${processInfoStr}\n`;
+dump += "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$44\n";
+fs.appendFileSync(appLogs, dump);
