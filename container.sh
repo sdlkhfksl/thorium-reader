@@ -104,9 +104,9 @@ mkdir -p release || echo ok
 # --rm
 #
 if [[ ${ARCHITECTURE} == 'arm64' ]]; then
-container run --cpus 7 --memory 8g --platform linux/arm64 --name thorium-docker-container --volume ${PWD}/release:/MOUNT thorium-docker-image sh -c "ls -als /THORIUM/release/ ; ls -als /MOUNT/ ; cp /THORIUM/release/$FILENAME1 /MOUNT/ ; cp /THORIUM/release/$FILENAME2 /MOUNT/ ; ls -als /MOUNT/"
+container run --cpus 4 --memory 2g --platform linux/arm64 --name thorium-docker-container --volume ${PWD}/release:/MOUNT thorium-docker-image sh -c "ls -als /THORIUM/release/ ; ls -als /MOUNT/ ; cp /THORIUM/release/$FILENAME1 /MOUNT/ ; cp /THORIUM/release/$FILENAME2 /MOUNT/ ; ls -als /MOUNT/"
 else
-container run --cpus 7 --memory 8g --platform linux/amd64 --name thorium-docker-container --volume ${PWD}/release:/MOUNT thorium-docker-image sh -c "ls -als /THORIUM/release/ ; ls -als /MOUNT/ ; cp /THORIUM/release/$FILENAME1 /MOUNT/ ; cp /THORIUM/release/$FILENAME2 /MOUNT/ ; ls -als /MOUNT/"
+container run --cpus 4 --memory 2g --platform linux/amd64 --name thorium-docker-container --volume ${PWD}/release:/MOUNT thorium-docker-image sh -c "ls -als /THORIUM/release/ ; ls -als /MOUNT/ ; cp /THORIUM/release/$FILENAME1 /MOUNT/ ; cp /THORIUM/release/$FILENAME2 /MOUNT/ ; ls -als /MOUNT/"
 fi
 
 
@@ -144,8 +144,8 @@ fi
 #container cp thorium-docker-container:/THORIUM/release/$FILENAME2 release
 
 (container stop thorium-docker-container || echo ok_stop) && echo _ok_stop
-container logs -f thorium-docker-container
-container logs thorium-docker-container
+#container logs -f thorium-docker-container
+#container logs thorium-docker-container
 
 # container exec -it thorium-docker-container /bin/sh
 
