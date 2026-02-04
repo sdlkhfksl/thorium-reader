@@ -17,6 +17,24 @@
 # container builder start --cpus 7 --memory 8g
 # container builder stop
 # container builder delete
+#
+# container list --all
+# container list --all | grep stopped | awk '{print $1}' | xargs -I {} container rm {}
+# container prune
+#
+
+container --version
+container system stop
+container system start
+container system status
+
+container builder stop
+container builder start --cpus 7 --memory 8g
+container builder status
+
+container list --all
+# container list --all | grep stopped | awk '{print $1}' | xargs -I {} container rm {}
+# container prune
 
 echo "ARCHI: [$ARCHI]"
 ARCH_SYS=$(uname -m)
@@ -39,8 +57,9 @@ sed 's/linux-unpacked/linux-arm64-unpacked/g' ./package.json > ./package.json.ne
 fi
 
 container --version
-
-container list -a
+container system status
+container builder status
+container list --all
 
 # container images ls
 
@@ -56,6 +75,11 @@ else
 container build --cpus 7 --memory 8g --platform linux/amd64 --progress plain --build-arg BUST_CACHE=$(date +%Y%m%d-%H%M%S) -f ./Dockerfile -t thorium-docker-image .
 fi
 
+container --version
+container system status
+container builder status
+container list --all
+
 # --platform linux/x86_64
 # --platform=linux/amd64
 
@@ -69,7 +93,7 @@ fi
 
 (container rm --force thorium-docker-container || echo ok_rm) && echo _ok_rm
 
-npm run clean
+# npm run clean
 
 #ARCHITECTURE=arm64
 #echo $ARCHITECTURE
@@ -161,3 +185,16 @@ mv ./package.json.original ./package.json
 fi
 
 git status
+
+container --version
+
+container builder stop
+container builder status
+
+container list --all
+container prune
+container list --all | grep stopped | awk '{print $1}' | xargs -I {} container rm {}
+container list --all
+
+container system stop
+container system status
