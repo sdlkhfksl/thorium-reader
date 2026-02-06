@@ -123,6 +123,8 @@ async function checkIfProfilePackageSigned(manifest: ICustomizationManifest, pac
     const packageAbsolutePath = path.join(customizationWellKnownFolder, packageFileName);
     const contentHash = await extractCrc32OnZip(packageAbsolutePath, "profile");
     if (manifest.contentHash !== contentHash) {
+        debug("manifest.contentHash=", manifest.contentHash);
+        debug("contentHash=", contentHash);
         return Promise.reject("manifest contentHash missmatch");
     }
 
