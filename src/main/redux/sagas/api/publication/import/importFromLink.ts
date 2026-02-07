@@ -247,7 +247,7 @@ export function* importFromLinkService(
             const pathInZipDecoded = decodeURIComponent(pathInZipEncoded);
             const pathInZipBase64Decoded = Buffer.from(pathInZipDecoded, "base64").toString().replace(/\\/g, "/");
             const id = Buffer.from(decodeURIComponent(idEncoded), "base64").toString();
-            const pathInZip = path.posix.normalize(pathInZipBase64Decoded).replace(/^\/+/, ""); // remove first '/'
+            const pathInZip = path.posix.normalize(pathInZipBase64Decoded).trim().replace(/^\/+/, ""); // remove one or more '/' prefix(es)
             debug("PathInZip=", pathInZip);
 
             const state = diMainGet("store").getState();
