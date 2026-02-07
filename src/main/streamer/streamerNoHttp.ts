@@ -517,7 +517,7 @@ const streamProtocolHandler = async (
         debug("streamProtocolHandler pathInZipEncoded_", pathInZipEncoded_);
 
         // const pathInZip = path.resolve("/", pathInZipEncoded_.replace(/\\/g, "/").trim()).substr(1).replace(/^:\//, ""); // remove initial assumed slash, then removes Windows drive letter...hacky! (absolute path C:/..)
-        const pathInZip = path.posix.normalize(pathInZipEncoded_.replace(/\\/g, "/"))).trim().replace(/^\/+/, ""); // remove one or more '/' prefix(es)
+        const pathInZip = path.posix.normalize(pathInZipEncoded_.replace(/\\/g, "/")).trim().replace(/^\/+/, ""); // remove one or more '/' prefix(es)
         debug("streamProtocolHandler pathInZip", pathInZip);
 
         const state = diMainGet("store").getState();
