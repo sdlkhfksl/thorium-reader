@@ -516,7 +516,7 @@ const streamProtocolHandler = async (
         const pathInZipEncoded_ = Buffer.from(decodeURIComponent(pathInZipEncoded), "base64").toString();
         debug("streamProtocolHandler pathInZipEncoded_", pathInZipEncoded_);
 
-        // const pathInZip = path.resolve("/", pathInZipEncoded_).replace(/\\/g, "/").trim().substr(1).replace(/^:\//, ""); // Windows drive letter removal...hacky! (absolute path C:/..)
+        // const pathInZip = path.resolve("/", pathInZipEncoded_.replace(/\\/g, "/").trim()).substr(1).replace(/^:\//, ""); // remove initial assumed slash, then removes Windows drive letter...hacky! (absolute path C:/..)
         const pathInZip = path.posix.normalize(pathInZipEncoded_.replace(/\\/g, "/"))).trim().replace(/^\/+/, ""); // remove one or more '/' prefix(es)
         debug("streamProtocolHandler pathInZip", pathInZip);
 
