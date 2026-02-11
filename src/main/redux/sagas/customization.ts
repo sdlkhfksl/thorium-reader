@@ -492,7 +492,7 @@ export function* acquireProvisionsActivates(action: customizationActions.acquire
         }),
         c: callTyped(function* () {
 
-            yield* delay(100);
+            yield* delay(10000);
 
             const isTheFileExists = yield* callTyped(async () => { try { await fs.promises.access(packagePath, constants.R_OK); return true; } catch { return false; }; });
 
