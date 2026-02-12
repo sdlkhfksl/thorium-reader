@@ -63,7 +63,9 @@ function* winOpen(action: winActions.reader.openSucess.TAction) {
 
 
     let gotTheLock = false;
-    const winIdGotTheLock = __readerWithSamePubIdGotTheLockMap.get(reader.publicationIdentifier);
+    const winIdGotTheLock = reader?.publicationIdentifier
+        ? __readerWithSamePubIdGotTheLockMap.get(reader.publicationIdentifier)
+        : true;
     if (winIdGotTheLock) {
         gotTheLock = false;
         debug(`reader ${identifier} did not get the lock`);
@@ -73,7 +75,9 @@ function* winOpen(action: winActions.reader.openSucess.TAction) {
         debug(`reader ${identifier} got the lock !!!`);
     }
 
-    const notes = yield* callTyped(() => sqliteTableSelectAllNotesWherePubId(reader.publicationIdentifier));
+    const notes = reader?.publicationIdentifier
+        ? yield* callTyped(() => sqliteTableSelectAllNotesWherePubId(reader.publicationIdentifier))
+        : [];
 
     webContents.send(readerIpc.CHANNEL, {
         type: readerIpc.EventType.request,
