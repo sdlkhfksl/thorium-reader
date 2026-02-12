@@ -492,6 +492,12 @@ export function* acquireProvisionsActivates(action: customizationActions.acquire
         }),
         c: callTyped(function* () {
 
+
+            // The timeout to manual import is set to 10seconds
+            // should be suficient to copy large profile package to the wellKnown folder
+            // The risk is to trigger the manual import function and bypassing chokidar too early
+            // when the disk in not atomically/fully written to the disk (wellKnown folder),
+            // and therefore corrupt the import phase and raise an import error on the profile.
             yield* delay(10000);
 
             const isTheFileExists = yield* callTyped(async () => { try { await fs.promises.access(packagePath, constants.R_OK); return true; } catch { return false; }; });
