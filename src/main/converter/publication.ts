@@ -166,7 +166,7 @@ export class PublicationViewConverter {
         } catch (err) {
             debug(err, " FALLBACK: parsing publication from filesystem ...");
 
-            const epubPath = this.publicationStorage.getPublicationEpubPath(
+            const epubPath = await this.publicationStorage.getPublicationEpubPath(
                 publicationDocument.identifier,
             );
 
