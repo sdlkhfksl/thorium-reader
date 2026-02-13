@@ -101,10 +101,10 @@ export function* createReaderWindow(action: winActions.reader.openRequest.TActio
 
         readerWindow.webContents.on("did-finish-load", () => {
 
-            if (readerWindow.isDestroyed() || readerWindow.webContents.isDestroyed()) {
-                debug("readerWindow or webcontents is destroyed !!");
-                return; // Is it really needed to early return here, and block reader openSuccess 
-            }
+            // if (readerWindow.isDestroyed() || readerWindow.webContents.isDestroyed()) {
+            //     debug("readerWindow or webcontents is destroyed !!");
+            //     return; // Is it really needed to early return here, and block reader openSuccess 
+            // }
             // see app.whenReady() in src/main/redux/sagas/app.ts
             // // app.whenReady().then(() => {
             // // });

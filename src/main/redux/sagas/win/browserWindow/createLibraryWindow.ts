@@ -99,10 +99,10 @@ export function* createLibraryWindow(_action: winActions.library.openRequest.TAc
 
         libWindow.webContents.on("did-finish-load", () => {
 
-            if (libWindow.isDestroyed() || libWindow.webContents.isDestroyed()) {
-                debug("readerWindow or webcontents is destroyed !!");
-                return; // Is it really needed to early return here, and block library openSuccess 
-            }
+            // if (libWindow.isDestroyed() || libWindow.webContents.isDestroyed()) {
+            //     debug("readerWindow or webcontents is destroyed !!");
+            //     return; // Is it really needed to early return here, and block library openSuccess 
+            // }
             // see app.whenReady() in src/main/redux/sagas/app.ts
             // // app.whenReady().then(() => {
             // // });
