@@ -13,7 +13,7 @@ import { acceptedExtensionObject, publicationExtensionStoredOnDisk } from "readi
 import { File } from "readium-desktop/common/models/file";
 import { PublicationView } from "readium-desktop/common/views/publication";
 import { ContentType } from "readium-desktop/utils/contentType";
-import { getFileSize, rmDirSync } from "readium-desktop/utils/fs";
+import { getFileSize } from "readium-desktop/utils/fs";
 
 import { PublicationParsePromise } from "@r2-shared-js/parser/publication-parser";
 import { streamToBufferPromise } from "@r2-utils-js/_utils/stream/BufferUtils";
@@ -74,7 +74,7 @@ export class PublicationStorage {
         return files;
     }
 
-    public removePublication(identifier: string, preservePublicationOnFileSystem?: string) {
+    public async removePublication(identifier: string, preservePublicationOnFileSystem?: string) {
         const p = this.buildPublicationPath(identifier);
         try {
             if (preservePublicationOnFileSystem) {
@@ -99,7 +99,7 @@ export class PublicationStorage {
                 return;
             }
 
-            rmDirSync(p);
+            await fs.promises.rmdir(p);
         } catch (e) {
             debug(e);
             debug(preservePublicationOnFileSystem);
@@ -129,6 +129,7 @@ export class PublicationStorage {
             debug("readdir error", err);
         } 
 
+        debug("Error GetPublicationEpubPath not found with", identifier, "Throw new Error");
         throw new Error(`getPublicationEpubPath() FAIL ${identifier} (cannot find book.epub|audiobook|etc.)`);
     }
 
