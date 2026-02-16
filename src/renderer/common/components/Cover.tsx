@@ -146,7 +146,7 @@ class Cover extends React.Component<IProps, IState> {
                 : <></>} */}
                 {
                         publicationViewMaybeOpds.type === "missingOrDeleted"
-                            ? <div aria-label={this.props.__("catalog.missing")} style={{ position: "absolute", width: "inherit", height: "inherit", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            ? <div aria-label={this.props.__("catalog.missing")} style={{ position: "absolute", width: "inherit", height: "inherit", display: "flex", alignItems: "center", justifyContent: "center", opacity: 0.7 }}>
                                 <div aria-hidden style={{ height: "70px", width: "70px", borderRadius: "50%", background: "var(--color-error-text)", padding: "10px" }}>
                                     <SVG ariaHidden svg={FileBroken} className={stylesPublications.publication_missing_icon} />
                                 </div>
@@ -190,6 +190,14 @@ class Cover extends React.Component<IProps, IState> {
             {/* {!this.props.publicationViewMaybeOpds.lastReadTimeStamp ?
             <div className={stylesPublications.corner}></div>
             : <></>} */}
+            {
+                    publicationViewMaybeOpds.type === "missingOrDeleted"
+                        ? <div aria-label={this.props.__("catalog.missing")} style={{ position: "absolute", width: "inherit", height: "inherit", display: "flex", alignItems: "center", justifyContent: "center", opacity: 0.7 }}>
+                            <div aria-hidden style={{ height: "70px", width: "70px", borderRadius: "50%", background: "var(--color-error-text)", padding: "10px" }}>
+                                <SVG ariaHidden svg={FileBroken} className={stylesPublications.publication_missing_icon} />
+                            </div>
+                        </div> : <></>
+            }
             {
             needsSpinner
             ?
