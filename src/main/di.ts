@@ -37,15 +37,13 @@ import { OpdsService } from "./services/opds";
 import { LSDManager } from "./services/lsd";
 import { tryCatch } from "readium-desktop/utils/tryCatch";
 import { EOL } from "os";
-import { USER_DATA_FOLDER } from "readium-desktop/common/constant";
+import { FORCE_PROD_DB_IN_DEV, USER_DATA_FOLDER } from "readium-desktop/common/constant";
 
 // import { streamer } from "readium-desktop/main/streamerHttp";
 // import { Server } from "@r2-streamer-js/http/server";
 
 // Logger
 const debug = debug_("readium-desktop:main:di");
-
-const FORCE_PROD_DB_IN_DEV = false;
 
 export const CONFIGREPOSITORY_REDUX_PERSISTENCE = "CONFIGREPOSITORY_REDUX_PERSISTENCE";
 const capitalizedAppName = _APP_NAME.charAt(0).toUpperCase() + _APP_NAME.substring(1);
