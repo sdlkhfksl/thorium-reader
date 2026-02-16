@@ -107,8 +107,6 @@ class Cover extends React.Component<IProps, IState> {
     public render() {
         const { publicationViewMaybeOpds } = this.props;
 
-        const isPublicationMissingOrDeleted = publicationViewMaybeOpds.type === "missingOrDeleted";
-
         let needsSpinner = false;
 
         const { identifier } = this.props.publicationViewMaybeOpds;
@@ -125,16 +123,6 @@ class Cover extends React.Component<IProps, IState> {
         //         tagString = tag.name;
         //     }
         // };
-
-        if (isPublicationMissingOrDeleted) {
-            return (
-                <div style={{width: "188px", height: "345px", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--color-gray-100)"}}>
-                    <div style={{height: "100px", width: "100px", borderRadius: "50%", background: "var(--color-error-text)", padding: "10px"}}>
-                        <SVG ariaHidden svg={FileBroken} className={stylesPublications.publication_missing_icon} />
-                    </div>
-                </div>
-            );
-        }
 
         if (this.state.imgUrl) {
             return (
@@ -157,7 +145,12 @@ class Cover extends React.Component<IProps, IState> {
                 <div className={stylesPublications.corner}><SVG ariaHidden svg={ValidateIcon} /></div>
                 : <></>} */}
                 {
-                    publicationViewMaybeOpds.type === "missingOrDeleted" ? <span style={{position: "absolute"}}>{this.props.__("catalog.missing")}</span> : <></>
+                        publicationViewMaybeOpds.type === "missingOrDeleted"
+                            ? <div aria-label={this.props.__("catalog.missing")} style={{ position: "absolute", width: "inherit", height: "inherit", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div aria-hidden style={{ height: "70px", width: "70px", borderRadius: "50%", background: "var(--color-error-text)", padding: "10px" }}>
+                                    <SVG ariaHidden svg={FileBroken} className={stylesPublications.publication_missing_icon} />
+                                </div>
+                            </div> : <></>
                 }
                 {
                 needsSpinner

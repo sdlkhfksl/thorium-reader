@@ -134,6 +134,10 @@ export class PublicationViewConverter {
             return r2Publication;
         }
 
+        const epubPath = await this.publicationStorage.getPublicationEpubPath(
+            publicationDocument.identifier,
+        );
+
         try {
             const manifestPath = path.join(pubFolder, "manifest.json");
             const r2PublicationStr = fs.readFileSync(manifestPath, { encoding: "utf-8"});
@@ -165,10 +169,6 @@ export class PublicationViewConverter {
             return r2Publication;
         } catch (err) {
             debug(err, " FALLBACK: parsing publication from filesystem ...");
-
-            const epubPath = await this.publicationStorage.getPublicationEpubPath(
-                publicationDocument.identifier,
-            );
 
             const r2Publication = await PublicationParsePromise(epubPath);
             // just like when calling lsdLcpUpdateInject():
