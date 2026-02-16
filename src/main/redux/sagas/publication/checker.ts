@@ -6,7 +6,7 @@
 // ==LICENSE-END==
 
 import debug_ from "debug";
-import { SagaGenerator, select as selectTyped, call as callTyped, delay as delayTyped } from "typed-redux-saga/macro";
+import { SagaGenerator, select as selectTyped, call as callTyped, delay as delayTyped, put as putTyped, take as takeTyped } from "typed-redux-saga/macro";
 import { RootState } from "../../states";
 import { diMainGet } from "readium-desktop/main/di";
 import * as fs from "node:fs";
@@ -14,6 +14,9 @@ import * as path from "node:path";
 import { publicationExtensionStoredOnDisk } from "readium-desktop/common/extension";
 import { _APP_NAME, _APP_VERSION, _PACK_NAME } from "readium-desktop/preprocessor-directives";
 import { USER_DATA_FOLDER, FORCE_PROD_DB_IN_DEV } from "readium-desktop/common/constant";
+import { IPublicationCheckerDirent, IPublicationCheckerState } from "readium-desktop/common/redux/states/publicationsChecker";
+import { publicationActions } from "readium-desktop/common/redux/actions";
+import { winActions } from "../../actions";
 
 // TODO: use app.getPath("logs"); instead
 const folderPath = path.join(
@@ -52,16 +55,16 @@ export function* publicationIntegrityChecker(): SagaGenerator<void> {
 
     yield* delayTyped(1);
     const files = yield* callTyped(() => fs.promises.readdir(publicationDirectoryPath, {withFileTypes: true}));
-    const FileNameNotCorrectArray: fs.Dirent[] = [];
-    const directoryFileCorrectArray: Array<{ rootDir: fs.Dirent, title: string, identifiedFileArray: fs.Dirent[], unknownFileArray: fs.Dirent[] }> = [];
-    const publicationIdentifiersFileSystem: string[] = [];
+    const rejectedFileInPubDir: fs.Dirent[] = [];
+    const approvedFileInPubDir: Array<{ rootDir: fs.Dirent, title: string, identifiedFileArray: fs.Dirent[], unknownFileArray: fs.Dirent[] }> = [];
+    const publicationIdentifierDisk: string[] = [];
     for (const file of files) {
         if (
             /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/.test(file.name) &&
             file.isDirectory() &&
             publicationIdentifiersDataBase.includes(file.name)
         ) {
-            publicationIdentifiersFileSystem.push(file.name);
+            publicationIdentifierDisk.push(file.name);
 
             const filePath = path.join(file.parentPath, file.name);
 
@@ -92,21 +95,21 @@ export function* publicationIntegrityChecker(): SagaGenerator<void> {
             }
 
             yield* delayTyped(1);
-            directoryFileCorrectArray.push({rootDir: file, title: publicationDocuments.find(({identifier}) => identifier === file.name)?.title, identifiedFileArray, unknownFileArray});
+            approvedFileInPubDir.push({rootDir: file, title: publicationDocuments.find(({identifier}) => identifier === file.name)?.title, identifiedFileArray, unknownFileArray});
         } else {
-            FileNameNotCorrectArray.push(file);
+            rejectedFileInPubDir.push(file);
             dumpLogs = true;
         }
 
     }
 
     yield* delayTyped(1);
-    const publicationDocumentIdArray = publicationDocuments.map(({identifier}) => identifier);
-    const publicationDocumentNotFoundArray: string[] = publicationDocumentIdArray.filter((id) => !publicationIdentifiersFileSystem.includes(id));
-    const publicationDocumentFoundArray = publicationDocumentIdArray.filter((id) => publicationIdentifiersFileSystem.includes(id));
+    const publicationIdentifierDataBase = publicationDocuments.map(({identifier}) => identifier);
+    const publicationDocumentNotFoundArray: string[] = publicationIdentifierDataBase.filter((id) => !publicationIdentifierDisk.includes(id));
+    const publicationDocumentFoundArray = publicationIdentifierDataBase.filter((id) => publicationIdentifierDisk.includes(id));
 
     debug("==> uuid publication directory not correct because not a directory, uuid or not found in database and need to be removed:");
-    for (const file of FileNameNotCorrectArray) {
+    for (const file of rejectedFileInPubDir) {
         debug(`Directory: ${file.isDirectory()}, File: ${file.isFile()}, Filename: ${file.name}`);
         dumpLogs = true;
     }
@@ -119,16 +122,16 @@ export function* publicationIntegrityChecker(): SagaGenerator<void> {
     }
     debug("--------");
 
-    debug(`${directoryFileCorrectArray.length} uuid directory(ies) found on disk and ${publicationDocumentIdArray.length} publication(s) found in database`);
+    debug(`${approvedFileInPubDir.length} uuid directory(ies) found on disk and ${publicationIdentifierDataBase.length} publication(s) found in database`);
     debug(`${publicationDocumentNotFoundArray.length} publication(s) found in database but not found on the disk`);
     debug(`${publicationDocumentFoundArray.length} publication(s) matched between the database and the disk`);
-    if (!publicationDocumentNotFoundArray.length || directoryFileCorrectArray.length !== publicationDocumentIdArray.length) {
+    if (!publicationDocumentNotFoundArray.length || approvedFileInPubDir.length !== publicationIdentifierDataBase.length) {
         dumpLogs = true;
     }
     yield* delayTyped(1);
 
     debug("==> files in publication uuid directory not identified and not correct:");
-    const filesInpublicationUUIDDirectoryNotCorrect = directoryFileCorrectArray.filter((obj) => !!obj.unknownFileArray.length || !obj.identifiedFileArray.find((f) => f.name.startsWith("book.")));
+    const filesInpublicationUUIDDirectoryNotCorrect = approvedFileInPubDir.filter((obj) => !!obj.unknownFileArray.length || !obj.identifiedFileArray.find((f) => f.name.startsWith("book.")));
     for (const obj of filesInpublicationUUIDDirectoryNotCorrect) {
         dumpLogs = true;
         debug(`From ${obj.rootDir.name} (${obj.title}) =>`);
@@ -140,8 +143,24 @@ export function* publicationIntegrityChecker(): SagaGenerator<void> {
             debug(`\tfileName: ${a.name}`);
         }
     }
-    debug(`seems to have ${directoryFileCorrectArray.length - filesInpublicationUUIDDirectoryNotCorrect.length} publication(s) correct and identified in publication directory`);
+    debug(`seems to have ${approvedFileInPubDir.length - filesInpublicationUUIDDirectoryNotCorrect.length} publication(s) correct and identified in publication directory`);
     debug("--------");
+
+    const convertFSDirent = (d: fs.Dirent): IPublicationCheckerDirent => ({
+        name: d.name,
+        parentPath: d.parentPath,
+        isDirectory: d.isDirectory(),
+        isFile: d.isFile(),
+    });
+
+    yield* delayTyped(1);
+    const publicationCheckerState: IPublicationCheckerState = {
+        publicationIdentifierDataBase,
+        publicationIdentifierDisk,
+        approvedFileInPubDir: approvedFileInPubDir.map(({ rootDir, identifiedFileArray, unknownFileArray, ...a }) => ({ ...a, rootDir: convertFSDirent(rootDir), identifiedFileArray: identifiedFileArray.map((a) => convertFSDirent(a)), unknownFileArray: unknownFileArray.map((a) => convertFSDirent(a)) })),
+        rejectedFileInPubDir: rejectedFileInPubDir.map((a) => convertFSDirent(a)),
+        dump,
+    };
 
     yield* delayTyped(1);
     dump += `Process: ${JSON.stringify({
@@ -158,5 +177,10 @@ export function* publicationIntegrityChecker(): SagaGenerator<void> {
     }, null, 4)}\n`;
     if (dumpLogs) {
         yield* callTyped(() => fs.promises.appendFile(appLogs, dump));
+
+        yield* takeTyped(winActions.library.openSucess.ID);
+        yield* delayTyped(1000); // 1s
+        yield* putTyped(publicationActions.checker.build(publicationCheckerState));
     }
+
 }
