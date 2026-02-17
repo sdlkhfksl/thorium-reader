@@ -302,6 +302,10 @@ export class PublicationViewConverter {
         const trimStrings = (texts: string | string[]): string[] => Array.isArray(texts) ? texts.filter((item) => item && typeof item === "string").map((item) => item.trim()) : texts && typeof texts === "string" ? [texts.trim()] : [];
 
         return {
+
+            // When a publication is found on disk but cannot be found in the database, we should mitigate the risk by setting a missingOrDeleted error.
+            type: document.doNotPresentInReduxStoreDataBaseButFoundOnDisk_dummyDocument ? "missingOrDeleted" : undefined,
+            
             isAudio,
             isDivina,
             isPDF,
