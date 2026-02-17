@@ -99,7 +99,7 @@ export class PublicationStorage {
                 return;
             }
 
-            await fs.promises.rmdir(p);
+            await fs.promises.rm(p, { recursive: true, retryDelay: 100, maxRetries: 3, force: true });
         } catch (e) {
             debug(e);
             debug(preservePublicationOnFileSystem);
@@ -158,7 +158,10 @@ export class PublicationStorage {
     }
 
     public buildPublicationPath(identifier: string): string {
-        return path.join(this.rootPath, identifier);
+        if (/^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/.test(identifier.trim())) {
+            return path.join(this.rootPath, identifier.trim());
+        }
+        throw new Error("not an uuidv4 identifier !");
     }
 
     private async storePublicationBook(
