@@ -15,7 +15,7 @@ export interface IPublicationCheckerDirent {
 export interface IPublicationCheckerState {
     publicationIdentifierDataBase: string[],
     publicationIdentifierDisk: string[],
-    approvedFileInPubDir: Array<{ rootDir: IPublicationCheckerDirent, title: string, identifiedFileArray: IPublicationCheckerDirent[], unknownFileArray: IPublicationCheckerDirent[] }>,
+    approvedFileInPubDir: Array<{ id: string, title: string, identifiedFileArray: IPublicationCheckerDirent[], unknownFileArray: IPublicationCheckerDirent[] }>,
     rejectedFileInPubDir: IPublicationCheckerDirent[],
     dump: string,
 }

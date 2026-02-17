@@ -6,8 +6,7 @@
 // ==LICENSE-END==
 
 import debug_ from "debug";
-import { SagaGenerator, select as selectTyped, call as callTyped, delay as delayTyped, put as putTyped, take as takeTyped } from "typed-redux-saga/macro";
-import { RootState } from "../../states";
+import { SagaGenerator, call as callTyped, delay as delayTyped, put as putTyped, take as takeTyped } from "typed-redux-saga/macro";
 import { diMainGet } from "readium-desktop/main/di";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -47,22 +46,21 @@ export function* publicationIntegrityChecker(): SagaGenerator<void> {
         dump += str + "\n";
     };
 
-    const pubs = yield* selectTyped((state: RootState) => state.publication.db);
-    const publicationDirectoryPath = yield* callTyped(() => diMainGet("publication-storage").getRootPath());
-
-    const pubsDict = Object.entries(pubs);
-    const [publicationIdentifiersDataBase, publicationDocuments] = [pubsDict.map(([id]) => id), pubsDict.map(([_, doc]) => doc)];
-
+    // const pubs = yield* selectTyped((state: RootState) => state.publication.db);
+    const publicationDocuments = yield* callTyped(() => diMainGet("publication-repository").findAll());
+    const publicationIdentifierDataBase = publicationDocuments.map(({ identifier }) => identifier);
+    
     yield* delayTyped(1);
+    const publicationDirectoryPath = yield* callTyped(() => diMainGet("publication-storage").getRootPath());
     const files = yield* callTyped(() => fs.promises.readdir(publicationDirectoryPath, {withFileTypes: true}));
     const rejectedFileInPubDir: fs.Dirent[] = [];
-    const approvedFileInPubDir: Array<{ rootDir: fs.Dirent, title: string, identifiedFileArray: fs.Dirent[], unknownFileArray: fs.Dirent[] }> = [];
+    const approvedFileInPubDirDisk: Array<{ id: string, title: string, identifiedFileArray: fs.Dirent[], unknownFileArray: fs.Dirent[] }> = [];
     const publicationIdentifierDisk: string[] = [];
     for (const file of files) {
         if (
-            /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/.test(file.name) &&
-            file.isDirectory() &&
-            publicationIdentifiersDataBase.includes(file.name)
+            /^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/.test(file.name) &&
+            file.isDirectory()
+            // && publicationIdentifiersDataBase.includes(file.name)
         ) {
             publicationIdentifierDisk.push(file.name);
 
@@ -95,7 +93,7 @@ export function* publicationIntegrityChecker(): SagaGenerator<void> {
             }
 
             yield* delayTyped(1);
-            approvedFileInPubDir.push({rootDir: file, title: publicationDocuments.find(({identifier}) => identifier === file.name)?.title, identifiedFileArray, unknownFileArray});
+            approvedFileInPubDirDisk.push({id: file.name, title: publicationDocuments.find(({identifier}) => identifier === file.name)?.title, identifiedFileArray, unknownFileArray});
         } else {
             rejectedFileInPubDir.push(file);
             dumpLogs = true;
@@ -104,9 +102,11 @@ export function* publicationIntegrityChecker(): SagaGenerator<void> {
     }
 
     yield* delayTyped(1);
-    const publicationIdentifierDataBase = publicationDocuments.map(({identifier}) => identifier);
-    const publicationDocumentNotFoundArray: string[] = publicationIdentifierDataBase.filter((id) => !publicationIdentifierDisk.includes(id));
-    const publicationDocumentFoundArray = publicationIdentifierDataBase.filter((id) => publicationIdentifierDisk.includes(id));
+    const approvedFileWithBookArchiveInPubDirDisk = approvedFileInPubDirDisk.filter((obj) => !!obj.unknownFileArray.length || !obj.identifiedFileArray.find((f) => f.name.startsWith("book."))); // TODO: make a reference to publication-storage
+    const publicationIdentifierApprovedInDisk = approvedFileWithBookArchiveInPubDirDisk.map(({ id }) => id);
+    const publicationIdentifierNotFoundOnDiskArray: string[] = publicationIdentifierDataBase.filter((id) => !publicationIdentifierDisk.includes(id));
+    const publicationIdentifierNotFoundOnDataBaseButFoundOnDisk: string[] = publicationIdentifierApprovedInDisk.filter((id) => !publicationIdentifierDataBase.includes(id));
+    const publicationIdentifierMatchedDiskDataBaseArray = publicationIdentifierDataBase.filter((id) => publicationIdentifierDisk.includes(id));
 
     debug("==> uuid publication directory not correct because not a directory, uuid or not found in database and need to be removed:");
     for (const file of rejectedFileInPubDir) {
@@ -116,25 +116,26 @@ export function* publicationIntegrityChecker(): SagaGenerator<void> {
     debug("--------");
 
     debug("==> publication identifier not found in publication directory:");
-    for (const id of publicationDocumentNotFoundArray) {
+    for (const id of publicationIdentifierNotFoundOnDiskArray) {
         debug(`pubId: ${id}`);
         dumpLogs = true;
     }
     debug("--------");
 
-    debug(`${approvedFileInPubDir.length} uuid directory(ies) found on disk and ${publicationIdentifierDataBase.length} publication(s) found in database`);
-    debug(`${publicationDocumentNotFoundArray.length} publication(s) found in database but not found on the disk`);
-    debug(`${publicationDocumentFoundArray.length} publication(s) matched between the database and the disk`);
-    if (!publicationDocumentNotFoundArray.length || approvedFileInPubDir.length !== publicationIdentifierDataBase.length) {
+    debug(`${publicationIdentifierDisk.length} uuid directory(ies) found on disk, of which ${publicationIdentifierApprovedInDisk.length} with a book found as approved publication archive`);
+    debug(`${publicationIdentifierDataBase.length} publication(s) found in database`);
+    debug(`${publicationIdentifierNotFoundOnDiskArray.length} publication(s) found in database but not found on the disk`);
+    debug(`${publicationIdentifierNotFoundOnDataBaseButFoundOnDisk.length} publication(s) found in disk but not found on the database`);
+    debug(`${publicationIdentifierMatchedDiskDataBaseArray.length} publication(s) matched between the database and the disk`);
+    if (!publicationIdentifierNotFoundOnDiskArray.length || approvedFileInPubDirDisk.length !== publicationIdentifierDataBase.length) {
         dumpLogs = true;
     }
     yield* delayTyped(1);
 
     debug("==> files in publication uuid directory not identified and not correct:");
-    const filesInpublicationUUIDDirectoryNotCorrect = approvedFileInPubDir.filter((obj) => !!obj.unknownFileArray.length || !obj.identifiedFileArray.find((f) => f.name.startsWith("book.")));
-    for (const obj of filesInpublicationUUIDDirectoryNotCorrect) {
+    for (const obj of approvedFileWithBookArchiveInPubDirDisk) {
         dumpLogs = true;
-        debug(`From ${obj.rootDir.name} (${obj.title}) =>`);
+        debug(`From ${obj.id} (${obj.title}) =>`);
         for (const a of obj.unknownFileArray) {
             debug(`\tfileName: ${a.name}`);
         }
@@ -143,7 +144,7 @@ export function* publicationIntegrityChecker(): SagaGenerator<void> {
             debug(`\tfileName: ${a.name}`);
         }
     }
-    debug(`seems to have ${approvedFileInPubDir.length - filesInpublicationUUIDDirectoryNotCorrect.length} publication(s) correct and identified in publication directory`);
+    debug(`seems to have ${approvedFileInPubDirDisk.length - approvedFileWithBookArchiveInPubDirDisk.length} publication(s) correct and identified in publication directory`);
     debug("--------");
 
     const convertFSDirent = (d: fs.Dirent): IPublicationCheckerDirent => ({
@@ -157,7 +158,7 @@ export function* publicationIntegrityChecker(): SagaGenerator<void> {
     const publicationCheckerState: IPublicationCheckerState = {
         publicationIdentifierDataBase,
         publicationIdentifierDisk,
-        approvedFileInPubDir: approvedFileInPubDir.map(({ rootDir, identifiedFileArray, unknownFileArray, ...a }) => ({ ...a, rootDir: convertFSDirent(rootDir), identifiedFileArray: identifiedFileArray.map((a) => convertFSDirent(a)), unknownFileArray: unknownFileArray.map((a) => convertFSDirent(a)) })),
+        approvedFileInPubDir: approvedFileInPubDirDisk.map(({ identifiedFileArray, unknownFileArray, ...a }) => ({ ...a, identifiedFileArray: identifiedFileArray.map((a) => convertFSDirent(a)), unknownFileArray: unknownFileArray.map((a) => convertFSDirent(a)) })),
         rejectedFileInPubDir: rejectedFileInPubDir.map((a) => convertFSDirent(a)),
         dump,
     };
