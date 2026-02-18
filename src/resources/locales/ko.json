@@ -687,6 +687,11 @@
             "mute": "오디오 음소거",
             "unmute": "오디오 음소거 해제"
         },
+        "dock": {
+            "dockDefault": "",
+            "dockLeft": "",
+            "dockRight": ""
+        },
         "fxl": {
             "fit": ""
         },

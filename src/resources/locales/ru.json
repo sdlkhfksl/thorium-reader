@@ -707,6 +707,11 @@
             "mute": "отключить звук",
             "unmute": "включить звук"
         },
+        "dock": {
+            "dockDefault": "",
+            "dockLeft": "",
+            "dockRight": ""
+        },
         "fxl": {
             "fit": "Размер"
         },

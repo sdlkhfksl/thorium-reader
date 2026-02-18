@@ -697,6 +697,11 @@
             "mute": "mute audio",
             "unmute": "unmute audio"
         },
+        "dock": {
+            "dockDefault": "Show panel as a modal popup",
+            "dockLeft": "Dock panel to the left",
+            "dockRight": "Dock panel to the right"
+        },
         "fxl": {
             "fit": "Fit"
         },

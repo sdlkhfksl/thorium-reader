@@ -697,6 +697,11 @@
             "mute": "σίγαση ήχου",
             "unmute": "ενεργοποίηση ήχου"
         },
+        "dock": {
+            "dockDefault": "",
+            "dockLeft": "",
+            "dockRight": ""
+        },
         "fxl": {
             "fit": "Προσαρμογή"
         },

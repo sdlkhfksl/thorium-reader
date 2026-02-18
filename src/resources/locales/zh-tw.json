@@ -692,6 +692,11 @@
             "mute": "靜音",
             "unmute": "取消靜音"
         },
+        "dock": {
+            "dockDefault": "",
+            "dockLeft": "",
+            "dockRight": ""
+        },
         "fxl": {
             "fit": "Fit"
         },

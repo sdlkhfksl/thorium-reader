@@ -697,6 +697,11 @@
             "mute": "Audio stummschalten",
             "unmute": "Ton einschalten"
         },
+        "dock": {
+            "dockDefault": "",
+            "dockLeft": "",
+            "dockRight": ""
+        },
         "fxl": {
             "fit": "Einpassen"
         },

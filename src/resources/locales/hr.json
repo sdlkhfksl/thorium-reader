@@ -702,6 +702,11 @@
             "mute": "isključi zvuk",
             "unmute": "uključi zvuk"
         },
+        "dock": {
+            "dockDefault": "",
+            "dockLeft": "",
+            "dockRight": ""
+        },
         "fxl": {
             "fit": ""
         },
