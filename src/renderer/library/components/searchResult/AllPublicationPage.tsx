@@ -111,7 +111,7 @@ import debounce from "debounce";
 import { useSelector } from "readium-desktop/renderer/common/hooks/useSelector";
 import { ICommonRootState } from "readium-desktop/common/redux/states/commonRootState";
 import { useTranslator } from "readium-desktop/renderer/common/hooks/useTranslator";
-import { HoverEvent } from "node_modules/@react-types/shared/src";
+import { HoverEvent } from "@react-types/shared";
 
 
 // import GridTagButton from "../catalog/GridTagButton";
@@ -719,9 +719,9 @@ const CellFormat: React.FC<ITableCellProps_Column & ITableCellProps_GenericCell 
                     setSelection(t);
                     setActiveFiltersArray(prevArray => {
                     const filtered = prevArray.filter(f => f.filterCol !== "colFormat");
-                    return [...filtered, { 
-                        filterType: props.column.Header.toString(), 
-                        value: t, 
+                    return [...filtered, {
+                        filterType: props.column.Header.toString(),
+                        value: t,
                         filterCol: "colFormat",
                     }];
                 });
@@ -767,13 +767,13 @@ const CellLangs: React.FC<ITableCellProps_Column & ITableCellProps_GenericCell &
                     setSelection(t);
                     setActiveFiltersArray(prevArray => {
                     const filtered = prevArray.filter(f => f.filterCol !== "colLanguages");
-                    return [...filtered, { 
-                        filterType: props.column.Header.toString(), 
-                        value: t, 
+                    return [...filtered, {
+                        filterType: props.column.Header.toString(),
+                        value: t,
                         filterCol: "colLanguages",
                     }];
                 });
-            }   
+            }
             }}
             className={stylesPublication.cell_link}>{t}</a>;
     };
@@ -970,9 +970,9 @@ const CellTags: React.FC<ITableCellProps_Column & ITableCellProps_GenericCell & 
                     setSelection(t);
                     setActiveFiltersArray(prevArray => {
                     const filtered = prevArray.filter(f => f.filterCol !== "colTags");
-                    return [...filtered, { 
-                        filterType: props.column.Header.toString(), 
-                        value: t, 
+                    return [...filtered, {
+                        filterType: props.column.Header.toString(),
+                        value: t,
                         filterCol: "colTags",
                     }];
                 });
@@ -1380,13 +1380,13 @@ const CellReadingState: React.FC<ITableCellProps_Column & ITableCellProps_Generi
                     setSelection(t);
                     setActiveFiltersArray(prevArray => {
                     const filtered = prevArray.filter(f => f.filterCol !== "colReadingState");
-                    return [...filtered, { 
-                        filterType: props.column.Header.toString(), 
-                        value: t, 
+                    return [...filtered, {
+                        filterType: props.column.Header.toString(),
+                        value: t,
                         filterCol: "colReadingState",
                     }];
                 });
-            }   
+            }
             }}>{t}</a>;
     };
 
@@ -2297,8 +2297,8 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
     }));
 
     const readingStates = [
-        __("publication.onGoing"), 
-        __("publication.notStarted"), 
+        __("publication.onGoing"),
+        __("publication.notStarted"),
         __("publication.read"),
     ].map((state, i) => ({
         id: i,
@@ -2309,7 +2309,7 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
     const languages = [
         ...new Set(
             publicationViews
-                .flatMap(pub => pub.languages || []) 
+                .flatMap(pub => pub.languages || [])
                 .map(lang => lang ? lang.substring(0, 2).toLowerCase() : "")
                 .filter(Boolean),
         ),
@@ -2461,14 +2461,14 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                 <Popover.Content avoidCollisions sideOffset={5} align="end" alignOffset={-10} className={stylesAnnotations.annotation_form} style={{ paddingTop: "20px" }}>
                     {editableColumnsArray.map((col) => (
                         <div key={col.id} style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}>
-                            <input 
-                                type="checkbox" 
-                                id={col.id} 
-                                {...col.getToggleHiddenProps()} 
+                            <input
+                                type="checkbox"
+                                id={col.id}
+                                {...col.getToggleHiddenProps()}
                             />
                             <label htmlFor={col.id} style={{ marginLeft: "8px", cursor: "pointer" }}>
-                                {typeof col.Header === "string" 
-                                    ? col.Header 
+                                {typeof col.Header === "string"
+                                    ? col.Header
                                     : col.id.replace("col", "")}
                             </label>
                         </div>
@@ -2504,7 +2504,7 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                                     {FilterPopover}
                                     {SortingPopover}
                                 </>
-                                : 
+                                :
                                 <>
                                     {SelectTableHeaders}
                                 </>
@@ -2751,8 +2751,8 @@ const FilterComponent = ({ tableInstance, target, targetColName, targetList, sel
                     if (key === null || key === undefined) {
                         setSelection("");
                         tableInstance.setFilter(targetColName, undefined);
-                        
-                        setActiveFiltersArray(prevArray => 
+
+                        setActiveFiltersArray(prevArray =>
                             prevArray.filter(f => f.filterType !== target),
                         );
                         return;
@@ -2766,15 +2766,15 @@ const FilterComponent = ({ tableInstance, target, targetColName, targetList, sel
 
                         setActiveFiltersArray(prevArray => {
                             const filtered = prevArray.filter(f => f.filterType !== target);
-                            return [...filtered, { 
-                                filterType: target, 
-                                value: found.name, 
+                            return [...filtered, {
+                                filterType: target,
+                                value: found.name,
                                 filterCol: targetColName,
                             }];
                         });
                     } else {
                         tableInstance.setFilter(targetColName, undefined);
-                        setActiveFiltersArray(prevArray => 
+                        setActiveFiltersArray(prevArray =>
                             prevArray.filter(f => f.filterType !== target),
                         );
                     }
