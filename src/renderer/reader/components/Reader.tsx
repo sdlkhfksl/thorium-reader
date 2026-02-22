@@ -86,7 +86,6 @@ import { pdfMount } from "../pdf/driver";
 import {
     readerLocalActionAnnotations,
     readerLocalActionDivina, readerLocalActionLocatorHrefChanged, readerLocalActionSetConfig,
-    readerLocalActionSetLocator,
     readerLocalActionToggleMenu,
     readerLocalActionToggleSettings,
 } from "../redux/actions";
@@ -3389,7 +3388,7 @@ const mapDispatchToProps = (dispatch: TDispatch, _props: IBaseProps) => {
             dispatch(dialogActions.closeRequest.build());
         },
         setMiniLocatorExtended: (miniLocatorExtended: MiniLocatorExtended) => {
-            dispatch(readerLocalActionSetLocator.build(miniLocatorExtended));
+            dispatch(readerActions.setLocator.build(miniLocatorExtended));
 
             // just to refresh allPublicationPage.tsx
 

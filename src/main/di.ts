@@ -115,6 +115,19 @@ export const memoryLoggerFilename = path.join(
     MEMORY_LOGGGER_FILENAME,
 );
 
+const USER_VAULT_FILENAME = "vault.json";
+export const userVaultConfigPath = path.join(
+    configDataFolderPath,
+    USER_VAULT_FILENAME,
+);
+const READER_CONFIG_DIRECTORY_NAME = "reader";
+export const readerConfigPath = path.join(
+    configDataFolderPath,
+    READER_CONFIG_DIRECTORY_NAME,
+);
+if (!fs.existsSync(readerConfigPath)) {
+    fs.mkdirSync(readerConfigPath);
+}
 //
 // Create databases
 //
@@ -259,7 +272,7 @@ container.bind<OpdsFeedViewConverter>(diSymbolTable["opds-feed-view-converter"])
     .to(OpdsFeedViewConverter).inSingletonScope();
 
 // Storage
-const publicationStorage = new PublicationStorage(publicationRepositoryPath, configDataFolderPath);
+const publicationStorage = new PublicationStorage(publicationRepositoryPath, userVaultConfigPath, readerConfigPath);
 container.bind<PublicationStorage>(diSymbolTable["publication-storage"]).toConstantValue(
     publicationStorage,
 );

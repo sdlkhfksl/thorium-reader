@@ -24,6 +24,17 @@ import { URL_PROTOCOL_STORE } from "readium-desktop/common/streamerProtocol";
 
 const debug = debug_("readium-desktop:main/storage/pub-storage");
 
+const rmrf = async (dir: string) => {
+    return await fs.promises.rm(dir, { recursive: true, retryDelay: 100, maxRetries: 3, force: true });
+};
+
+const isUUIDv4 = (uuid: string) => /^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/.test(uuid);
+const assertUUIDv4 = (uuid: string) => {
+    if (!isUUIDv4(uuid)) {
+        throw new Error("not an uuidv4 identifier !");
+    }
+};
+
 // Store pubs in a repository on filesystem
 // Each file of publication is stored in a directory whose name is the
 // publication uuid
@@ -34,16 +45,38 @@ const debug = debug_("readium-desktop:main/storage/pub-storage");
 // |- <publication 2 uuid>
 @injectable()
 export class PublicationStorage {
+
+    /**
+     * from di.ts
+     * %appData%\config-data-json{-dev}\
+     */
+    // private configDataFolderPath: string;
+
+    /**
+     * publication reader config directory from configDataFolderPath
+     * aka: %appData%\config-data-json{-dev}\reader\<uuid>\
+     */
+    private readerConfigPath: string; // %appData%\config-data
+
+    /**
+     * appData/userData default publication storage directory path
+     * aka: %appData%\publications{-dev}\<uuid>
+     */
     private defaultVaultPath: string;
+
+    /**
+     * publication storage directory path choose by user
+     */
     private userVaultPath: Promise<string>;
+
+    /**
+     * json config path of the user choosen vault
+     */
     private userVaultConfigPath: string;
 
-    public constructor(rootPath: string, configDataFolderPath: string) {
-        const userVaultFileName = "vault.json";
-        this.userVaultConfigPath = path.join(
-            configDataFolderPath,
-            userVaultFileName,
-        );
+    public constructor(rootPath: string, userVaultConfigPath: string, readerConfigPath: string) {
+        this.userVaultConfigPath = userVaultConfigPath;
+        this.readerConfigPath = readerConfigPath;
         this.defaultVaultPath = rootPath;
         this.userVaultPath = this.readUserVault();
     }
@@ -116,9 +149,49 @@ export class PublicationStorage {
         identifier: string,
         srcPath: string,
     ): Promise<File[]> {
+
+        assertUUIDv4(identifier);
+
         // Create a directory whose name is equals to publication identifier
         const pubDirPath = path.join(await this.getVaultPath(), identifier);
-        await fs.promises.mkdir(pubDirPath);
+
+        try {
+            await fs.promises.mkdir(pubDirPath);
+        } catch (e) {
+            debug(`mkdir ${pubDirPath}: ${e}`);
+            if (e.code === "EEXIST") {
+                debug("Directory already exists");
+                debug("How to handle this error?");
+                debug("Do we have to clean the directory before using it?");
+                debug("For the moment let's remove the directory");
+                try {
+                    await rmrf(pubDirPath);
+                    await fs.promises.mkdir(pubDirPath);
+                } catch (e) {
+                    debug(e);
+                } 
+            }
+        }
+
+        const configPubDirPath = path.join(this.readerConfigPath, identifier);
+
+        try {
+            await fs.promises.mkdir(configPubDirPath);
+        } catch (e) {
+            debug(`mkdir ${configPubDirPath}: ${e}`);
+            if (e.code === "EEXIST") {
+                debug("Directory already exists");
+                debug("How to handle this error?");
+                debug("Do we have to clean the directory before using it?");
+                debug("For the moment let's remove the directory");
+                try {
+                    await rmrf(configPubDirPath);
+                    await fs.promises.mkdir(configPubDirPath);
+                } catch (e) {
+                    debug(e);
+                } 
+            }
+        }
 
         const dirStat = await fs.promises.stat(pubDirPath);
         if (!dirStat.isDirectory()) {
@@ -141,6 +214,9 @@ export class PublicationStorage {
     }
 
     public async removePublication(identifier: string, preservePublicationOnFileSystem?: string) {
+
+        assertUUIDv4(identifier);
+
         const p = await this.findPublicationPath(identifier);
         try {
             if (preservePublicationOnFileSystem) {
@@ -165,7 +241,7 @@ export class PublicationStorage {
                 return;
             }
 
-            await fs.promises.rm(p, { recursive: true, retryDelay: 100, maxRetries: 3, force: true });
+            await rmrf(p);
         } catch (e) {
             debug(e);
             debug(preservePublicationOnFileSystem);
@@ -174,6 +250,8 @@ export class PublicationStorage {
     }
 
     public async getPublicationEpubPath(identifier: string): Promise<string> {
+
+        assertUUIDv4(identifier);
 
         // path.join(this.rootPath, identifier);
         const root = await this.findPublicationPath(identifier);
@@ -231,9 +309,7 @@ export class PublicationStorage {
     public async findPublicationPath(identifier: string): Promise<string> {
 
         identifier = identifier.trim();
-        if (!/^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/.test(identifier)) {
-            throw new Error("not an uuidv4 identifier !");
-        }
+
 
         let publicationPath = "";
 
@@ -273,7 +349,7 @@ export class PublicationStorage {
 
         for (const file of files) {
             if (
-                /^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/.test(file.name) &&
+                isUUIDv4(file.name) &&
                 file.isDirectory()
             ) {
                 pubs.add(file.name);

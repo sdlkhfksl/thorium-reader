@@ -7,16 +7,24 @@
 
 import debug_ from "debug";
 import * as fs from "fs";
-import { patchFilePath, stateFilePath } from "readium-desktop/main/di";
+import { patchFilePath, readerConfigPath, stateFilePath } from "readium-desktop/main/di";
 import { PersistRootState, RootState } from "readium-desktop/main/redux/states";
 // eslint-disable-next-line local-rules/typed-redux-saga-use-typed-effects
-import { call, debounce } from "redux-saga/effects";
-import { flush as flushTyped, select as selectTyped } from "typed-redux-saga/macro";
+import { call, debounce, all } from "redux-saga/effects";
+import { flush as flushTyped, select as selectTyped, call as callTyped } from "typed-redux-saga/macro";
 import { winActions } from "../actions";
 
 import { patchChannel } from "./patch";
+import { takeSpawnLeading } from "readium-desktop/common/redux/sagas/takeSpawnLeading";
+import { readerActions } from "readium-desktop/common/redux/actions";
+import { EventPayload } from "readium-desktop/common/ipc/sync";
+import { SenderType } from "readium-desktop/common/models/sync";
+import * as path from "path";
+import { takeSpawnEvery } from "readium-desktop/common/redux/sagas/takeSpawnEvery";
 
 const DEBOUNCE_TIME = 3 * 60 * 1000; // 3 min
+
+const locatorFileHandleMap: Map<string, fs.promises.FileHandle> = new Map();
 
 // Logger
 const filename_ = "readium-desktop:main:saga:persist";
@@ -64,6 +72,12 @@ export function* needToPersistFinalState() {
     const nextState = yield* selectTyped((store: RootState) => store);
     yield call(() => persistStateToFs(nextState));
     yield call(() => needToPersistPatch());
+
+    yield* callTyped(async () => {
+        for (const fileHandle of locatorFileHandleMap.values()) {
+            await fileHandle.close();
+        }
+    });
 }
 
 export function* needToPersistPatch() {
@@ -93,10 +107,103 @@ export function* needToPersistPatch() {
 
 }
 
+function* persistLocatorInReaderConfigDirectory(action: readerActions.setLocator.TAction) {
+    const locator = action.payload;
+    const sender = action.sender as EventPayload["sender"];
+
+    if (sender.type !== SenderType.Renderer) {
+        debug("sender is not renderer !!!");
+        return ;
+    } 
+
+    const locatorSerialize = JSON.stringify(locator, null, 4);
+
+    const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
+    const pubId = reader.publicationIdentifier;
+    const locatorDirPath = path.join(readerConfigPath, pubId);
+    const locatorFilePath = path.join(locatorDirPath, "locator.json");
+
+    yield* callTyped(() => locatorFileHandleMap.get(pubId).writeFile(locatorSerialize, { encoding: "utf-8" }));
+    yield* callTyped(() => locatorFileHandleMap.get(pubId).sync());
+    debug("LOCATOR write to", locatorFilePath);
+
+}
+
 export function saga() {
-    return debounce(
-        DEBOUNCE_TIME,
-        winActions.persistRequest.ID,
-        needToPersistPatch,
-    );
+    return all([
+        debounce(
+            DEBOUNCE_TIME,
+            winActions.persistRequest.ID,
+            needToPersistPatch,
+        ),
+        takeSpawnLeading(
+            readerActions.setLocator.ID,
+            persistLocatorInReaderConfigDirectory,
+            (e) => debug(e),
+        ),
+        // debounce(
+        //     DEBOUNCE_TIME,
+        //     readerActions.setLocator.ID,
+        //     persistLocatorInPublicationStorage,
+        // )
+        takeSpawnEvery(
+            winActions.reader.openRequest.ID,
+            function* (action: winActions.reader.openRequest.TAction) {
+                const { publicationIdentifier: pubId } = action.payload;
+
+                const locatorDirPath = path.join(readerConfigPath, pubId);
+                const locatorFilePath = path.join(locatorDirPath, "locator.json");
+
+                while (1) {
+                    try {
+                        if (!locatorFileHandleMap.has(pubId)) {
+                            locatorFileHandleMap.set(pubId, yield* callTyped(() => fs.promises.open(locatorFilePath, "w+", 0o600)));
+                            debug("locator file open and ready to be written: ", locatorFilePath);
+
+                            debug("There are currently", locatorFileHandleMap.size, "open locator file(s)");
+                            debug([...locatorFileHandleMap.keys()]);
+                        }
+                    } catch (e) {
+                        debug(JSON.stringify(e, null, 4));
+                        debug("Error to persist locator in reader config directory");
+                        if (e.code === "ENOENT") {
+                            try {
+                                debug("create directory", locatorDirPath);
+                                yield* callTyped(() => fs.promises.mkdir(locatorDirPath, { recursive: false, mode: 0o600 }));
+                                continue;
+                            } catch (e) {
+                                debug(e);
+                            }
+                        }
+                    }
+                    break; // important
+                }
+            },
+            // (e) => error(filename_ + ":createReaderWindow", e),
+            (e) => debug(e),
+        ),
+        // takeSpawnEvery(
+        //     winActions.reader.openSucess.ID,
+        //     winOpen,
+        //     (e) => error(filename_ + ":winOpen", e),
+        // ),
+        takeSpawnEvery(
+            winActions.reader.closed.ID,
+            function* (action: winActions.reader.closed.TAction) {
+                const { identifier } = action.payload;
+
+                const reader = yield* selectTyped((state: RootState) => state.win.session.reader[identifier]);
+                const pubId = reader.publicationIdentifier;
+
+                if (locatorFileHandleMap.has(pubId)) {
+                    locatorFileHandleMap.get(pubId).close();
+                    locatorFileHandleMap.delete(pubId);
+                    debug("locator file closed and deleted for", pubId);
+                }
+
+            },
+            // (e) => error(filename_ + ":winClose", e),
+            (e) => debug(e),
+        ),
+    ]);
 }

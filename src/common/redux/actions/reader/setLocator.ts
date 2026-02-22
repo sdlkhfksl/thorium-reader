@@ -10,7 +10,7 @@ import { MiniLocatorExtended } from "readium-desktop/common/redux/states/locator
 
 import { Action } from "readium-desktop/common/models/redux";
 
-export const ID = "READER_SET_LOCATOR_IN_RENDERER";
+export const ID = "READER_SET_LOCATOR";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Payload extends MiniLocatorExtended {
