@@ -75,8 +75,13 @@ export function* needToPersistFinalState() {
 
     yield* callTyped(async () => {
         for (const fileHandle of locatorFileHandleMap.values()) {
-            await fileHandle.close();
+            try {
+                await fileHandle.close();
+            } catch (e) {
+                debug(e);
+            }
         }
+        locatorFileHandleMap.clear(); // thorium is closing
     });
 }
 
@@ -195,7 +200,7 @@ export function saga() {
                 const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
                 const pubId = reader.publicationIdentifier;
 
-                const locatorSerialize = JSON.stringify(locator, null, 4);
+                const locatorSerialize = (__TH__IS_DEV__ || __TH__IS_CI__) ? JSON.stringify(locator, null, 4) : JSON.stringify(locator);
                 yield* callTyped(writeLocatorToPublicationStorageVault, locatorSerialize, pubId);
             },
         ),
@@ -249,13 +254,18 @@ export function saga() {
                 const pubId = reader.publicationIdentifier;
 
                 if (locatorFileHandleMap.has(pubId)) {
-                    locatorFileHandleMap.get(pubId).close();
+                    const fd = locatorFileHandleMap.get(pubId);
                     locatorFileHandleMap.delete(pubId);
+                    try {
+                        yield* callTyped(() => fd.close());
+                    } catch (e) {
+                        debug(e);
+                    }
                     debug("locator file closed and deleted for", pubId);
                 }
 
                 const locator = reader.reduxState.locator;
-                const locatorSerialize = JSON.stringify(locator, null, 4);
+                const locatorSerialize = (__TH__IS_DEV__ || __TH__IS_CI__) ? JSON.stringify(locator, null, 4) : JSON.stringify(locator);
                 yield* callTyped(writeLocatorToPublicationStorageVault, locatorSerialize, pubId);
 
             },
