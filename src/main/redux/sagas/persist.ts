@@ -7,7 +7,7 @@
 
 import debug_ from "debug";
 import * as fs from "fs";
-import { patchFilePath, readerConfigPath, stateFilePath } from "readium-desktop/main/di";
+import { diMainGet, patchFilePath, readerConfigPath, stateFilePath } from "readium-desktop/main/di";
 import { PersistRootState, RootState } from "readium-desktop/main/redux/states";
 // eslint-disable-next-line local-rules/typed-redux-saga-use-typed-effects
 import { call, debounce, all } from "redux-saga/effects";
@@ -125,8 +125,47 @@ function* persistLocatorInReaderConfigDirectory(action: readerActions.setLocator
 
     yield* callTyped(() => locatorFileHandleMap.get(pubId).writeFile(locatorSerialize, { encoding: "utf-8" }));
     yield* callTyped(() => locatorFileHandleMap.get(pubId).sync());
-    debug("LOCATOR write to", locatorFilePath);
+    debug("LOCATOR written to", locatorFilePath);
 
+}
+
+function* writeLocatorToPublicationStorageVault(locatorSerialize: string, identifier: string) {
+
+    const publicationPath = yield* callTyped(() => diMainGet("publication-storage").findPublicationPath(identifier));
+    const locatorFilePath = path.join(publicationPath, "locator.json");
+
+    try {
+        const data = yield* callTyped(() => fs.promises.readFile(locatorFilePath, { encoding: "utf-8" }));
+        if (data === locatorSerialize) {
+            debug("LOCATOR Storage same as LOCATOR Serialized, already persisted");
+            return ;
+        }
+    } catch {
+        // ignore
+    }
+
+    let loop = 3;
+    while (loop) {
+        try {
+            yield* callTyped(() => fs.promises.writeFile(locatorFilePath, locatorSerialize, { mode: 0o600, encoding: "utf-8", flush: true }));
+        } catch (e) {
+            debug(e);
+        }
+        debug("LOCATOR written to", locatorFilePath);
+
+        const data = yield* callTyped(() => fs.promises.readFile(locatorFilePath, { encoding: "utf-8" }));
+        if (data !== locatorSerialize) {
+            debug("ERROR: locator not written/verified to", locatorFilePath);
+            --loop;
+        } else {
+            break;
+        }
+    }
+    if (!loop) {
+        debug("========================");
+        debug("ERROR: LOCATOR NOT WRITTEN TO PUBLICATION VAULT !!! Tried 3 times");
+        debug("========================");
+    }
 }
 
 export function saga() {
@@ -141,11 +180,25 @@ export function saga() {
             persistLocatorInReaderConfigDirectory,
             (e) => debug(e),
         ),
-        // debounce(
-        //     DEBOUNCE_TIME,
-        //     readerActions.setLocator.ID,
-        //     persistLocatorInPublicationStorage,
-        // )
+        debounce(
+            DEBOUNCE_TIME,
+            readerActions.setLocator.ID,
+            function* (action: readerActions.setLocator.TAction) {
+
+                const locator = action.payload;
+                const sender = action.sender as EventPayload["sender"];
+
+                if (sender.type !== SenderType.Renderer) {
+                    debug("sender is not renderer !!!");
+                    return;
+                }    
+                const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
+                const pubId = reader.publicationIdentifier;
+
+                const locatorSerialize = JSON.stringify(locator, null, 4);
+                yield* callTyped(writeLocatorToPublicationStorageVault, locatorSerialize, pubId);
+            },
+        ),
         takeSpawnEvery(
             winActions.reader.openRequest.ID,
             function* (action: winActions.reader.openRequest.TAction) {
@@ -200,6 +253,10 @@ export function saga() {
                     locatorFileHandleMap.delete(pubId);
                     debug("locator file closed and deleted for", pubId);
                 }
+
+                const locator = reader.reduxState.locator;
+                const locatorSerialize = JSON.stringify(locator, null, 4);
+                yield* callTyped(writeLocatorToPublicationStorageVault, locatorSerialize, pubId);
 
             },
             // (e) => error(filename_ + ":winClose", e),
