@@ -5,7 +5,7 @@
 // that can be found in the LICENSE file exposed on Github (readium) in the project repository.
 // ==LICENSE-END==
 
-import { dialog, shell } from "electron";
+import { dialog } from "electron";
 import * as fs from "fs";
 import { injectable } from "inversify";
 import * as path from "path";
@@ -213,45 +213,65 @@ export class PublicationStorage {
         return files;
     }
 
-    public async removePublication(identifier: string, preservePublicationOnFileSystem?: string) {
+    private __publicationEpubPathMap = new Map<string, string>();
+    public async removePublication(identifier: string /*, preservePublicationOnFileSystem?: string*/) {
 
         assertUUIDv4(identifier);
 
-        const p = await this.findPublicationPath(identifier);
-        try {
-            if (preservePublicationOnFileSystem) {
-                const log = path.join(p, "error.txt");
-                fs.writeFileSync(log, preservePublicationOnFileSystem, { encoding: "utf-8" });
-                shell.showItemInFolder(log);
-
-                // const parent = path.dirname(p) + "_REMOVED";
-                // if (!fs.existsSync(parent)) {
-                //     fs.mkdirSync(parent);
-                // }
-
-                // setTimeout(async () => {
-                //     await shell.openPath(parent);
-                // }, 0);
-                // shell.showItemInFolder(parent);
-
-                // const f = path.basename(p);
-                // const n = path.join(parent, f);
-                // shell.showItemInFolder(n);
-
-                return;
-            }
-
-            await rmrf(p);
-        } catch (e) {
-            debug(e);
-            debug(preservePublicationOnFileSystem);
-            debug(`removePublication error (ignore) ${identifier} ${p}`);
+        if (this.__publicationEpubPathMap.has(identifier)) {
+            this.__publicationEpubPathMap.delete(identifier);
         }
+
+        const p = await this.findPublicationPath(identifier);
+        const p1 = path.join(await this.userVaultPath, identifier);
+        const p2 = path.join(this.defaultVaultPath, identifier);
+        // try {
+            // if (preservePublicationOnFileSystem) {
+            //     const log = path.join(p, "error.txt");
+            //     fs.writeFileSync(log, preservePublicationOnFileSystem, { encoding: "utf-8" });
+            //     shell.showItemInFolder(log);
+
+            //     // const parent = path.dirname(p) + "_REMOVED";
+            //     // if (!fs.existsSync(parent)) {
+            //     //     fs.mkdirSync(parent);
+            //     // }
+
+            //     // setTimeout(async () => {
+            //     //     await shell.openPath(parent);
+            //     // }, 0);
+            //     // shell.showItemInFolder(parent);
+
+            //     // const f = path.basename(p);
+            //     // const n = path.join(parent, f);
+            //     // shell.showItemInFolder(n);
+
+            //     return;
+            // }
+
+            try {
+                await rmrf(p1);
+            } catch (e) {
+                debug(p1 === p ? e : "ok");
+            }
+            try {
+                await rmrf(p2);
+            } catch (e) {
+                debug(p2 === p ? e : "ok");
+            }
+        // } catch (e) {
+        //     debug(e);
+        //     // debug(preservePublicationOnFileSystem);
+        //     debug(`removePublication error (ignore) ${identifier} ${p}`);
+        // }
     }
 
     public async getPublicationEpubPath(identifier: string): Promise<string> {
 
         assertUUIDv4(identifier);
+
+        if (this.__publicationEpubPathMap.has(identifier)) {
+            return this.__publicationEpubPathMap.get(identifier);
+        }
 
         // path.join(this.rootPath, identifier);
         const root = await this.findPublicationPath(identifier);
@@ -269,6 +289,7 @@ export class PublicationStorage {
                     const filePath = path.join(file.parentPath, file.name);
                     const stats = await fs.promises.stat(filePath);
                     if (stats.isFile() && stats.size > 10) {
+                        this.__publicationEpubPathMap.set(identifier, filePath);
                         return filePath;
                     }
                     // await fs.promises.access(filePath, fs.constants.R_OK | fs.constants.W_OK);
@@ -308,8 +329,20 @@ export class PublicationStorage {
 
     public async findPublicationPath(identifier: string): Promise<string> {
 
-        identifier = identifier.trim();
+        assertUUIDv4(identifier);
 
+        debug("FindPublicationPath", identifier);
+
+        const defer = (pubPath: string) => {
+            if (this.__publicationEpubPathMap.has(identifier)) {
+                if (path.dirname(this.__publicationEpubPathMap.get(identifier)) !== pubPath) {
+                    debug("publicationEpubPath cache invalidation for", identifier);
+                    this.__publicationEpubPathMap.delete(identifier);
+                }
+            }
+        };
+
+        identifier = identifier.trim();
 
         let publicationPath = "";
 
@@ -322,6 +355,7 @@ export class PublicationStorage {
                 // await fs.promises.access(publicationPath, fs.constants.R_OK | fs.constants.W_OK);
                 const stats = await fs.promises.stat(publicationPath);
                 if (stats.isDirectory()) {
+                    defer(publicationPath);
                     return publicationPath;
                 }
             } catch (e) {
@@ -335,6 +369,7 @@ export class PublicationStorage {
             // await fs.promises.access(publicationPath, fs.constants.R_OK | fs.constants.W_OK);
             const stats = await fs.promises.stat(publicationPath);
             if (stats.isDirectory()) {
+                defer(publicationPath);
                 return publicationPath;
             }
         } catch (e) {
