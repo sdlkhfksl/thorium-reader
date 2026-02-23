@@ -120,7 +120,7 @@ function* persistLocatorInReaderConfigDirectory(action: readerActions.setLocator
     if (sender.type !== SenderType.Renderer) {
         debug("sender is not renderer !!!");
         return ;
-    } 
+    }
 
     const locatorSerialize = JSON.stringify(locator, null, 4);
 
@@ -158,7 +158,7 @@ export function saga() {
                 if (sender.type !== SenderType.Renderer) {
                     debug("sender is not renderer !!!");
                     return;
-                }    
+                }
                 const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
                 const pubId = reader.publicationIdentifier;
 
@@ -183,7 +183,7 @@ export function saga() {
                             debug("There are currently", locatorFileHandleMap.size, "open locator file(s)");
                             debug([...locatorFileHandleMap.keys()]);
                         }
-                    } catch (e) {
+                    } catch (e: any) {
                         debug(JSON.stringify(e, null, 4));
                         debug("Error to persist locator in reader config directory");
                         if (e.code === "ENOENT") {

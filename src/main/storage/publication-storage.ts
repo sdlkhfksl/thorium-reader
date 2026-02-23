@@ -188,7 +188,7 @@ export class PublicationStorage {
 
         try {
             await fs.promises.mkdir(pubDirPath);
-        } catch (e) {
+        } catch (e: any) {
             debug(`mkdir ${pubDirPath}: ${e}`);
             if (e.code === "EEXIST") {
                 debug("Directory already exists");
@@ -200,7 +200,7 @@ export class PublicationStorage {
                     await fs.promises.mkdir(pubDirPath);
                 } catch (e) {
                     debug(e);
-                } 
+                }
             }
         }
 
@@ -208,7 +208,7 @@ export class PublicationStorage {
 
         try {
             await fs.promises.mkdir(configPubDirPath);
-        } catch (e) {
+        } catch (e: any) {
             debug(`mkdir ${configPubDirPath}: ${e}`);
             if (e.code === "EEXIST") {
                 debug("Directory already exists");
@@ -220,7 +220,7 @@ export class PublicationStorage {
                     await fs.promises.mkdir(configPubDirPath);
                 } catch (e) {
                     debug(e);
-                } 
+                }
             }
         }
 
@@ -328,7 +328,7 @@ export class PublicationStorage {
             }
         } catch (err) {
             debug("readdir error", err);
-        } 
+        }
 
         debug("Error GetPublicationEpubPath not found with", identifier, "Throw new Error");
         throw new Error(`getPublicationEpubPath() FAIL ${identifier} (cannot find book.epub|audiobook|etc.)`);
