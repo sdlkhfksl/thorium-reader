@@ -23,6 +23,7 @@ import * as path from "path";
 import { takeSpawnEvery } from "readium-desktop/common/redux/sagas/takeSpawnEvery";
 
 const DEBOUNCE_TIME = 3 * 60 * 1000; // 3 min
+const LOCATOR_DEBOUNCE_TIME = 10 * 1000; // 10 secs
 
 const locatorFileHandleMap: Map<string, fs.promises.FileHandle> = new Map();
 
@@ -134,45 +135,6 @@ function* persistLocatorInReaderConfigDirectory(action: readerActions.setLocator
 
 }
 
-function* writeLocatorToPublicationStorageVault(locatorSerialize: string, identifier: string) {
-
-    const publicationPath = yield* callTyped(() => diMainGet("publication-storage").findPublicationPath(identifier));
-    const locatorFilePath = path.join(publicationPath, "locator.json");
-
-    try {
-        const data = yield* callTyped(() => fs.promises.readFile(locatorFilePath, { encoding: "utf-8" }));
-        if (data === locatorSerialize) {
-            debug("LOCATOR Storage same as LOCATOR Serialized, already persisted");
-            return ;
-        }
-    } catch {
-        // ignore
-    }
-
-    let loop = 3;
-    while (loop) {
-        try {
-            yield* callTyped(() => fs.promises.writeFile(locatorFilePath, locatorSerialize, { mode: 0o600, encoding: "utf-8", flush: true }));
-        } catch (e) {
-            debug(e);
-        }
-        debug("LOCATOR written to", locatorFilePath);
-
-        const data = yield* callTyped(() => fs.promises.readFile(locatorFilePath, { encoding: "utf-8" }));
-        if (data !== locatorSerialize) {
-            debug("ERROR: locator not written/verified to", locatorFilePath);
-            --loop;
-        } else {
-            break;
-        }
-    }
-    if (!loop) {
-        debug("========================");
-        debug("ERROR: LOCATOR NOT WRITTEN TO PUBLICATION VAULT !!! Tried 3 times");
-        debug("========================");
-    }
-}
-
 export function saga() {
     return all([
         debounce(
@@ -186,7 +148,7 @@ export function saga() {
             (e) => debug(e),
         ),
         debounce(
-            DEBOUNCE_TIME,
+            LOCATOR_DEBOUNCE_TIME,
             readerActions.setLocator.ID,
             function* (action: readerActions.setLocator.TAction) {
 
@@ -201,7 +163,7 @@ export function saga() {
                 const pubId = reader.publicationIdentifier;
 
                 const locatorSerialize = (__TH__IS_DEV__ || __TH__IS_CI__) ? JSON.stringify(locator, null, 4) : JSON.stringify(locator);
-                yield* callTyped(writeLocatorToPublicationStorageVault, locatorSerialize, pubId);
+                yield* callTyped(() => diMainGet("publication-storage").writeData(pubId, "locator", locatorSerialize));
             },
         ),
         takeSpawnEvery(
@@ -266,7 +228,7 @@ export function saga() {
 
                 const locator = reader.reduxState.locator;
                 const locatorSerialize = (__TH__IS_DEV__ || __TH__IS_CI__) ? JSON.stringify(locator, null, 4) : JSON.stringify(locator);
-                yield* callTyped(writeLocatorToPublicationStorageVault, locatorSerialize, pubId);
+                yield* callTyped(() => diMainGet("publication-storage").writeData(pubId, "locator", locatorSerialize));
 
             },
             // (e) => error(filename_ + ":winClose", e),

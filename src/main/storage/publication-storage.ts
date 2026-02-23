@@ -138,6 +138,37 @@ export class PublicationStorage {
         return (await this.userVaultPath) || this.defaultVaultPath;
     }
 
+    public async writeData(
+        identifier: string,
+        fileName: "locator",
+        data: string,
+    ) {
+
+        assertUUIDv4(identifier);
+
+        const pubPath = await this.findPublicationPath(identifier);
+        const filePath = fileName === "locator" ? path.join(pubPath, "locator.json") : "";
+
+        try {
+            const readData = await fs.promises.readFile(filePath, { encoding: "utf-8" });
+            if (readData === data) {
+                debug("LOCATOR Storage same as LOCATOR Serialized, already persisted");
+                return;
+            }
+        } catch {
+            // ignore
+        }
+
+        await using dir = await fs.promises.mkdtempDisposable(pubPath); // same as defer and RAII: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/await_using
+        const tmpFilePath = path.join(dir.path, "locator.json");
+        await fs.promises.writeFile(tmpFilePath, data, { encoding: "utf-8", flush: true, mode: 0o644}); // owner read/write group/all read
+        const read = await fs.promises.readFile(tmpFilePath, { encoding: "utf-8" });
+        if (read === data) {
+            await fs.promises.rename(tmpFilePath, filePath);
+            debug("LOCATOR written to", filePath);
+        }
+    }
+    
     /**
      * Store a publication in a repository
      *
