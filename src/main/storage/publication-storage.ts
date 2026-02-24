@@ -168,6 +168,25 @@ export class PublicationStorage {
             debug("LOCATOR written to", filePath);
         }
     }
+
+        public async readData(
+        identifier: string,
+        fileName: "locator",
+    ) {
+        
+        assertUUIDv4(identifier);
+
+        const pubPath = await this.findPublicationPath(identifier);
+        const filePath = fileName === "locator" ? path.join(pubPath, "locator.json") : "";
+
+        try {
+            const readData = await fs.promises.readFile(filePath, { encoding: "utf-8" });
+            const data = JSON.parse(readData);
+            return data;
+        } catch (e) {
+            debug(e);
+        }
+    }
     
     /**
      * Store a publication in a repository
