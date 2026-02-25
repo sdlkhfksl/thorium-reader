@@ -75,14 +75,15 @@ export function* needToPersistFinalState() {
     yield call(() => needToPersistPatch());
 
     yield* callTyped(async () => {
-        for (const fileHandle of locatorFileHandleMap.values()) {
+        const values = locatorFileHandleMap.values();
+        locatorFileHandleMap.clear(); // thorium is closing, but just for logica correctness we make sure no consumer code can pass the locatorFileHandleMap.has(id) condition and reach locatorFileHandleMap.get(id)
+        for (const fileHandle of values) {
             try {
                 await fileHandle.close();
             } catch (e) {
                 debug(e);
             }
         }
-        locatorFileHandleMap.clear(); // thorium is closing
     });
 }
 
