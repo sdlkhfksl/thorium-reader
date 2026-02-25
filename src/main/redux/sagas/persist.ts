@@ -216,6 +216,7 @@ export function saga() {
                 const reader = yield* selectTyped((state: RootState) => state.win.session.reader[identifier]);
                 const pubId = reader.publicationIdentifier;
 
+                // TODO: this incorrectly deletes the map entry and closes the file handle ... because there can be several reader windows opened for the same publication ID!
                 if (locatorFileHandleMap.has(pubId)) {
                     const fd = locatorFileHandleMap.get(pubId);
                     locatorFileHandleMap.delete(pubId);
