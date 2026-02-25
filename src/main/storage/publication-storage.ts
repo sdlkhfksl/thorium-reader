@@ -173,7 +173,7 @@ export class PublicationStorage {
         identifier: string,
         fileName: "locator",
     ) {
-        
+
         assertUUIDv4(identifier);
 
         const pubPath = await this.findPublicationPath(identifier);
@@ -187,7 +187,7 @@ export class PublicationStorage {
             debug(e);
         }
     }
-    
+
     /**
      * Store a publication in a repository
      *
@@ -391,8 +391,6 @@ export class PublicationStorage {
                 }
             }
         };
-
-        identifier = identifier.trim();
 
         let publicationPath = "";
 
