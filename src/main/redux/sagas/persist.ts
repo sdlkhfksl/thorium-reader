@@ -76,7 +76,7 @@ export function* needToPersistFinalState() {
 
     yield* callTyped(async () => {
         const values = Array.from(locatorFileHandleMap.values());
-        locatorFileHandleMap.clear(); // thorium is closing, but just for logica correctness we make sure no consumer code can pass the locatorFileHandleMap.has(id) condition and reach locatorFileHandleMap.get(id)
+        locatorFileHandleMap.clear(); // thorium is closing, but just for logical correctness we make sure no consumer code can pass the locatorFileHandleMap.has(id) condition and reach locatorFileHandleMap.get(id)
         for (const fileHandle of values) {
             try {
                 await fileHandle.close();
@@ -127,13 +127,29 @@ function* persistLocatorInReaderConfigDirectory(action: readerActions.setLocator
 
     const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
     const pubId = reader.publicationIdentifier;
+
     const locatorDirPath = path.join(readerConfigPath, pubId);
     const locatorFilePath = path.join(locatorDirPath, "locator.json");
 
-    yield* callTyped(() => locatorFileHandleMap.get(pubId).writeFile(locatorSerialize, { encoding: "utf-8" }));
-    yield* callTyped(() => locatorFileHandleMap.get(pubId).sync());
-    debug("LOCATOR written to", locatorFilePath);
+    yield call(() => {
+        const fileHandle = locatorFileHandleMap.get(pubId);
+        if (!fileHandle) {
+            debug("locatorFileHandleMap WRITE NIL fileHandle for pub id " + pubId);
+            return;
+        }
+        fileHandle.writeFile(locatorSerialize, { encoding: "utf-8" });
+    });
 
+    yield call(() => {
+        const fileHandle = locatorFileHandleMap.get(pubId);
+        if (!fileHandle) {
+            debug("locatorFileHandleMap SYNC NIL fileHandle for pub id " + pubId);
+            return;
+        }
+        fileHandle.sync();
+    });
+
+    debug("LOCATOR written to", locatorFilePath);
 }
 
 export function saga() {
