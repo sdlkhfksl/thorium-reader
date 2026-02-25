@@ -14,7 +14,7 @@ import { takeSpawnLeading } from "readium-desktop/common/redux/sagas/takeSpawnLe
 import { error } from "readium-desktop/main/tools/error";
 import * as fs from "fs";
 import { nanoid } from "nanoid";
-import { fork as forkTyped, call as callTyped, select as selectTyped, put as putTyped, take as takeTyped, race as raceTyped, delay, SagaGenerator, all as allTyped } from "typed-redux-saga/macro";
+import { fork as forkTyped, call as callTyped, select as selectTyped, put as putTyped, take as takeTyped, race as raceTyped, delay as delayTyped, SagaGenerator, all as allTyped } from "typed-redux-saga/macro";
 import path from "node:path";
 import { ICustomizationLockInfo, ICustomizationProfileError, ICustomizationProfileProvisioned, ICustomizationProfileProvisionedWithError } from "readium-desktop/common/redux/states/customization";
 import { ToastType } from "readium-desktop/common/models/toast";
@@ -389,7 +389,7 @@ export function* acquireProvisionsActivates(action: customizationActions.acquire
 
         yield* forkTyped(function* () {
 
-            yield* delay(100);
+            yield* delayTyped(100);
             let error = false;
             debug(`COPY "${filePath}" to "${packagePath}"`);
             try {
@@ -498,7 +498,7 @@ export function* acquireProvisionsActivates(action: customizationActions.acquire
             // The risk is to trigger the manual import function and bypassing chokidar too early
             // when the disk in not atomically/fully written to the disk (wellKnown folder),
             // and therefore corrupt the import phase and raise an import error on the profile.
-            yield* delay(10000);
+            yield* delayTyped(10000);
 
             const isTheFileExists = yield* callTyped(async () => { try { await fs.promises.access(packagePath, constants.R_OK); return true; } catch { return false; }; });
 
