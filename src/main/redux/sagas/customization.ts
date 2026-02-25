@@ -35,7 +35,7 @@ const debug = debug_(filename_);
 
 export function* fileProvisionning(packageFileName:string, removed = false): SagaGenerator<void> {
 
-    const customizationState = yield * selectTyped((state: ICommonRootState) => state.customization);
+    const customizationState = yield* selectTyped((state: ICommonRootState) => state.customization);
     let packagesProvisionedAndLatest = customizationState.provision;
     let packagesNotProvisionedOrOnError: ICustomizationProfileProvisionedWithError[] = [];
 
@@ -43,19 +43,19 @@ export function* fileProvisionning(packageFileName:string, removed = false): Sag
         const packageFound = packagesProvisionedAndLatest.find(({ fileName }) => fileName === packageFileName);
         if (packageFound && packageFound.id === customizationState.activate.id && packageFound.fileName === packageFileName) {
             debug("rollback to thorium vanilla profile");
-            yield * putTyped(customizationActions.activating.build("")); // no profile
+            yield* putTyped(customizationActions.activating.build("")); // no profile
         }
         packagesProvisionedAndLatest = packagesProvisionedAndLatest.filter(({ fileName }) => fileName !== packageFileName);
     } else {
 
         debug("Found => ", packageFileName);
-        const profileProvisionedOrOnError = yield * callTyped(() => customizationPackageProvisioning(packageFileName));
+        const profileProvisionedOrOnError = yield* callTyped(() => customizationPackageProvisioning(packageFileName));
         if ((profileProvisionedOrOnError as ICustomizationProfileError).error) {
             debug("ERROR: Profile not provisioned, due to error :", (profileProvisionedOrOnError as ICustomizationProfileError).message);
             packagesNotProvisionedOrOnError.push((profileProvisionedOrOnError as ICustomizationProfileError));
         } else {
 
-            [packagesProvisionedAndLatest, packagesNotProvisionedOrOnError] = yield * callTyped(() => customizationPackageProvisioningCheckVersion(
+            [packagesProvisionedAndLatest, packagesNotProvisionedOrOnError] = yield* callTyped(() => customizationPackageProvisioningCheckVersion(
                 packagesProvisionedAndLatest,
                 packagesNotProvisionedOrOnError,
                 profileProvisionedOrOnError as ICustomizationProfileProvisioned,
@@ -64,7 +64,7 @@ export function* fileProvisionning(packageFileName:string, removed = false): Sag
     }
 
     debug("dispatch provisionning action with ", JSON.stringify(packagesProvisionedAndLatest)/*.slice(0, 100)+"..."*/);
-    yield * putTyped(customizationActions.provisioning.build(packagesProvisionedAndLatest, packagesNotProvisionedOrOnError));
+    yield* putTyped(customizationActions.provisioning.build(packagesProvisionedAndLatest, packagesNotProvisionedOrOnError));
 
     // TODO: how to warn user of potentially a new version of the packages id, we have to put a diff between version for a same id !
     // And mostly a technical issue, how to update the view with the update. package streamer follow a package id
@@ -510,7 +510,7 @@ export function* acquireProvisionsActivates(action: customizationActions.acquire
 
             while (1) {
                 yield* takeTyped(0); // never finished
-            } 
+            }
 
         }),
     });
