@@ -432,7 +432,7 @@ export function* acquireProvisionsActivates(action: customizationActions.acquire
     }
 
     const { a: timeoutResult, b: fileNameProvisioned } = yield* raceTyped({
-        a: delay(20000),
+        a: delayTyped(20000),
         b: callTyped(function* (): SagaGenerator<boolean> {
             if (copyDownloadAndQuit) {
                 return undefined;
