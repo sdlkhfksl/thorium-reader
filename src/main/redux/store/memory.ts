@@ -29,10 +29,13 @@ import { TBookmarkState } from "readium-desktop/common/redux/states/bookmark";
 import { TAnnotationState } from "readium-desktop/common/redux/states/renderer/annotation";
 import { sqliteInitTableNote, sqliteTableNoteDeleteWherePubId, sqliteTableNoteInsert, sqliteTableSelectLastModifiedDateWherePubId } from "readium-desktop/main/db/sqlite/note";
 import { sqliteInitialisation } from "readium-desktop/main/db/sqlite";
-import { IReaderStateReaderSession } from "readium-desktop/common/redux/states/renderer/readerRootState";
+import { IReaderPdfConfig, IReaderStateReaderSession } from "readium-desktop/common/redux/states/renderer/readerRootState";
 import { IWinRegistryReaderState } from "readium-desktop/main/redux/states/win/registry/reader";
 import { ReaderConfig } from "readium-desktop/common/models/reader";
 import { IRTLFlipState } from "readium-desktop/common/redux/states/renderer/rtlFlip";
+import { IAllowCustomConfigState } from "src/common/redux/states/renderer/allowCustom";
+import { IDivinaState } from "src/common/redux/states/renderer/divina";
+import { IBookmarkTotalCountState } from "src/common/redux/states/renderer/bookmarkTotalCount";
 
 // import { composeWithDevTools } from "remote-redux-devtools";
 const REDUX_REMOTE_DEVTOOLS_PORT = 7770;
@@ -626,6 +629,8 @@ export async function initStore()
             debug("PubID", pubId);
             preloadedState.win.registry.reader[pubId] = {} as IWinRegistryReaderState;
 
+            // "config" | "locator" | "divina" | "disableRTLFlip" | "allowCustomConfig" | "noteTotalCount" | "pdfConfig"
+
             // can be undefined!
             const locator = await tryCatch(async () => await publicationData.readJsonObj(pubId, "locator"), _dbgn) as unknown as MiniLocatorExtended;
 
@@ -635,10 +640,26 @@ export async function initStore()
             // can be undefined!
             const disableRTLFlip = await tryCatch(async () => await publicationData.readJsonObj(pubId, "disableRTLFlip"), _dbgn) as unknown as IRTLFlipState;
 
+            // can be undefined!
+            const allowCustomConfig = await tryCatch(async () => await publicationData.readJsonObj(pubId, "allowCustomConfig"), _dbgn) as unknown as IAllowCustomConfigState;
+
+            // can be undefined!
+            const noteTotalCount = await tryCatch(async () => await publicationData.readJsonObj(pubId, "noteTotalCount"), _dbgn) as unknown as IBookmarkTotalCountState;
+
+            // can be undefined!
+            const divina = await tryCatch(async () => await publicationData.readJsonObj(pubId, "divina"), _dbgn) as unknown as IDivinaState;
+
+            // can be undefined!
+            const pdfConfig = await tryCatch(async () => await publicationData.readJsonObj(pubId, "pdfConfig"), _dbgn) as unknown as IReaderPdfConfig;
+
             preloadedState.win.registry.reader[pubId].reduxState = {
                 locator,
                 config,
                 disableRTLFlip,
+                allowCustomConfig,
+                noteTotalCount,
+                divina,
+                pdfConfig,
             };
 
             // can be undefined!
