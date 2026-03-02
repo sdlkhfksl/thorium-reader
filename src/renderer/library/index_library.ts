@@ -103,14 +103,23 @@ ipcRenderer.on(syncIpc.CHANNEL, (_0: any, data: syncIpc.EventPayload) => {
     switch (data.type) {
         case syncIpc.EventType.MainAction:
             // Dispatch main action to renderer reducers
-            const store = getStore();
-            store.dispatch(Object.assign(
-                {},
-                ActionSerializer.deserialize(data.payload.action),
-                {
-                    sender: data.sender,
-                },
-            ) as ActionWithSender);
+
+            try {
+                const store = getStore();
+                store.dispatch(Object.assign(
+                    {},
+                    ActionSerializer.deserialize(data.payload.action),
+                    {
+                        sender: data.sender,
+                    },
+                ) as ActionWithSender);
+            } catch (e) {
+                console.error("####################3");
+                console.error("SYNC_ACTION not dispatched from main to library");
+                console.error("SYNC_ACTION=", data);
+                console.error(e);
+                console.error("####################3");
+            }
             break;
     }
 });
