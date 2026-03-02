@@ -479,7 +479,6 @@ declare namespace typed_i18n {
   readonly "filter": {
     readonly "addFilters": string,
     readonly "filterBy": string,
-    readonly "reset": string,
     readonly "selectOption": string
   },
   readonly "lcp": {
@@ -506,12 +505,10 @@ declare namespace typed_i18n {
   (_: "library.filter", __?: {}): {
   readonly "addFilters": string,
   readonly "filterBy": string,
-  readonly "reset": string,
   readonly "selectOption": string
 };
   (_: "library.filter.addFilters", __?: {}): string;
   (_: "library.filter.filterBy", __?: {}): string;
-  (_: "library.filter.reset", __?: {}): string;
   (_: "library.filter.selectOption", __?: {}): string;
   (_: "library.lcp", __?: {}): {
   readonly "hidePassphrase": string,

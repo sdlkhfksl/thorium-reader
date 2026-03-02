@@ -203,7 +203,6 @@
         "filter": {
             "addFilters": "Add filters",
             "filterBy": "Filter by",
-            "reset": "Reset",
             "selectOption": "Select an item"
         },
         "lcp": {

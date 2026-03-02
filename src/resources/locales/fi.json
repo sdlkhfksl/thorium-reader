@@ -203,7 +203,6 @@
         "filter": {
             "addFilters": "Lisää suodatin",
             "filterBy": "Suodata",
-            "reset": "Nollaa",
             "selectOption": "Valitse"
         },
         "lcp": {
