@@ -15,9 +15,9 @@ import { pathToFileURL } from "url";
 import * as path from "path";
 import { diMainGet } from "readium-desktop/main/di";
 
-const debug = (..._: any[]) => {};
-const debug__ =  debug_("readium-desktop:main#sessions");
-debug__("_");
+// const debug = (..._: any[]) => {};
+const debug =  debug_("readium-desktop:main#sessions");
+debug("_");
 
 interface PromiseFulfilled<T> {
     status: "fulfilled";
