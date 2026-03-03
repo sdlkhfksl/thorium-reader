@@ -16,16 +16,15 @@ import { commandLineMainEntry } from ".";
 import { getOpenFileFromCliChannel } from "../event";
 import { isOpenUrl, setOpenUrl } from "./url";
 import { _APP_NAME, _APP_VERSION, _PACK_NAME } from "readium-desktop/preprocessor-directives";
-import { USER_DATA_FOLDER } from "readium-desktop/common/constant";
+import { FORCE_PROD_DB_IN_DEV, USER_DATA_FOLDER } from "readium-desktop/common/constant";
 
 // Logger
 const filename = "readium-desktop:main:lock";
 const debug = debug_(filename);
 
-const userDataPath = USER_DATA_FOLDER;
 const folderPath = path.join(
-    userDataPath,
-    "app-logs",
+    USER_DATA_FOLDER,
+    !FORCE_PROD_DB_IN_DEV && (__TH__IS_DEV__ || __TH__IS_CI__) ? "app-logs-dev" : "app-logs",
 );
 const PROCESS_LOGS = "processLogs.txt";
 const appLogs = path.join(
@@ -117,7 +116,7 @@ export function lockInstance() {
                 thoriumAppName: _APP_NAME,
                 thoriumAppVersion: _APP_VERSION,
                 thoriumPackName: _PACK_NAME,
-                thoriumUserDataPath: userDataPath,
+                thoriumUserDataPath: USER_DATA_FOLDER,
             }, null, 4)}\n`;
 
             // Someone tried to run a second instance, we should focus our window.

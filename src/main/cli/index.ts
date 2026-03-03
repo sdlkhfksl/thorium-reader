@@ -25,7 +25,7 @@ import { isOpenUrl, setOpenUrl } from "./url";
 import { globSync } from "glob";
 import { PublicationView } from "readium-desktop/common/views/publication";
 import { isAcceptedExtension } from "readium-desktop/common/extension";
-import { USER_DATA_FOLDER } from "readium-desktop/common/constant";
+import { FORCE_PROD_DB_IN_DEV, USER_DATA_FOLDER } from "readium-desktop/common/constant";
 
 // Logger
 const debug = debug_("readium-desktop:cli:process");
@@ -52,10 +52,9 @@ if (gotTheLock) {
 // TODO: check electron app.getPath('logs') instead
 // From electron docs: https://www.electronjs.org/docs/latest/api/app#appgetpathname
 // if is called without called app.setAppLogsPath() being called first, a default log directory will be created equivalent to calling app.setAppLogsPath() without a path parameter.
-const userDataPath = USER_DATA_FOLDER;
 const folderPath = path.join(
-    userDataPath,
-    "app-logs",
+    USER_DATA_FOLDER,
+    !FORCE_PROD_DB_IN_DEV && (__TH__IS_DEV__ || __TH__IS_CI__) ? "app-logs-dev" : "app-logs",
 );
 const PROCESS_LOGS = "processLogs.txt";
 const appLogs = path.join(

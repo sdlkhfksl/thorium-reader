@@ -36,7 +36,7 @@ import { getTranslator } from "readium-desktop/common/services/translator";
 import * as path from "path";
 import * as fs from "fs";import { fileProvisionning } from "./customization";
 import { customizationWellKnownFolder } from "readium-desktop/main/customization/provisioning";
-import { USER_DATA_FOLDER } from "readium-desktop/common/constant";
+import { FORCE_PROD_DB_IN_DEV, USER_DATA_FOLDER } from "readium-desktop/common/constant";
 
 // Logger
 const debug = debug_("readium-desktop:main:saga:event");
@@ -45,7 +45,7 @@ const debug = debug_("readium-desktop:main:saga:event");
 // same as main/cli/index
 const folderPath = path.join(
     USER_DATA_FOLDER,
-    "app-logs",
+    !FORCE_PROD_DB_IN_DEV && (__TH__IS_DEV__ || __TH__IS_CI__) ? "app-logs-dev" : "app-logs",
 );
 const PROCESS_LOGS = "processLogs.txt";
 const appLogs = path.join(
