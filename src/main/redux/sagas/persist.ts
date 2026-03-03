@@ -311,82 +311,6 @@ export function saga() {
         ),
         debounce(
             PUBLICATION_STORAGE_DEBOUNCE_TIME,
-            readerActions.pdfConfig.ID,
-            function* (action: readerActions.pdfConfig.TAction) {
-                const jsonObj = action.payload as unknown as object;
-                const sender = action.sender as EventPayload["sender"];
-
-                if (sender.type !== SenderType.Renderer) {
-                    debug("sender is not renderer !!!");
-                    return;
-                }
-                const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
-                if (reader) {
-                    const pubId = reader.publicationIdentifier;
-                    yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "pdfConfig", jsonObj));
-                }
-
-            },
-        ),
-        debounce(
-            PUBLICATION_STORAGE_DEBOUNCE_TIME,
-            readerActions.bookmarkTotalCount.ID,
-            function* (action: readerActions.bookmarkTotalCount.TAction) {
-                const jsonObj = action.payload as unknown as object;
-                const sender = action.sender as EventPayload["sender"];
-
-                if (sender.type !== SenderType.Renderer) {
-                    debug("sender is not renderer !!!");
-                    return;
-                }
-                const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
-                if (reader) {
-                    const pubId = reader.publicationIdentifier;
-                    yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "noteTotalCount", jsonObj));
-                }
-
-            },
-        ),
-        debounce(
-            PUBLICATION_STORAGE_DEBOUNCE_TIME,
-            readerActions.allowCustom.ID,
-            function* (action: readerActions.allowCustom.TAction) {
-                const jsonObj = action.payload as unknown as object;
-                const sender = action.sender as EventPayload["sender"];
-
-                if (sender.type !== SenderType.Renderer) {
-                    debug("sender is not renderer !!!");
-                    return;
-                }
-                const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
-                if (reader) {
-                    const pubId = reader.publicationIdentifier;
-                    yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "allowCustomConfig", jsonObj));
-                }
-
-            },
-        ),
-        debounce(
-            PUBLICATION_STORAGE_DEBOUNCE_TIME,
-            readerActions.divina.setReadingMode.ID,
-            function* (action: readerActions.divina.setReadingMode.TAction) {
-                const jsonObj = action.payload as unknown as object;
-                const sender = action.sender as EventPayload["sender"];
-
-                if (sender.type !== SenderType.Renderer) {
-                    debug("sender is not renderer !!!");
-                    return;
-                }
-                const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
-                if (reader) {
-                    const pubId = reader.publicationIdentifier;
-                    yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "divina", jsonObj));
-                }
-
-            },
-        ),
-        debounce(
-            PUBLICATION_STORAGE_DEBOUNCE_TIME,
             readerActions.setLocator.ID,
             function* (action: readerActions.setLocator.TAction) {
                 const jsonObj = action.payload as unknown as object;
@@ -404,44 +328,123 @@ export function saga() {
 
             },
         ),
-        debounce(
-            PUBLICATION_STORAGE_DEBOUNCE_TIME,
-            readerActions.setConfig.ID,
-            function* (action: readerActions.setConfig.TAction) {
-                const configJsonObj = action.payload as unknown as object;
-                const sender = action.sender as EventPayload["sender"];
 
-                if (sender.type !== SenderType.Renderer) {
-                    debug("sender is not renderer !!!");
-                    return;
-                }
-                const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
-                if (reader) {
-                    const pubId = reader.publicationIdentifier;
-                    const config: Partial<ReaderConfig> = (yield* callTyped(() => diMainGet("publication-data").getJsonObj(pubId, "config"))) || {};
-                    const configUnion = { ...config, ...configJsonObj };
-                    yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "config", configUnion));
-                }
-            },
-        ),
-        debounce(
-            PUBLICATION_STORAGE_DEBOUNCE_TIME,
-            readerActions.disableRTLFlip.ID,
-            function* (action: readerActions.disableRTLFlip.TAction) {
-                const rtlFlipJsonObj = action.payload as unknown as object;
-                const sender = action.sender as EventPayload["sender"];
+        // TODO: enable publication-storage debounce persistence
+        // debounce(
+        //     PUBLICATION_STORAGE_DEBOUNCE_TIME,
+        //     readerActions.pdfConfig.ID,
+        //     function* (action: readerActions.pdfConfig.TAction) {
+        //         const jsonObj = action.payload as unknown as object;
+        //         const sender = action.sender as EventPayload["sender"];
 
-                if (sender.type !== SenderType.Renderer) {
-                    debug("sender is not renderer !!!");
-                    return;
-                }
-                const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
-                if (reader) {
-                    const pubId = reader.publicationIdentifier;
-                    yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "disableRTLFlip", rtlFlipJsonObj));
-                }
-            },
-        ),
+        //         if (sender.type !== SenderType.Renderer) {
+        //             debug("sender is not renderer !!!");
+        //             return;
+        //         }
+        //         const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
+        //         if (reader) {
+        //             const pubId = reader.publicationIdentifier;
+        //             yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "pdfConfig", jsonObj));
+        //         }
+
+        //     },
+        // ),
+        // debounce(
+        //     PUBLICATION_STORAGE_DEBOUNCE_TIME,
+        //     readerActions.bookmarkTotalCount.ID,
+        //     function* (action: readerActions.bookmarkTotalCount.TAction) {
+        //         const jsonObj = action.payload as unknown as object;
+        //         const sender = action.sender as EventPayload["sender"];
+
+        //         if (sender.type !== SenderType.Renderer) {
+        //             debug("sender is not renderer !!!");
+        //             return;
+        //         }
+        //         const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
+        //         if (reader) {
+        //             const pubId = reader.publicationIdentifier;
+        //             yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "noteTotalCount", jsonObj));
+        //         }
+
+        //     },
+        // ),
+        // debounce(
+        //     PUBLICATION_STORAGE_DEBOUNCE_TIME,
+        //     readerActions.allowCustom.ID,
+        //     function* (action: readerActions.allowCustom.TAction) {
+        //         const jsonObj = action.payload as unknown as object;
+        //         const sender = action.sender as EventPayload["sender"];
+
+        //         if (sender.type !== SenderType.Renderer) {
+        //             debug("sender is not renderer !!!");
+        //             return;
+        //         }
+        //         const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
+        //         if (reader) {
+        //             const pubId = reader.publicationIdentifier;
+        //             yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "allowCustomConfig", jsonObj));
+        //         }
+
+        //     },
+        // ),
+        // debounce(
+        //     PUBLICATION_STORAGE_DEBOUNCE_TIME,
+        //     readerActions.divina.setReadingMode.ID,
+        //     function* (action: readerActions.divina.setReadingMode.TAction) {
+        //         const jsonObj = action.payload as unknown as object;
+        //         const sender = action.sender as EventPayload["sender"];
+
+        //         if (sender.type !== SenderType.Renderer) {
+        //             debug("sender is not renderer !!!");
+        //             return;
+        //         }
+        //         const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
+        //         if (reader) {
+        //             const pubId = reader.publicationIdentifier;
+        //             yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "divina", jsonObj));
+        //         }
+
+        //     },
+        // ),
+        // debounce(
+        //     PUBLICATION_STORAGE_DEBOUNCE_TIME,
+        //     readerActions.setConfig.ID,
+        //     function* (action: readerActions.setConfig.TAction) {
+        //         const configJsonObj = action.payload as unknown as object;
+        //         const sender = action.sender as EventPayload["sender"];
+
+        //         if (sender.type !== SenderType.Renderer) {
+        //             debug("sender is not renderer !!!");
+        //             return;
+        //         }
+        //         const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
+        //         if (reader) {
+        //             const pubId = reader.publicationIdentifier;
+        //             const config: Partial<ReaderConfig> = (yield* callTyped(() => diMainGet("publication-data").getJsonObj(pubId, "config"))) || {};
+        //             const configUnion = { ...config, ...configJsonObj };
+        //             yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "config", configUnion));
+        //         }
+        //     },
+        // ),
+        // debounce(
+        //     PUBLICATION_STORAGE_DEBOUNCE_TIME,
+        //     readerActions.disableRTLFlip.ID,
+        //     function* (action: readerActions.disableRTLFlip.TAction) {
+        //         const rtlFlipJsonObj = action.payload as unknown as object;
+        //         const sender = action.sender as EventPayload["sender"];
+
+        //         if (sender.type !== SenderType.Renderer) {
+        //             debug("sender is not renderer !!!");
+        //             return;
+        //         }
+        //         const reader = yield* selectTyped((state: RootState) => state.win.session.reader[sender.identifier]);
+        //         if (reader) {
+        //             const pubId = reader.publicationIdentifier;
+        //             yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "disableRTLFlip", rtlFlipJsonObj));
+        //         }
+        //     },
+        // ),
+
         // takeSpawnEvery(
         //     winActions.reader.openRequest.ID,
         //     function* (action: winActions.reader.openRequest.TAction) {
@@ -475,9 +478,9 @@ export function saga() {
                     return;
                 }
 
-                // TODO: parallelize with Promise.allSettled
                 yield* callTyped(() => diMainGet("publication-data").close(pubId));
-
+                
+                // TODO: parallelize with Promise.allSettled
                 {
                     const jsonObj = diMainGet("publication-data").getJsonObj(pubId, "locator");
                     if (jsonObj) {
@@ -485,24 +488,58 @@ export function saga() {
                         yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "locator", jsonObj));
                     }
                 }
+                
+                // TODO: enable publication-storage config saving
+                // {
+                //     const jsonObj = diMainGet("publication-data").getJsonObj(pubId, "config");
+                //     if (jsonObj) {
+                //         // finally save config next to publication storage vault
+                //         yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "config", jsonObj));
+                //     }
+                // }
 
-                {
-                    const jsonObj = diMainGet("publication-data").getJsonObj(pubId, "config");
-                    if (jsonObj) {
-                        // finally save config next to publication storage vault
-                        yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "config", jsonObj));
-                    }
-                }
+                // {
+                //     const jsonObj = diMainGet("publication-data").getJsonObj(pubId, "disableRTLFlip");
+                //     if (jsonObj) {
+                //         // finally save disableRTLFlip next to publication storage vault
+                //         yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "disableRTLFlip", jsonObj));
+                //     }
+                // }
 
-                {
-                    const jsonObj = diMainGet("publication-data").getJsonObj(pubId, "disableRTLFlip");
-                    if (jsonObj) {
-                        // finally save disableRTLFlip next to publication storage vault
-                        yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "disableRTLFlip", jsonObj));
-                    }
-                }
+                // {
+                //     const jsonObj = diMainGet("publication-data").getJsonObj(pubId, "allowCustomConfig");
+                //     if (jsonObj) {
+                //         // finally save allowCustomConfig next to publication storage vault
+                //         yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "allowCustomConfig", jsonObj));
+                //     }
+                // }
+
+                // {
+                //     const jsonObj = diMainGet("publication-data").getJsonObj(pubId, "divina");
+                //     if (jsonObj) {
+                //         // finally save divina next to publication storage vault
+                //         yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "divina", jsonObj));
+                //     }
+                // }
+
+                // {
+                //     const jsonObj = diMainGet("publication-data").getJsonObj(pubId, "noteTotalCount");
+                //     if (jsonObj) {
+                //         // finally save noteTotalCount next to publication storage vault
+                //         yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "noteTotalCount", jsonObj));
+                //     }
+                // }
+
+                // {
+
+                //     const jsonObj = diMainGet("publication-data").getJsonObj(pubId, "pdfConfig");
+                //     if (jsonObj) {
+                //         // finally save pdfConfig next to publication storage vault
+                //         yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "pdfConfig", jsonObj));
+                //     }
+                // }
             },
-// (e) => error(filename_ + ":winClose", e),
+            // (e) => error(filename_ + ":winClose", e),
             (e) => debug(e),
         ),
     ]);
