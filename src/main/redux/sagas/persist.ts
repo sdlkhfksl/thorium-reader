@@ -541,11 +541,10 @@ export function saga() {
                 const pubId = readers[identifier].publicationIdentifier;
                 const readersPubId = Object.values(readers).filter((v) => v.publicationIdentifier === pubId);
                 if (readersPubId.length > 1) {
+                    debug(`reader ${pubId} is not the last, ${readersPubId.length} remain(s)`);
                     return;
                 }
 
-                yield* callTyped(() => diMainGet("publication-data").close(pubId));
-                
                 // TODO: parallelize with Promise.allSettled
                 {
                     const jsonObj = diMainGet("publication-data").getJsonObj(pubId, "locator");
@@ -604,6 +603,10 @@ export function saga() {
                 //         yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "pdfConfig", jsonObj));
                 //     }
                 // }
+
+                // publication data must be closed at the end after publication-storage finish
+                yield* callTyped(() => diMainGet("publication-data").close(pubId));
+                
             },
             // (e) => error(filename_ + ":winClose", e),
             (e) => debug(e),
