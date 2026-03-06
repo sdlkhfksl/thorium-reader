@@ -43,7 +43,7 @@ let externals = {
     "electron-devtools-installer": "electron-devtools-installer",
     "remote-redux-devtools": "remote-redux-devtools",
     electron: "electron",
-    // yargs: "yargs",
+    yargs: "yargs",
 };
 const _externalsCache = new Set();
 if (nodeEnv !== "production") {
@@ -197,22 +197,6 @@ let config = Object.assign(
             ],
         },
         plugins: [
-            new CopyWebpackPlugin({
-                patterns: [
-                    {
-                        from: path.join(__dirname, "node_modules", "bindings"),
-                        to: "node_modules/bindings",
-                    },
-                ],
-            }),
-            new CopyWebpackPlugin({
-                patterns: [
-                    {
-                        from: path.join(__dirname, "node_modules", "file-uri-to-path"),
-                        to: "node_modules/file-uri-to-path",
-                    },
-                ],
-            }),
             // new CopyWebpackPlugin({
             //     patterns: [
             //         {
