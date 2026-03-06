@@ -63,7 +63,7 @@ const TabHeader = (props: React.PropsWithChildren<{ title: string }>) => {
 export const WizardModal = () => {
     const [__] = useTranslator();
     const dispatch = useDispatch();
-    const opened = useSelector((state: ILibraryRootState) => state.wizard.opened);
+    const opened = useSelector((state: ILibraryRootState) => state.wizard.opened_v340);
 
     const [checked, setChecked] = React.useState(false);
 

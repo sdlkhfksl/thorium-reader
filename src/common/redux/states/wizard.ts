@@ -6,5 +6,5 @@
 // ==LICENSE-END==
 
 export interface IWizardState {
-    opened: boolean;
+    opened_v340: boolean;
 }

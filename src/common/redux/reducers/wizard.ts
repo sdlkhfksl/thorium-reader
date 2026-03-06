@@ -11,7 +11,7 @@ import { wizardActions } from "../actions";
 import { IWizardState } from "../states/wizard";
 
 const initialState: IWizardState = {
-    opened: false,
+    opened_v340: false,
 };
 
 function wizardReducer_(
