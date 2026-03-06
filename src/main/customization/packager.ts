@@ -13,7 +13,8 @@ import * as crypto from "crypto";
 import { extractCrc32OnZip } from "../tools/crc";
 import { createSign, createVerify } from "crypto";
 
-import { _CUSTOMIZATION_PROFILE_PRIVATE_KEY, _CUSTOMIZATION_PROFILE_PUB_KEY } from "readium-desktop/preprocessor-directives";
+// import { _CUSTOMIZATION_PROFILE_PRIVATE_KEY, _CUSTOMIZATION_PROFILE_PUB_KEY } from "readium-desktop/preprocessor-directives";
+import { _CUSTOMIZATION_PROFILE_PUB_KEY } from "readium-desktop/preprocessor-directives";
 import { ICustomizationManifest } from "readium-desktop/common/readium/customization/manifest";
 import { sanitizeForFilename } from "readium-desktop/common/safe-filename";
 import { injectBufferInZip } from "../tools/zipInjector";
@@ -31,7 +32,7 @@ const signManifest = (manifest: ICustomizationManifest) => {
     const sign = createSign("SHA256");
     sign.update(manifestStringified);
     sign.end();
-    const signature = sign.sign(_CUSTOMIZATION_PROFILE_PRIVATE_KEY, "hex");
+    const signature = sign.sign(__TH__CUSTOMIZATION_PROFILE_PRIVATE_KEY__, "hex");
 
     return {
         key: _CUSTOMIZATION_PROFILE_PUB_KEY, // PUBLIC Not PRIVATE !?!
