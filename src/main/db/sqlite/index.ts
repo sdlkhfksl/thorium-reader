@@ -10,7 +10,7 @@ import sqlite from "node:sqlite";
 import path from "path";
 import * as fs from "fs";
 import url from "url";
-import { USER_DATA_FOLDER } from "readium-desktop/common/constant";
+import { FORCE_PROD_DB_IN_DEV, USER_DATA_FOLDER } from "readium-desktop/common/constant";
 
 const debug = debug_("readium-desktop:main:db:sqlite");
 
@@ -20,7 +20,7 @@ let database: sqlite.DatabaseSync = undefined;
 
 const sqliteFolder = path.join(
     USER_DATA_FOLDER,
-    __TH__IS_DEV__ ? "sqlite-database-dev" : "sqlite-database",
+    !FORCE_PROD_DB_IN_DEV && (__TH__IS_DEV__ || __TH__IS_CI__) ? "sqlite-database-dev" : "sqlite-database",
 );
 const sqlitePath = path.join(
     sqliteFolder,
