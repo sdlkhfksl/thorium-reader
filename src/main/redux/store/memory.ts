@@ -33,9 +33,9 @@ import { IReaderPdfConfig, IReaderStateReaderSession } from "readium-desktop/com
 import { IWinRegistryReaderState } from "readium-desktop/main/redux/states/win/registry/reader";
 import { ReaderConfig } from "readium-desktop/common/models/reader";
 import { IRTLFlipState } from "readium-desktop/common/redux/states/renderer/rtlFlip";
-import { IAllowCustomConfigState } from "src/common/redux/states/renderer/allowCustom";
-import { IDivinaState } from "src/common/redux/states/renderer/divina";
-import { IBookmarkTotalCountState } from "src/common/redux/states/renderer/bookmarkTotalCount";
+import { IAllowCustomConfigState } from "readium-desktop/common/redux/states/renderer/allowCustom";
+import { IDivinaState } from "readium-desktop/common/redux/states/renderer/divina";
+import { IBookmarkTotalCountState } from "readium-desktop/common/redux/states/renderer/bookmarkTotalCount";
 import { persistStateToFs } from "../sagas/persist";
 
 // import { composeWithDevTools } from "remote-redux-devtools";

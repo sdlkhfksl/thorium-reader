@@ -34,7 +34,7 @@ import { ILibraryRootState } from "readium-desktop/common/redux/states/renderer/
 import * as CheckIcon from "readium-desktop/renderer/assets/icons/singlecheck-icon.svg";
 import * as LinkIcon from "readium-desktop/renderer/assets/icons/link-icon.svg";
 import { shell } from "electron";
-import { ICommonRootState } from "src/common/redux/states/commonRootState";
+import { ICommonRootState } from "readium-desktop/common/redux/states/commonRootState";
 
 
 const TabTitle = (props: React.PropsWithChildren<{ title: string }>) => {
