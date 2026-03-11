@@ -84,8 +84,8 @@ export class PublicationStorage {
         this.userVaultPath = this.readUserVault().then((userVaultPath) => {
             debug("USER_VAULT_PATH=", userVaultPath);
             return userVaultPath;
-        }).catch((e) => {
-            debug(e);
+        }).catch((e: any): undefined => {
+            debug(`${e}`);
             return undefined;
         }); // promise not resolved
     }
