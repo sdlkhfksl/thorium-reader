@@ -81,7 +81,13 @@ export class PublicationStorage {
     public constructor(rootPath: string, userVaultConfigPath: string) {
         this.userVaultConfigPath = userVaultConfigPath;
         this.defaultVaultPath = rootPath;
-        this.userVaultPath = this.readUserVault();
+        this.userVaultPath = this.readUserVault().then((userVaultPath) => {
+            debug("USER_VAULT_PATH=", userVaultPath);
+            return userVaultPath;
+        }).catch((e) => {
+            debug(e);
+            return undefined;
+        }); // promise not resolved
     }
 
     private async readUserVault(): Promise<string> {
@@ -269,47 +275,52 @@ export class PublicationStorage {
             this.__publicationEpubPathMap.delete(identifier);
         }
 
-        const p = await this.findPublicationPath(identifier);
-        const p1 = path.join(await this.userVaultPath, identifier);
-        const p2 = path.join(this.defaultVaultPath, identifier);
+
         // try {
-            // if (preservePublicationOnFileSystem) {
-            //     const log = path.join(p, "error.txt");
-            //     fs.writeFileSync(log, preservePublicationOnFileSystem, { encoding: "utf-8" });
-            //     shell.showItemInFolder(log);
+        // if (preservePublicationOnFileSystem) {
+        //     const log = path.join(p, "error.txt");
+        //     fs.writeFileSync(log, preservePublicationOnFileSystem, { encoding: "utf-8" });
+        //     shell.showItemInFolder(log);
 
-            //     // const parent = path.dirname(p) + "_REMOVED";
-            //     // if (!fs.existsSync(parent)) {
-            //     //     fs.mkdirSync(parent);
-            //     // }
+        //     // const parent = path.dirname(p) + "_REMOVED";
+        //     // if (!fs.existsSync(parent)) {
+        //     //     fs.mkdirSync(parent);
+        //     // }
 
-            //     // setTimeout(async () => {
-            //     //     await shell.openPath(parent);
-            //     // }, 0);
-            //     // shell.showItemInFolder(parent);
+        //     // setTimeout(async () => {
+        //     //     await shell.openPath(parent);
+        //     // }, 0);
+        //     // shell.showItemInFolder(parent);
 
-            //     // const f = path.basename(p);
-            //     // const n = path.join(parent, f);
-            //     // shell.showItemInFolder(n);
+        //     // const f = path.basename(p);
+        //     // const n = path.join(parent, f);
+        //     // shell.showItemInFolder(n);
 
-            //     return;
-            // }
-
-            try {
-                await rmrf(p1);
-            } catch (e) {
-                debug(p1 === p ? e : "ok");
-            }
-            try {
-                await rmrf(p2);
-            } catch (e) {
-                debug(p2 === p ? e : "ok");
-            }
+        //     return;
+        // }
         // } catch (e) {
         //     debug(e);
         //     // debug(preservePublicationOnFileSystem);
         //     debug(`removePublication error (ignore) ${identifier} ${p}`);
         // }
+
+        const p = await this.findPublicationPath(identifier);
+        const userVaultPath = await this.userVaultPath; // can be undefined;
+        const p1 = userVaultPath ? path.join(userVaultPath, identifier) : undefined;
+        const p2 = path.join(this.defaultVaultPath, identifier);
+        try {
+            if (p1) {
+                await rmrf(p1);
+            }
+        } catch (e) {
+            debug(p1 === p ? e : "ok");
+        }
+        try {
+            await rmrf(p2);
+        } catch (e) {
+            debug(p2 === p ? e : "ok");
+        }
+
     }
 
     public async getPublicationEpubPath(identifier: string): Promise<string> {
@@ -392,7 +403,7 @@ export class PublicationStorage {
 
         let publicationPath = "";
 
-        const userVaultPath = await this.userVaultPath;
+        const userVaultPath = await this.userVaultPath; // can be undefined
         if (userVaultPath) {
 
             publicationPath = path.join(userVaultPath, identifier);
@@ -441,7 +452,7 @@ export class PublicationStorage {
 
         const pubIdSet = new Set<string>();
 
-        const userVaultPath = await this.userVaultPath;
+        const userVaultPath = await this.userVaultPath; // can be undefined
         if (userVaultPath) {
             await this._loopOnDirectory(userVaultPath, pubIdSet);
         }
