@@ -223,6 +223,9 @@ export class PublicationData {
         }
 
         file.mutex = file.mutex.then(async () => {
+            if (file.jsonObj) {
+                return;
+            }
             try {
                 // flush before read
                 await file.fileHandle.sync();
