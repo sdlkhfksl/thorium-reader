@@ -175,7 +175,7 @@ const yargsInit = () =>
                         }
 
                         debug("cliImport filePath in filePathArray: ", fp);
-                        const pubViews = await sagaMiddleware.run(pubApi.importFromFs, fp).toPromise<PublicationView[]>();
+                        const pubViews = await sagaMiddleware.run(pubApi.importFromFs, fp, false /* willBeImmediatelyFollowedByOpen */).toPromise<PublicationView[]>();
                         if (pubViews?.length) {
                             process.stdout.write("import success: " + fp + EOL);
                         } else {
@@ -287,7 +287,7 @@ const yargsInit = () =>
                         const pathArgvArray = Array.isArray(pathArgv) ? pathArgv : [pathArgv];
                         dump += `pathArgvArray = ${JSON.stringify(pathArgvArray)}\n`;
                         for (const pathArgvName of pathArgvArray) {
-    
+
                             const pathArgvNameResolve = path.resolve(pathArgvName);
                             debug(`Push (${pathArgvNameResolve}) to openFileFromCliChannel`);
                             dump += `Push (${pathArgvNameResolve}) to openFileFromCliChannel\n`;

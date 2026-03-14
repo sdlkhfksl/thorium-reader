@@ -24,6 +24,9 @@ import { PublicationViewConverter } from "readium-desktop/main/converter/publica
 import { getTranslator } from "readium-desktop/common/services/translator";
 import { publicationApi } from "..";
 
+// import { appActivate } from "readium-desktop/main/redux/sagas/win/library";
+// import { readerActions } from "readium-desktop/common/redux/actions";
+
 // Logger
 const debug = debug_("readium-desktop:main#saga/api/publication/import");
 
@@ -40,6 +43,7 @@ const convertDoc = async (doc: PublicationDocument, publicationViewConverter: Pu
 
 export function* importFromLink(
     link: IOpdsLinkView,
+    willBeImmediatelyFollowedByOpen: boolean,
     pub?: IOpdsPublicationView,
     deep: number = 0,
 ): SagaGenerator<PublicationView | undefined> {
@@ -48,7 +52,7 @@ export function* importFromLink(
 
     try {
 
-        const [publicationDocument, alreadyImported] = yield* callTyped(importFromLinkService, link, pub);
+        const [publicationDocument, alreadyImported] = yield* callTyped(importFromLinkService, link, willBeImmediatelyFollowedByOpen, pub);
 
         if (!publicationDocument) {
             throw new Error("publicationDocument not imported on db");
@@ -63,7 +67,7 @@ export function* importFromLink(
                 deep = 1;
 
                 if (publicationView.type === "missingOrDeleted") {
-    
+
                     debug(`${publicationDocument?.identifier} => ${publicationDocument?.title} should be removed`);
                     const str = `The publication is missing or deleted: ${publicationDocument?.identifier} => ${publicationDocument?.title}. The directory must be deleted.`;
                     try {
@@ -74,7 +78,7 @@ export function* importFromLink(
                     }
                     try {
                         debug("restart import process after publication was already imported, missing, but not deleted");
-                        yield* callTyped(importFromLink, link, pub, deep);
+                        yield* callTyped(importFromLink, link, willBeImmediatelyFollowedByOpen, pub, deep);
                     } catch (e) {
                         debug("Error during the second import of the publication", e);
                     }
@@ -123,13 +127,14 @@ export function* importFromLink(
 
 export function* importFromString(
     manifest: string,
+    willBeImmediatelyFollowedByOpen: boolean,
     baseFileUrl: string, // should starts with 'file://'
 ): SagaGenerator<PublicationView | undefined> {
 
     if (manifest) {
 
         try {
-            const [publicationDocument]  = yield* callTyped(importFromStringService, manifest, baseFileUrl);
+            const [publicationDocument]  = yield* callTyped(importFromStringService, manifest, willBeImmediatelyFollowedByOpen, baseFileUrl);
 
             if (!publicationDocument) {
                 throw new Error("publicationDocument not imported on db");
@@ -149,6 +154,7 @@ export function* importFromString(
 
 export function* importFromFs(
     filePath: string | string[],
+    willBeImmediatelyFollowedByOpen: boolean,
     deep: number = 0,
 ): SagaGenerator<PublicationView[] | undefined> {
 
@@ -168,7 +174,7 @@ export function* importFromFs(
                     //     a: delay(30000),
                     //     b: callTyped(importFromFsService, fpath),
                     // });
-                    const data = yield* callTyped(importFromFsService, fpath);
+                    const data = yield* callTyped(importFromFsService, fpath, willBeImmediatelyFollowedByOpen);
                     if (!data) {
                         throw new Error("importFromFsService undefined");
                     }
@@ -179,7 +185,7 @@ export function* importFromFs(
                     }
 
                     const publicationView = yield* callTyped(() => convertDoc(publicationDocument, publicationViewConverter));
-                    
+
                     if (alreadyImported) {
 
                         if (deep < 1) {
@@ -197,7 +203,7 @@ export function* importFromFs(
                                 }
                                 try {
                                     debug("restart import process after publication was already imported, missing, but not deleted");
-                                    yield* callTyped(importFromFs, fpath, deep);
+                                    yield* callTyped(importFromFs, fpath, willBeImmediatelyFollowedByOpen, deep);
                                 } catch (e) {
                                     debug("Error during the second import of the publication", e);
                                 }
@@ -223,7 +229,6 @@ export function* importFromFs(
                                     { title: publicationView.documentTitle }),
                             ),
                         );
-
                     }
 
                     return publicationView;
@@ -244,8 +249,18 @@ export function* importFromFs(
             }),
     );
 
-    const pubView = yield* allTyped(effects);
-    const ret = pubView.filter((v) => v);
+    const pubViews = yield* allTyped(effects);
+    const publicationViews = pubViews.filter((pubView) => pubView);
 
-    return ret;
+    // // UNCOMMENT THIS TO SIMULATE DOUBLE-CLICK ON LCP-PROTECTED EPUB OR LCPL IN FILESYSTEM,
+    // // NOT ONLY DOWNLOADS/IMPORTS THE FILE, ALSO OPENS THE READER
+    // // see main/redux/sagas/event.ts
+    // // const chan = getOpenFileFromCliChannel();
+    // if (publicationViews?.[0]) {
+    //     yield* callTyped(appActivate);
+    //     yield put(readerActions.openRequest.build(publicationViews[0].identifier));
+    //     yield put(readerActions.detachModeRequest.build());
+    // }
+
+    return publicationViews;
 }

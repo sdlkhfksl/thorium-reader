@@ -29,6 +29,7 @@ const debug = debug_("readium-desktop:main#saga/api/publication/importFromFSServ
 
 export function* importFromFsService(
     filePath: string,
+    willBeImmediatelyFollowedByOpen: boolean,
     lcpHashedPassphrase?: string,
 ): SagaGenerator<[publicationDoc: PublicationDocument, alreadyImported: boolean]> {
 
@@ -78,7 +79,7 @@ export function* importFromFsService(
     if (isLCPLicense) {
 
         debug("is a LCP licence need a converter");
-        return yield* callTyped(importLcplFromFS, filePath, lcpHashedPassphrase);
+        return yield* callTyped(importLcplFromFS, filePath, willBeImmediatelyFollowedByOpen, lcpHashedPassphrase);
 
     } else {
         let publicationFilePath = filePath;
@@ -98,7 +99,7 @@ export function* importFromFsService(
         }
 
         publicationDocument = yield* callTyped(
-            () => importPublicationFromFS(publicationFilePath, hash, lcpHashedPassphrase));
+            () => importPublicationFromFS(publicationFilePath, willBeImmediatelyFollowedByOpen, hash, lcpHashedPassphrase));
 
         if (cleanFct) {
             yield call(() => cleanFct());

@@ -31,6 +31,7 @@ const debug = debug_("readium-desktop:main#saga/api/publication/import/publicati
 
 export function* importLcplFromFS(
     filePath: string,
+    willBeImmediatelyFollowedByOpen: boolean,
     lcpHashedPassphrase?: string,
 ): SagaGenerator<[publicationDocument: PublicationDocument, alreadyImported: boolean]> {
 
@@ -133,7 +134,7 @@ export function* importLcplFromFS(
             }
 
             const publicationDocument = yield* callTyped(
-                () => importPublicationFromFS(downloadFilePath, hash, lcpHashedPassphrase));
+                () => importPublicationFromFS(downloadFilePath, willBeImmediatelyFollowedByOpen, hash, lcpHashedPassphrase));
 
             return [publicationDocument, false];
 

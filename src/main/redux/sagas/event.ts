@@ -105,15 +105,12 @@ export function saga() {
                         continue ;
                     }
 
-                    const pubViewArray = yield* callTyped(importFromFs, filePath);
+                    const pubViewArray = yield* callTyped(importFromFs, filePath, true /* willBeImmediatelyFollowedByOpen */);
                     const pubView = Array.isArray(pubViewArray) ? pubViewArray[0] : pubViewArray;
                     if (pubView) {
-
                         yield* callTyped(appActivate);
                         yield put(readerActions.openRequest.build(pubView.identifier));
                         yield put(readerActions.detachModeRequest.build());
-
-
                     }
 
                 } catch (e) {
@@ -196,7 +193,7 @@ export function saga() {
                         url: openUrl,
                     };
 
-                    const pubViewArray = (yield* callTyped(importFromLink, link)) as PublicationView | PublicationView[];
+                    const pubViewArray = (yield* callTyped(importFromLink, link, true /* willBeImmediatelyFollowedByOpen */)) as PublicationView | PublicationView[];
                     const pubView = Array.isArray(pubViewArray) ? pubViewArray[0] : pubViewArray;
                     if (pubView) {
 
@@ -225,7 +222,7 @@ export function saga() {
                     let dump = "#############################################\n";
                     dump += `take opds url from channel: URL="${url}"\n`;
                     dump += `Date: ${(new Date()).toISOString()}\n`;
-                    // dump += 
+                    // dump +=
 
                     if (url.startsWith(`${URL_PROTOCOL_OPDS}://${URL_HOST_OPDS_AUTH}/`)) {
                         debug("OPDS AUTH: ", `${URL_PROTOCOL_OPDS}://${URL_HOST_OPDS_AUTH}/`);

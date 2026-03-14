@@ -18,6 +18,7 @@ const debug = debug_("readium-desktop:main#saga/api/publication/importFromString
 
 export function* importFromStringService(
     manifest: string,
+    willBeImmediatelyFollowedByOpen: boolean,
     baseFileUrl: string, // MUST be file://
 ): SagaGenerator<[publicationDoc: PublicationDocument, alreadyImported: boolean]> {
 
@@ -25,7 +26,7 @@ export function* importFromStringService(
     const packagePath = yield* callTyped(packageFromManifestBuffer, baseFileUrl, Buffer.from(manifest));
     if (packagePath) {
         debug(packagePath);
-        return yield* callTyped(importFromFsService, packagePath);
+        return yield* callTyped(importFromFsService, packagePath, willBeImmediatelyFollowedByOpen);
     } else {
         debug("package path is empty");
     }

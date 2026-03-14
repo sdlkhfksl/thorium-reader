@@ -46,6 +46,7 @@ const debug = debug_("readium-desktop:main#saga/api/publication/import/publicati
 
 export async function importPublicationFromFS(
     filePath: string,
+    willBeImmediatelyFollowedByOpen: boolean,
     hash?: string,
     lcpHashedPassphrase?: string,
 ): Promise<PublicationDocument> {
@@ -122,7 +123,7 @@ export async function importPublicationFromFS(
             }
 
             if (packagePath) {
-                return await importPublicationFromFS(packagePath);
+                return await importPublicationFromFS(packagePath, willBeImmediatelyFollowedByOpen, hash, lcpHashedPassphrase);
             }
 
             throw new Error("convertDaisyToReadiumWebPub failed?!");
@@ -301,17 +302,34 @@ export async function importPublicationFromFS(
     }
 
     if (r2Publication.LCP) {
-        setTimeout(async () => {
-            // DOES NOT MUTATE newPubDocument (returns a modified copy)
-            const updatedDoc = await lcpManager.checkPublicationLicenseUpdate(newPubDocument);
-            // passphrase saved for doc.id with provider, this time (overrides old entry mapped on doc.id)
-            if (lcpHashedPassphrase && updatedDoc) {
-                await lcpManager.saveSecret(updatedDoc, lcpHashedPassphrase);
-            }
-        }, 0);
+
+        // DOES NOT MUTATE newPubDocument (returns a modified copy)
+        const updatedDoc = await lcpManager.checkPublicationLicenseUpdate(newPubDocument, true); // SKIPS the network LSD checks!
+        // passphrase saved for doc.id with provider, this time (overrides old entry mapped on doc.id)
+        if (updatedDoc && lcpHashedPassphrase) {
+            await lcpManager.saveSecret(updatedDoc, lcpHashedPassphrase);
+        }
+
+        if (!willBeImmediatelyFollowedByOpen) {
+            // deferred firing of the network LSD checks,
+            // the file lock will ensure that even if the publication is immediately opened (e.g. double-click from filesystem),
+            // there will not be concurrent access race (the publication open itself checks LSD updates, so this one will be skipped during the critical section lock)
+            // if there are opened readers when there is an LCP update, the LCPL gets injected into EPUB META-INF/ so the readers are force-closed
+            setTimeout(async () => {
+
+                debug("deferred lcpManager.checkPublicationLicenseUpdate() after publication import");
+                // DOES NOT MUTATE newPubDocument (returns a modified copy)
+                const updatedDoc = await lcpManager.checkPublicationLicenseUpdate(newPubDocument, false);// DOES NOT SKIP the network LSD checks!
+                // passphrase saved for doc.id with provider, this time (overrides old entry mapped on doc.id)
+                if (updatedDoc && lcpHashedPassphrase) {
+                    await lcpManager.saveSecret(updatedDoc, lcpHashedPassphrase);
+                }
+
+            }, 300);
+        }
     }
 
-    // at this point, newPubDocument.lcp is undefined even if r2Publication.LCP
+    // at this point, newPubDocument.lcp is defined if r2Publication.LCP
     debug("Publication imported", filePath);
     return newPubDocument;
 }

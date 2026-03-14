@@ -44,6 +44,7 @@ const debug = debug_("readium-desktop:main#saga/api/publication/importFromLinkSe
 
 function* importLinkFromPath(
     downloadPath: string,
+    willBeImmediatelyFollowedByOpen: boolean,
     link: IOpdsLinkView,
     pub?: IOpdsPublicationView,
 ): SagaGenerator<[publicationDocument: PublicationDocument, alreadyImported: boolean]> {
@@ -53,7 +54,7 @@ function* importLinkFromPath(
 
     const { b: [publicationDocument, alreadyImported] } = yield* raceTyped({
         a: delayTyped(30000),
-        b: callTyped(importFromFsService, downloadPath, lcpHashedPassphrase),
+        b: callTyped(importFromFsService, downloadPath, willBeImmediatelyFollowedByOpen, lcpHashedPassphrase),
     });
 
     if (link.localBookshelfPublicationId) {
@@ -143,6 +144,7 @@ function* importLinkFromPath(
 
 export function* importFromLinkService(
     link: IOpdsLinkView,
+    willBeImmediatelyFollowedByOpen: boolean,
     pub?: IOpdsPublicationView,
 ): SagaGenerator<[publicationDocument: PublicationDocument | undefined, alreadyImported: boolean]> {
 
@@ -326,7 +328,7 @@ export function* importFromLinkService(
 
     const fileOrPackagePath = yield* callTyped(downloadMayBePackageLink);
     if (fileOrPackagePath) {
-        return yield* callTyped(importLinkFromPath, fileOrPackagePath, link, pub);
+        return yield* callTyped(importLinkFromPath, fileOrPackagePath, willBeImmediatelyFollowedByOpen, link, pub);
     } else {
         debug("downloaded file path or package path is empty");
     }

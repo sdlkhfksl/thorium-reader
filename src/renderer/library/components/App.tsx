@@ -125,7 +125,7 @@ export default class App extends React.Component<{}, undefined> {
                 // console.log("absolutePath 4: " + file.path);
                 return file.path;
             });
-            apiAction("publication/importFromFs", paths).catch((error) => {
+            apiAction("publication/importFromFs", paths, false /* willBeImmediatelyFollowedByOpen */).catch((error) => {
                 console.error("Error to fetch publication/importFromFs", error);
             });
             return;

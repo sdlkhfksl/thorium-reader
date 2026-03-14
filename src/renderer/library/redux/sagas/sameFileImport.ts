@@ -52,6 +52,7 @@ function* sameFileImport(action: importActions.verify.TAction) {
         yield apiSaga("publication/importFromLink",
             REQUEST_ID,
             link,
+            false, // willBeImmediatelyFollowedByOpen
             pub,
         );
     }

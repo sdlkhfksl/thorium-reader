@@ -272,12 +272,16 @@ export class LcpManager {
         //     publicationDocument.resources = {};
         // }
         if (r2LCP) {
+            debug("updateDocumentLcp() with LCP");
+            debug(r2LCP);
+
             // Legacy Base64 data blobs
             // const r2LCPStr = r2LCP.JsonSource ?? JSON.stringify(TaJsonSerialize(r2LCP));
             // publicationDocument.resources.r2LCPBase64 = Buffer.from(r2LCPStr).toString("base64");
             // const r2LCPJson = r2LCP.JsonSource ? JSON.parse(r2LCP.JsonSource) : TaJsonSerialize(r2LCP);
             // publicationDocument.resources.r2LCPJson = r2LCPJson;
             if (!skipFilesystemCache) {
+                debug("updateDocumentLcp() !skipFilesystemCache");
                 await this.publicationViewConverter.updateLcpCache(publicationDocument, r2LCP);
             }
 
@@ -296,7 +300,9 @@ export class LcpManager {
                 // publicationDocument.resources.r2LSDBase64
                 // publicationDocument.resources.r2LCPJson,
                 // publicationDocument.resources.r2LSDJson,
-                );
+            );
+        } else {
+            debug("updateDocumentLcp() no LCP");
         }
     }
 
@@ -381,6 +387,7 @@ export class LcpManager {
     // DOES NOT MUTATE publicationDocument (returns a modified copy)
     public async checkPublicationLicenseUpdate(
         publicationDocument: PublicationDocument,
+        skipNetworkLSD: boolean,
     ): Promise<PublicationDocument> {
         const rootState = this.store.getState();
         if (rootState.lcp.publicationFileLocks[publicationDocument.identifier]) {
@@ -393,7 +400,7 @@ export class LcpManager {
             const r2Publication = await this.publicationViewConverter.unmarshallR2Publication(publicationDocument); // , true
 
             // DOES NOT MUTATE publicationDocument (returns a modified copy)
-            return await this.checkPublicationLicenseUpdate_(publicationDocument, r2Publication);
+            return await this.checkPublicationLicenseUpdate_(publicationDocument, r2Publication, skipNetworkLSD);
         } finally {
             this.store.dispatch(lcpActions.publicationFileLock.build({ [publicationDocument.identifier]: false }));
         }
@@ -403,10 +410,11 @@ export class LcpManager {
     private async checkPublicationLicenseUpdate_(
         publicationDocument: PublicationDocument,
         r2Publication: R2Publication,
+        skipNetworkLSD: boolean,
     ): Promise<PublicationDocument> {
 
         let redoHash = false;
-        if (r2Publication.LCP) {
+        if (!skipNetworkLSD && r2Publication.LCP) {
             try {
                 await this.processStatusDocument(
                     publicationDocument.identifier,
@@ -458,7 +466,7 @@ export class LcpManager {
             const r2Publication = await this.publicationViewConverter.unmarshallR2Publication(publicationDocument); // , true
 
             // DOES NOT MUTATE publicationDocument (returns a modified copy)
-            let newPubDocument = await this.checkPublicationLicenseUpdate_(publicationDocument, r2Publication);
+            let newPubDocument = await this.checkPublicationLicenseUpdate_(publicationDocument, r2Publication, false);
 
             let redoHash = false;
             if (r2Publication.LCP?.LSD?.Links) {
@@ -575,7 +583,7 @@ export class LcpManager {
             const r2Publication = await this.publicationViewConverter.unmarshallR2Publication(publicationDocument); // , true
 
             // DOES NOT MUTATE publicationDocument (returns a modified copy)
-            let newPubDocument = await this.checkPublicationLicenseUpdate_(publicationDocument, r2Publication);
+            let newPubDocument = await this.checkPublicationLicenseUpdate_(publicationDocument, r2Publication, false);
 
             let redoHash = false;
             if (r2Publication.LCP?.LSD?.Links) {

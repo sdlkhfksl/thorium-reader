@@ -84,8 +84,8 @@ export function* streamerOpenPublicationAndReturnManifestUrl(pubId: string): Sag
     //     doNotPresentInReduxStoreDataBaseButFoundOnDisk_dummyDocument: true,
     // }; // dummy publication if not found (publication found on disk but not in db, so need to be handled gracefully)
     // not a const value because assign a copy of publicationDocument with LCP
-    let publicationDocument = yield* callTyped(
-        () => publicationRepository.get(pubId));
+    let publicationDocument = yield* callTyped(() => publicationRepository.get(pubId));
+
     if (!publicationDocument) {
         yield* putTyped(toastActions.openRequest.build(ToastType.Error, translator.translate("message.open.error", {err: `not found in DataBase: ${pubId}`})));
         return undefined;
@@ -111,11 +111,14 @@ export function* streamerOpenPublicationAndReturnManifestUrl(pubId: string): Sag
     const publicationViewConverter = yield* callTyped(
         () => diMainGet("publication-view-converter"));
 
-    if (publicationDocument?.lcp) {
+    if (publicationDocument.lcp) {
+        debug("streamerOpenPublicationAndReturnManifestUrl() with LCP");
+        debug(publicationDocument.lcp);
+
         try {
             publicationDocument = yield* callTyped(
                 // DOES NOT MUTATE publicationDocument (returns a modified copy)
-                () => lcpManager.checkPublicationLicenseUpdate(publicationDocument),
+                () => lcpManager.checkPublicationLicenseUpdate(publicationDocument, false),
             );
         } catch (error) {
             debug("ERROR on call lcpManager.checkPublicationLicenseUpdate", error);
@@ -145,9 +148,14 @@ export function* streamerOpenPublicationAndReturnManifestUrl(pubId: string): Sag
         // we first unlockPublication() for the transient in-memory R2Publication,
         // then we have to unlockPublication() again for the streamer-hosted pub instance (see below)
         try {
+            debug("streamerOpenPublicationAndReturnManifestUrl() LCP unlockPublication() BEFORE");
+
             // TODO: improve this horrible returned union type!
             const unlockPublicationRes: string | number | null | undefined =
                 yield* callTyped(() => lcpManager.unlockPublication(publicationDocument, undefined));
+
+            debug("streamerOpenPublicationAndReturnManifestUrl() LCP unlockPublication() AFTER");
+            debug(unlockPublicationRes);
 
             if (typeof unlockPublicationRes !== "undefined") {
                 let publicationView: PublicationView;
@@ -181,6 +189,8 @@ export function* streamerOpenPublicationAndReturnManifestUrl(pubId: string): Sag
 
             throw error;
         }
+    } else {
+        debug("streamerOpenPublicationAndReturnManifestUrl() no LCP");
     }
 
     const pubStorage = yield* callTyped(() => diMainGet("publication-storage"));
@@ -234,10 +244,19 @@ export function* streamerOpenPublicationAndReturnManifestUrl(pubId: string): Sag
     // (see above), has not been done yet on streamer-hosted publication instance.
     // Consequently, unlockPublicationRes should always be undefined (valid passphrase already obtained)
     if (r2Publication.LCP) {
+        debug("streamerOpenPublicationAndReturnManifestUrl() with LCP 2");
+        debug(r2Publication.LCP);
+        debug(publicationDocument.lcp);
+
         try {
+            debug("streamerOpenPublicationAndReturnManifestUrl() LCP unlockPublication() BEFORE 2");
+
             // TODO: improve this horrible returned union type!
             const unlockPublicationRes: string | number | null | undefined =
                 yield* callTyped(() => lcpManager.unlockPublication(publicationDocument, undefined));
+
+            debug("streamerOpenPublicationAndReturnManifestUrl() LCP unlockPublication() AFTER 2");
+            debug(unlockPublicationRes);
 
             if (typeof unlockPublicationRes !== "undefined") {
                 let publicationView: PublicationView;
@@ -250,7 +269,7 @@ export function* streamerOpenPublicationAndReturnManifestUrl(pubId: string): Sag
                 const message =
                     // unlockPublicationRes === 11 ?
                     // translator.translate("publication.expiredLcp") :
-                    lcpManager.convertUnlockPublicationResultToString(unlockPublicationRes, publicationView.lcp?.issued || publicationDocument?.lcp?.issued || "");
+                    lcpManager.convertUnlockPublicationResultToString(unlockPublicationRes, publicationView.lcp?.issued || publicationDocument.lcp?.issued || "");
                 debug(message);
 
                 try {
@@ -276,6 +295,8 @@ export function* streamerOpenPublicationAndReturnManifestUrl(pubId: string): Sag
             throw error;
         }
     } else {
+        debug("streamerOpenPublicationAndReturnManifestUrl() no LCP 2");
+
         const isEncrypted = r2PublicationIsEncryptedAndHasNoLicense(r2Publication);
         if (isEncrypted) {
             throw ERROR_MESSAGE_ENCRYPTED_NO_LICENSE;

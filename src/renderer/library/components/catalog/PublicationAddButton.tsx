@@ -82,7 +82,7 @@ export class PublicationAddButton extends React.Component<IProps, undefined> {
         event.target.value = "";
         event.target.files = null;
 
-        this.props.import(paths);
+        this.props.import(paths, false /* willBeImmediatelyFollowedByOpen */);
     }
 }
 

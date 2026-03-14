@@ -104,7 +104,7 @@ class FileImport extends React.Component<IProps, undefined> {
                 // console.log("absolutePath 5: " + file.path);
                 return file.path;
             });
-            apiAction("publication/importFromFs", paths).catch((error) => {
+            apiAction("publication/importFromFs", paths, false /* willBeImmediatelyFollowedByOpen */).catch((error) => {
                 console.error("Error to fetch publication/importFromFs", error);
             });
         }

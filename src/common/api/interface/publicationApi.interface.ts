@@ -33,14 +33,17 @@ export interface IPublicationApi {
     ) => SagaGenerator<PublicationView>;
     importFromLink: (
         link: IOpdsLinkView,
+        willBeImmediatelyFollowedByOpen: boolean,
         pub?: IOpdsPublicationView,
     ) => SagaGenerator<PublicationView>;
     importFromString: (
         manifest: string,
+        willBeImmediatelyFollowedByOpen: boolean,
         baseFileUrl: string, // should starts with 'file://'
     ) => SagaGenerator<PublicationView>;
     importFromFs: (
         filePathArray: string | string[],
+        willBeImmediatelyFollowedByOpen: boolean,
     ) => SagaGenerator<PublicationView[]>;
     search: (
         title: string,
