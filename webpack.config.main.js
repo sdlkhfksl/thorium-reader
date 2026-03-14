@@ -3,6 +3,7 @@ const StatoscopeWebpackPlugin = require('@statoscope/webpack-plugin').default;
 
 const TerserPlugin = require("terser-webpack-plugin");
 
+const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -50,14 +51,39 @@ if (nodeEnv !== "production") {
     const nodeExternals = require("webpack-node-externals");
     const neFunc = nodeExternals({
         // allowlist: ["marked", "pdf.js", "readium-speech", "@github/paste-markdown", "yargs", "timeout-signal", "nanoid", "normalize-url", "node-fetch", "data-uri-to-buffer", /^fetch-blob/, /^formdata-polyfill/],
+        // allowlist: ["proxy-agent"],
         importType: function (moduleName) {
             if (!_externalsCache.has(moduleName)) {
                 console.log(`WEBPACK EXTERNAL (MAIN): [${moduleName}]`);
+
+                if (moduleName === "proxy-agent") {
+                    const filePath = path.join(process.cwd(), "node_modules", moduleName, "package.json");
+                    const jsonStr = fs.readFileSync(filePath, { encoding: "utf8" });
+                    fs.writeFileSync(filePath, jsonStr.replace(/"import":/, `".":`), { encoding: 'utf8' });
+                }
             }
             _externalsCache.add(moduleName);
-            // if (moduleName === "normalize-url") {
-            //     return "module normalize-url";
+
+            // https://github.com/electron/electron/blob/main/docs/tutorial/esm.md
+            // https://webpack.js.org/configuration/externals/#externals
+            // https://github.com/liady/webpack-node-externals
+            // https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
+
+            // if (moduleName === "proxy-agent") {
+            //     return "module " + moduleName;
             // }
+            // [2] Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: No "exports" main defined in /thorium-reader/node_modules/proxy-agent/package.json
+            // [2]     at exportsNotFound (node:internal/modules/esm/resolve:318:10)
+            // [2]     at packageExportsResolve (node:internal/modules/esm/resolve:609:13)
+            // [2]     at resolveExports (node:internal/modules/cjs/loader:692:36)
+            // [2]     at Module._findPath (node:internal/modules/cjs/loader:759:31)
+            // [2]     at Module._resolveFilename (node:internal/modules/cjs/loader:1448:27)
+            // [2]     at s._resolveFilename (node:electron/js2c/browser_init:2:140240)
+            // [2]     at defaultResolveImpl (node:internal/modules/cjs/loader:1073:19)
+            // [2]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1078:22)
+            // [2]     at Module._load (node:internal/modules/cjs/loader:1249:25)
+            // [2]     at c._load (node:electron/js2c/node_init:2:17999)
+
             return "commonjs " + moduleName;
         },
     });
