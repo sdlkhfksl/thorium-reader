@@ -158,7 +158,7 @@ export class PublicationData {
                     }
                 });
                 await file.mutex;
-            } catch (e) {
+            } catch (e: any) {
                 debug(`${e}`);
                 if (e.code === "ENOENT") {
                     try {
