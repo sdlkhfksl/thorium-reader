@@ -34,7 +34,7 @@
     // "suppressImplicitAnyIndexErrors": false,
     "downlevelIteration": false,
     "emitBOM": false,
-    "esModuleInterop": false,
+    // "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
@@ -53,60 +53,29 @@
     // "moduleResolution": "nodenext", // 99
     // "moduleResolution": "node", // 100
     "moduleResolution": "bundler", // 100
-    "lib": [
-      "es2022",
-      "dom",
-      "dom.iterable"
-    ],
+    "lib": ["es2022", "dom", "dom.iterable"],
     "target": "es2020",
     "jsx": "react",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     // "baseUrl": ".",
     "paths": {
-      "*": [
-        "./*",
-      ],
+      "*": ["./*"],
       // "file-selector": [
       //   "src/typings/noop.d.ts"
       // ],
-      "readium-desktop/*": [
-        "./src/*"
-      ],
-      "test/*": [
-        "./test/*"
-      ],
-      "@r2-utils-js/*": [
-        "./src/r2-xxx-js/r2-utils-js/*"
-      ],
-      "@r2-opds-js/*": [
-        "./src/r2-xxx-js/r2-opds-js/*"
-      ],
-      "@r2-shared-js/*": [
-        "./src/r2-xxx-js/r2-shared-js/*"
-      ],
-      "@r2-streamer-js/*": [
-        "./src/r2-xxx-js/r2-streamer-js/*"
-      ],
-      "@r2-navigator-js/*": [
-        "./src/r2-xxx-js/r2-navigator-js/*"
-      ],
-      "@r2-lcp-js/*": [
-        "./src/r2-xxx-js/r2-lcp-js/*"
-      ],
-      "@lunr-languages/*": [
-        "./node_modules/lunr-languages/*"
-      ]
-    }
+      "readium-desktop/*": ["./src/*"],
+      "test/*": ["./test/*"],
+      "@r2-utils-js/*": ["./src/r2-xxx-js/r2-utils-js/*"],
+      "@r2-opds-js/*": ["./src/r2-xxx-js/r2-opds-js/*"],
+      "@r2-shared-js/*": ["./src/r2-xxx-js/r2-shared-js/*"],
+      "@r2-streamer-js/*": ["./src/r2-xxx-js/r2-streamer-js/*"],
+      "@r2-navigator-js/*": ["./src/r2-xxx-js/r2-navigator-js/*"],
+      "@r2-lcp-js/*": ["./src/r2-xxx-js/r2-lcp-js/*"],
+      "@lunr-languages/*": ["./node_modules/lunr-languages/*"],
+    },
   },
-  "include": [
-    "./src/**/*",
-    "./test/**/*"
-  ],
-  "exclude": [
-    "./node_modules"
-  ],
-  "files": [
-    "./typings.d.ts"
-  ]
+  "include": ["./src/**/*", "./test/**/*"],
+  "exclude": ["./node_modules"],
+  "files": ["./typings.d.ts"],
 }

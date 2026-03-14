@@ -43,4 +43,5 @@
   //   "./node_modules/*",
   //   "./node_modules/@types/node/index.d.ts"
   // ],
+  // "exclude": ["node_modules/slugify/slugify.d.ts", "slugify.d.ts"]
 }
