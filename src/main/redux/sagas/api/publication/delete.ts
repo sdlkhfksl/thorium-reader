@@ -11,33 +11,44 @@ import { publicationActions, winActions } from "readium-desktop/main/redux/actio
 // eslint-disable-next-line local-rules/typed-redux-saga-use-typed-effects
 import { call, delay, put } from "redux-saga/effects";
 import { SagaGenerator } from "typed-redux-saga";
+import debug_ from "debug";
+
+const debug = debug_("readium-desktop:main/redux/saga/api/publication/delete");
 
 export function* deletePublication(identifier: string/*, preservePublicationOnFileSystem?: string*/): SagaGenerator<void> {
 
-        yield put(readerActions.closeRequestFromPublication.build(identifier));
+    yield put(readerActions.closeRequestFromPublication.build(identifier));
 
-        // dispatch action to update publication/lastReadingQueue reducer
-        yield put(publicationActions.deletePublication.build(identifier));
+    // dispatch action to update publication/lastReadingQueue reducer
+    yield put(publicationActions.deletePublication.build(identifier));
 
-        // delete publication from reader registry
-        yield put(winActions.registry.unregisterReaderPublication.build(identifier));
+    // delete publication from reader registry
+    yield put(winActions.registry.unregisterReaderPublication.build(identifier));
 
-        // allow extra completion time to ensure the filesystem ZIP streams are closed
-        yield delay(300);
+    // allow extra completion time to ensure the filesystem ZIP streams are closed
+    yield delay(300);
 
-        const publicationRepository = diMainGet("publication-repository");
-        // Remove from database
-        yield call(() => publicationRepository.delete(identifier));
+    const publicationRepository = diMainGet("publication-repository");
+    // Remove from database
+    yield call(() => publicationRepository.delete(identifier));
 
+    try {
         const publicationStorage = diMainGet("publication-storage");
         // Remove from storage
         yield call(() => publicationStorage.removePublication(identifier /*, preservePublicationOnFileSystem*/));
+    } catch (e) {
+        debug(`${e}`);
+    }
 
+    try {
         const publicationData = diMainGet("publication-data");
         // Remove from data storage
         yield call(() => publicationData.removePublication(identifier));
+    } catch (e) {
+        debug(`${e}`);
+    }
 
-        const publicationViewConverter = diMainGet("publication-view-converter");
-        // Remove from memory cache
-        yield call(() => publicationViewConverter.removeFromMemoryCache(identifier));
+    const publicationViewConverter = diMainGet("publication-view-converter");
+    // Remove from memory cache
+    yield call(() => publicationViewConverter.removeFromMemoryCache(identifier));
 }
