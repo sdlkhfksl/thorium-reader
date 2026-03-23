@@ -1,3 +1,5 @@
+schema-version = "1.10.0"
+
 # flox config --set-bool set_prompt false
 # ==> .zshrc
 # Warp-ify Flox subshell prompt:
@@ -29,11 +31,10 @@
 # PROMPT="${PROMPT}"$'\n'
 # printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "zsh" }}\x9c'
 
-version = 1
-
 [install]
 nodejs_24.pkg-path = "nodejs_24"
 jq.pkg-path = "jq"
+jq.outputs = "all"
 
 [vars]
 FLOX_DISABLE_METRICS="true"
