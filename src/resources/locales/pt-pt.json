@@ -1243,8 +1243,7 @@
     "wizard": {
         "buttons": {
             "discover": "Descubra o Thorium Desktop",
-            "goToBooks": "Ir para os meus documentos",
-            "next": "Seguinte"
+            "goToBooks": "Ir para os meus documentos"
         },
         "description": {
             "home": "O Thorium 3.4 traz uma série de melhorias na experiência do utilizador e corrige vários problemas. Caso, mais tarde, decida regressar a uma versão antiga da aplicação, é altamente recomendável que faça uma cópia de segurança das suas notas e marcadores do ebook, exportando-os para um ficheiro externo. Poderá importá-los de volta para a versão antiga após a instalação. Isto porque a aplicação, na versão 3.4, armazena anotações e marcadores num formato interno ligeiramente diferente. Esta alteração resolve um problema de desempenho, mas impede a compatibilidade com versões anteriores nas anotações.",
