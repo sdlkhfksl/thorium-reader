@@ -16,7 +16,7 @@ import { acceptedExtensionObject } from "readium-desktop/common/extension";
 import { lcpLicenseIsNotWellFormed } from "readium-desktop/common/lcp";
 import { LcpInfo, LsdStatus } from "readium-desktop/common/models/lcp";
 import { ToastType } from "readium-desktop/common/models/toast";
-import { lcpActions, readerActions, toastActions } from "readium-desktop/common/redux/actions/";
+import { lcpActions, toastActions } from "readium-desktop/common/redux/actions/";
 import { PublicationViewConverter } from "readium-desktop/main/converter/publication";
 import {
     PublicationDocument, PublicationDocumentWithoutTimestampable,
@@ -40,10 +40,11 @@ import { Publication as R2Publication } from "@r2-shared-js/models/publication";
 // import { injectBufferInZip } from "@r2-utils-js/_utils/zip/zipInjector";
 import { injectBufferInZip } from "../tools/zipInjector";
 
-import { lcpHashesFilePath } from "../di";
+import { diMainGet, lcpHashesFilePath } from "../di";
 import { extractCrc32OnZip } from "../tools/crc";
 import { LSDManager } from "./lsd";
 import { getTranslator } from "readium-desktop/common/services/translator";
+import { RequesetToCloseAllReadersWithTheSamePubId } from "../redux/sagas/reader";
 
 // import { Server } from "@r2-streamer-js/http/server";
 
@@ -982,7 +983,7 @@ export class LcpManager {
     }
 
     public async processStatusDocument(
-        publicationDocumentIdentifier: string,
+        publicationIdentifier: string,
         r2Publication: R2Publication): Promise<void> {
 
         (r2Publication as any).__LCP_LSD_UPDATE_COUNT = 0;
@@ -1009,20 +1010,25 @@ export class LcpManager {
                 }
 
                 if (r2LCPStr) {
-                    let atLeastOneReaderIsOpen = false;
-                    const readers = this.store.getState().win.session.reader;
-                    if (readers) {
-                        for (const reader of Object.values(readers)) {
-                            if (reader.publicationIdentifier === publicationDocumentIdentifier) {
-                                atLeastOneReaderIsOpen = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (atLeastOneReaderIsOpen) {
-                        this.store.dispatch(readerActions.closeRequestFromPublication.build(
-                            publicationDocumentIdentifier));
 
+                    const atLeastOneReaderIsOpen = await diMainGet("saga-middleware").run(RequesetToCloseAllReadersWithTheSamePubId, publicationIdentifier).toPromise<boolean>() // NOTE: no type inference with Task .toPromise
+                        .catch((e) => { debug("RequesetToCloseAllReadersWithTheSamePubId", e); });
+                    debug("RequesetToCloseAllReadersWithTheSamePubId fulfilled");
+                    // let atLeastOneReaderIsOpen = false;
+                    // const readers = this.store.getState().win.session.reader;
+                    // if (readers) {
+                    //     for (const reader of Object.values(readers)) {
+                    //         if (reader.publicationIdentifier === publicationIdentifier) {
+                    //             atLeastOneReaderIsOpen = true;
+                    //             break;
+                    //         }
+                    //     }
+                    // }
+                    // if (atLeastOneReaderIsOpen) {
+                    //     // this.store.dispatch(readerActions.closeRequestFromPublication.build(
+                    //     //     publicationDocumentIdentifier));
+                    // }
+                    if (atLeastOneReaderIsOpen) {
                         await new Promise<void>((res, _rej) => {
                             setTimeout(() => {
                                 res();
@@ -1065,7 +1071,7 @@ export class LcpManager {
                         r2Publication.LCP.LSD = prevLSD;
 
                         const epubPath = await this.publicationStorage.getPublicationEpubPath(
-                            publicationDocumentIdentifier,
+                            publicationIdentifier,
                         );
                         await this.injectLcplIntoZip_(epubPath, r2LCPStr);
 

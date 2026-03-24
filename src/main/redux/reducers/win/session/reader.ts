@@ -18,14 +18,13 @@ function winSessionReaderReducer_(
     state: IDictWinSessionReaderState = initialState,
     action: winActions.session.registerReader.TAction |
         winActions.session.unregisterReader.TAction |
-        winActions.session.setBound.TAction |
-        winActions.session.setReduxState.TAction,
+        winActions.session.setBound.TAction,
 ): IDictWinSessionReaderState {
     switch (action.type) {
 
         case winActions.session.registerReader.ID: {
 
-            const id = action.payload.identifier;
+            const id = action.payload.windowIdentifier;
             return {
                 ...state,
                 ...{
@@ -36,7 +35,7 @@ function winSessionReaderReducer_(
                         },
                         ...state[id],
                         ...{
-                            browserWindowId: action.payload.win.id,
+                            browserWindowId: action.payload.readerWindow.id,
                             publicationIdentifier: action.payload.publicationIdentifier,
                             manifestUrl: action.payload.manifestUrl,
                             fileSystemPath: action.payload.filesystemPath,
@@ -49,7 +48,7 @@ function winSessionReaderReducer_(
 
         case winActions.session.unregisterReader.ID: {
 
-            const id = action.payload.identifier;
+            const id = action.payload.windowIdentifier;
 
             if (state[id]) {
                 const ret = {
@@ -79,33 +78,6 @@ function winSessionReaderReducer_(
                 };
             }
             break;
-        }
-
-        case winActions.session.setReduxState.ID: {
-
-            const id = action.payload.identifier;
-
-            if (state[id]) {
-
-                const reduxState = { ...state[id].reduxState };
-                Object.entries(action.payload.reduxState).forEach(([key, value]) => {
-                    if (value) {
-                        (reduxState as any)[key] = value;
-                    }
-                });
-
-                return {
-                    ...state,
-                    ...{
-                        [id]: {
-                            ...state[id],
-                            ...{
-                                reduxState,
-                            },
-                        },
-                    },
-                };
-            }
         }
     }
 

@@ -101,7 +101,7 @@ import { isAudiobookFn } from "readium-desktop/common/isManifestType";
 
 import { createOrGetPdfEventBus } from "readium-desktop/renderer/reader/pdf/driver";
 
-import { winActions } from "readium-desktop/renderer/common/redux/actions";
+import { winCommonActions } from "readium-desktop/common/redux/actions";
 import { apiDispatch } from "readium-desktop/renderer/common/redux/api/api";
 import { MiniLocatorExtended, minimizeLocatorExtended } from "readium-desktop/common/redux/states/locatorInitialState";
 import { translateContentFieldHelper } from "readium-desktop/common/services/translator";
@@ -2324,9 +2324,7 @@ class Reader extends React.Component<IProps, IState> {
                 publicationViewport.setAttribute("style", "display: block; position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: 0; padding: 0; box-sizing: border-box; background: white; overflow: hidden;");
             }
 
-            // @----ts-ignore TS2578
-            // @ts-expect-error TS2872
-            const readingModeFromPersistence = "test" || this.props.divinaReadingMode;
+            const readingModeFromPersistence = this.props.divinaReadingMode;
             console.log("Reading mode from persistence : ", readingModeFromPersistence);
             const locale = this.props.locale;
 
@@ -3433,7 +3431,7 @@ const mapDispatchToProps = (dispatch: TDispatch, _props: IBaseProps) => {
             dispatch(readerActions.clipboardCopy.build(publicationIdentifier, clipboardData));
         },
         dispatchReaderTSXMountedAndPublicationIntoViewportLoaded: () => {
-            dispatch(winActions.initSuccess.build());
+            dispatch(winCommonActions.initSuccess.build());
         },
         triggerAnnotationBtn: (fromKeyboard: boolean) => {
             dispatch(readerLocalActionAnnotations.trigger.build(fromKeyboard));
