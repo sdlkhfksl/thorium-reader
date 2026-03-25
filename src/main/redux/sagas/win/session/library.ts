@@ -6,7 +6,6 @@
 // ==LICENSE-END==
 
 import debug_ from "debug";
-import { normalizeWinBoundRectangle } from "readium-desktop/common/rectangle/window";
 import { takeSpawnLeading } from "readium-desktop/common/redux/sagas/takeSpawnLeading";
 import { error } from "readium-desktop/main/tools/error";
 import { winActions } from "readium-desktop/main/redux/actions";
@@ -76,7 +75,7 @@ function* libraryMoveOrResizeObserver(action: winActions.session.registerLibrary
     yield debounce(DEBOUNCE_TIME, channel, function*() {
 
         try {
-            let winBound = library.getBounds(); // current bounds of the window maximized/fullscreen/minimized (not on windows11, specific events)
+            const winBound = library.getBounds(); // current bounds of the window maximized/fullscreen/minimized (not on windows11, specific events)
             debug("_______2 library.getBounds()", winBound);
             // winBound = normalizeWinBoundRectangle(winBound);
             yield put(winActions.session.setBound.build(id, winBound));
