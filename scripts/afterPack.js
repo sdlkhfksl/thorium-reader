@@ -91,9 +91,9 @@ module.exports = async function afterPack(context) {
         // GrantFileProtocolExtraPrivileges = 7,
         [FuseV1Options.GrantFileProtocolExtraPrivileges]: false,
 
-        // wasmTrapHandlers = 8,
+        // WasmTrapHandlers = 8,
         // https://www.electronjs.org/docs/latest/tutorial/fuses#wasmtraphandlers
-        [FuseV1Options.WasmTrapHandlers]: false,
+        [FuseV1Options.WasmTrapHandlers]: true,
     };
 
     // Electron Builder v26
