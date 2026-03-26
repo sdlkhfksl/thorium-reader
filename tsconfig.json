@@ -3,6 +3,7 @@
     "strictNullChecks": false,
     "strictPropertyInitialization": false,
     "outDir": "./dist/",
+    "rootDir": "./",
     "sourceMap": true,
     "inlineSourceMap": false,
     "inlineSources": false,
@@ -32,7 +33,7 @@
     // "noImplicitUseStrict": false,
     // "suppressExcessPropertyErrors": false,
     // "suppressImplicitAnyIndexErrors": false,
-    "downlevelIteration": false,
+    // "downlevelIteration": false,
     "emitBOM": false,
     // "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
@@ -54,7 +55,7 @@
     // "moduleResolution": "node", // 100
     "moduleResolution": "bundler", // 100
     "lib": ["es2022", "dom", "dom.iterable"],
-    "target": "es2020",
+    "target": "es2025",
     "jsx": "react",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
