@@ -391,7 +391,7 @@ export function saga() {
                 // }
                 // const pubId = reader.publicationIdentifier;
 
-                const config: Partial<ReaderConfig> = (yield* callTyped(() => diMainGet("publication-data").getJsonObj(pubId, "config"))) || {};
+                const config: Partial<ReaderConfig> = (yield* callTyped(() => diMainGet("publication-data").readJsonObj(pubId, "config"))) || {};
                 const configUnion = { ...config, ...configJsonObj };
                 yield* callTyped(() => diMainGet("publication-data").writeJsonObj(pubId, "config", configUnion));
             },
