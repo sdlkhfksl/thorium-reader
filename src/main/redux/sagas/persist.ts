@@ -27,7 +27,9 @@ import { JsonStringifySortedKeys } from "readium-desktop/common/utils/json";
 import { rmrf } from "readium-desktop/utils/fs";
 
 const DEBOUNCE_TIME = 3 * 60 * 1000; // 3 min
-const PUBLICATION_STORAGE_DEBOUNCE_TIME = 10 * 1000; // 10 secs
+
+// disabled for the 3.4 release
+// const PUBLICATION_STORAGE_DEBOUNCE_TIME = 10 * 1000; // 10 secs
 
 // Logger
 const filename_ = "readium-desktop:main:saga:persist";
@@ -397,21 +399,22 @@ export function saga() {
             },
             (e) => debug(e),
         ),
-        debounce(
-            PUBLICATION_STORAGE_DEBOUNCE_TIME,
-            readerActions.setLocator.ID,
-            function* (action: readerActions.setLocator.TAction) {
-                const jsonObj = action.payload as unknown as object;
-                const sender = action.sender as EventPayload["sender"];
+        // disabled for the 3.4 release
+        // debounce(
+        //     PUBLICATION_STORAGE_DEBOUNCE_TIME,
+        //     readerActions.setLocator.ID,
+        //     function* (action: readerActions.setLocator.TAction) {
+        //         const jsonObj = action.payload as unknown as object;
+        //         const sender = action.sender as EventPayload["sender"];
 
-                if (sender?.type !== SenderType.Renderer) {
-                    debug("sender is not renderer !!!");
-                    return;
-                }
-                const pubId = sender.reader_pubId; // see syncFactory
-                yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "locator", jsonObj));
-            },
-        ),
+        //         if (sender?.type !== SenderType.Renderer) {
+        //             debug("sender is not renderer !!!");
+        //             return;
+        //         }
+        //         const pubId = sender.reader_pubId; // see syncFactory
+        //         yield* callTyped(() => diMainGet("publication-storage").writeJsonObj(pubId, "locator", jsonObj));
+        //     },
+        // ),
 
         // TODO: enable publication-storage debounce persistence
         // debounce(
