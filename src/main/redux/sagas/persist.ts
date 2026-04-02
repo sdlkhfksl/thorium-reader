@@ -93,7 +93,7 @@ export const convertPersistedReduxState = (nextState: Partial<PersistRootState>)
 export const convertPublicationToRegistryReaderState = async (pubIds: string[]): Promise<IDictWinRegistryReaderState> => {
     const publicationData = diMainGet("publication-data");
 
-    const readerRegistry: IDictWinRegistryReaderState | undefined = {};
+    const readerRegistry: IDictWinRegistryReaderState = {};
     for (const pubId of pubIds) {
 
         const keys = [
@@ -173,6 +173,7 @@ const persistReaderRegistry = async (nextState: Partial<PersistRootState>): Prom
     return registryReaderState;
 };
 
+const enableTheDumpOfWinRegistryReaderForBackwardCompatibiltyInRuntimeStateWhenCrashOrWindowsReboot = true;
 export const persistStateToFs = async (nextState: Partial<PersistRootState>, filePath: string): Promise<void> => {
     debug("START persisting Redux state to", filePath);
 
@@ -181,7 +182,8 @@ export const persistStateToFs = async (nextState: Partial<PersistRootState>, fil
     let stateDataStringified = JsonStringifySortedKeys(persistedReduxState);
     const checksum = crypto.createHash("sha1").update(stateDataStringified).digest("hex");
 
-    if (filePath === stateFilePath) {
+    if (enableTheDumpOfWinRegistryReaderForBackwardCompatibiltyInRuntimeStateWhenCrashOrWindowsReboot
+        || filePath === stateFilePath) {
         // Add registry.reader for backward compatibility with older state.json versions 330
         persistedReduxState.win.registry.reader = await persistReaderRegistry(nextState);
         stateDataStringified = JsonStringifySortedKeys(persistedReduxState);
