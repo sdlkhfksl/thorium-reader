@@ -128,7 +128,8 @@ const recoveryReduxState = async (runtimeState: object): Promise<object | undefi
     // node_modules/rfc6902/diff.js:135:36
     try {
         const errors = applyPatch(runtimeState, patch);
-        if (errors.reduce((pv, cv) => pv && !cv, true)) {
+        const hasError = Array.isArray(errors) && errors.some(Boolean);
+        if (hasError) {
             debug("recoveryReduxState ERRORS:", errors);
             return undefined;
         }
