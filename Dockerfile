@@ -36,7 +36,15 @@ RUN echo $CONTAINER_TIMEZONE && arch && uname &&\
     ruby-dev && gem i fpm -f && fpm --version &&\
     curl -fsSL https://deb.nodesource.com/setup_24.x | bash &&\
     apt-get install -y nodejs &&\
-    npm install -g npm
+    npm install --ignore-scripts --foreground-scripts -g sfw &&\
+    npm config get prefix &&\
+    echo "$NPM_CONFIG_PREFIX" &&\
+    export NPM_CONFIG_PREFIX=$(npm config get prefix) &&\
+    echo "$NPM_CONFIG_PREFIX" &&\
+    export PATH="${NPM_CONFIG_PREFIX}/bin:$PATH" &&\
+    (ls -alshFR --color=auto "${NPM_CONFIG_PREFIX}/lib/node_modules/sfw/.sfw-cache" || echo OK) &&\
+    sfw npm install -g npm@11.x &&\
+    (ls -alshFR --color=auto "${NPM_CONFIG_PREFIX}/lib/node_modules/sfw/.sfw-cache" || echo OK)
 # https://github.com/npm/cli/issues/9133
 
 # wget libreadline-dev
@@ -109,10 +117,13 @@ USER notroot
 
 ARG BUST_CACHE
 RUN cd /THORIUM/ &&\
-    npm install --ignore-scripts --foreground-scripts &&\
+    sfw npm ci --ignore-scripts --foreground-scripts &&\
     cd node_modules/electron &&\
     npm run postinstall &&\
-    cd -
+    cd ../.. &&\
+    (ls -alshFR --color=auto "$NPM_CONFIG_PREFIX/lib/node_modules/sfw/.sfw-cache" || echo OK) &&\
+    (npm audit || echo OK) &&\
+    (npx --no --offline --include-workspace-root --workspace . taze || echo OK)
 
 ARG BUST_CACHE
 RUN cd /THORIUM/ &&\
