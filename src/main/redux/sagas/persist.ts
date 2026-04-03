@@ -165,7 +165,7 @@ const persistReaderRegistry = async (nextState: Partial<PersistRootState>): Prom
 
     // Preserve registry reader state for not-visited publications (backward compatibility)
     for (const pubId of pubIdNotVisitedSet) {
-        if (nextState?.win?.registry?.reader[pubId]) {
+        if (nextState?.win?.registry?.reader?.[pubId]) {
             registryReaderState[pubId] = nextState.win.registry.reader[pubId];
         }
     }
