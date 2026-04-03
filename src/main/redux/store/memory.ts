@@ -512,6 +512,18 @@ export async function initStore()
     sqliteInitialisation();
     sqliteInitTableNote();
 
+    // Initialized win.registry.reader as an empty object instead of using the null reducer value.
+    if (!preloadedState.win) {
+        preloadedState.win = {} as any;
+    }
+    if (!preloadedState.win.registry) {
+        preloadedState.win.registry = {} as any;
+    }
+    if (!preloadedState.win.registry.reader) {
+        preloadedState.win.registry.reader = {};
+    }
+
+
     if (version === 330) {
 
         debug("START reader registry migration from the 330 version");
@@ -944,16 +956,6 @@ export async function initStore()
             debug("END reader registry hydration from publication-data, let's create the redux store");
         } // win registry hydration disabled
         else {
-            if (!preloadedState.win) {
-                preloadedState.win = {} as any;
-            }
-            if (!preloadedState.win.registry) {
-                preloadedState.win.registry = {} as any;
-            }
-            if (!preloadedState.win.registry.reader) {
-                preloadedState.win.registry.reader = {};
-            }
-
             // apply to the win registry reader state the previous persisted state for the 330 backward compatibility (from state.json and not state_v340.json)
             preloadedState.win.registry.reader = reduxStateWinRegistryReader || {};
             const readerRegistryPubIds = Object.keys(preloadedState.win.registry.reader);
