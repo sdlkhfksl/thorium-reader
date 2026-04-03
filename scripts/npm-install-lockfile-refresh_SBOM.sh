@@ -11,6 +11,10 @@ mv node_modules/ node_modules_ORIGINAL/
 
 rm -f package-lock.json && npm install --ignore-scripts --foreground-scripts
 
+npm audit
+npm outdated
+npx --no --offline --include-workspace-root --workspace . taze
+
 rm -rf node_modules/
 mv node_modules_ORIGINAL/ node_modules/
 
