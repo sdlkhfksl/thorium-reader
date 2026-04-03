@@ -33,6 +33,7 @@ schema-version = "1.10.0"
 
 [install]
 nodejs_24.pkg-path = "nodejs_24"
+nodejs_24.outputs = "all"
 jq.pkg-path = "jq"
 jq.outputs = "all"
 
@@ -102,7 +103,7 @@ fi
 #export NPM_CONFIG_PREFIX="/tmp/${envName}-npm";
 
 export NPM_CONFIG_PREFIX="${FLOX_CACHE_DIR}/NPM_PREFIX";
-#### rm -rf "$NPM_CONFIG_PREFIX";
+rm -rf "$NPM_CONFIG_PREFIX";
 mkdir -p "$NPM_CONFIG_PREFIX";
 if [[ ! -z "${FLX_VERBOSE}" ]]; then
 echo "-----> NPM CONFIG PREFIX: $(npm config get prefix)";
@@ -114,7 +115,8 @@ lss "$NPM_CONFIG_PREFIX/lib/node_modules";
 fi
 
 export NPM_CONFIG_CACHE="${FLOX_CACHE_DIR}/NPM_CACHE";
-#### rm -rf "$NPM_CONFIG_CACHE";
+rm -rf "$NPM_CONFIG_CACHE";
+#### rm -rf "$NPM_CONFIG_CACHE/_cacache/"
 mkdir -p "$NPM_CONFIG_CACHE";
 if [[ ! -z "${FLX_VERBOSE}" ]]; then
 echo "-----> NPM CONFIG CACHE: $(npm config get cache)"
@@ -161,8 +163,10 @@ export PATH="$NPM_CONFIG_PREFIX/bin:$PATH";
 # https://github.com/npm/cli/issues/9133
 sfw npm install --ignore-scripts --foreground-scripts -g npm
 
-sfw npm install --ignore-scripts --foreground-scripts -g npm-check-updates
+#sfw npm install --ignore-scripts --foreground-scripts -g npm-check-updates
 # sfw npm install --ignore-scripts --foreground-scripts -g @electron/asar
+
+[[ ! -z "${FLX_VERBOSE}" ]] && ls -alshFR --color=auto "$NPM_CONFIG_PREFIX/lib/node_modules/sfw/.sfw-cache"
 
 '''
 
