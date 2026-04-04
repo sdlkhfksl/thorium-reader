@@ -8,7 +8,7 @@ rm -rf node_modules/ && rm -f package-lock.json && npm install --ignore-scripts 
 
 npm audit
 npm outdated
-npx --no --offline --include-workspace-root --workspace . taze
+(npm exec --no --offline -- taze --fail-on-outdated --all --force --include-locked --concurrency 10 --loglevel debug --cwd . && npm exec --no --offline -- taze major --fail-on-outdated --all --force --include-locked --concurrency 10 --loglevel debug --cwd .) || echo OK
 
 # npm install --foreground-scripts
 # TODO: preinstall, install and postinstall NPM lifecycle hooks for Electron, fsevents, ParcelWatcher, etc.?
