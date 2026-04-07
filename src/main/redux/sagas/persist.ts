@@ -27,6 +27,8 @@ import { JsonStringifySortedKeys } from "readium-desktop/common/utils/json";
 import crypto from "node:crypto";
 // import { rmrf } from "readium-desktop/utils/fs";
 
+import { readerConfigInitialState } from "readium-desktop/common/redux/states/reader";
+
 // Persist state diffs regularly now that win.registry is disabled.
 // Only publication.db and opds remain unbounded (arrays with N elements).
 const PATCH_DEBOUNCE_TIME = 1000; // 1 second before dumping to disk
@@ -445,7 +447,7 @@ export function saga() {
                 // const pubId = reader.publicationIdentifier;
 
                 const config: Partial<ReaderConfig> = (yield* callTyped(() => diMainGet("publication-data").readJsonObj(pubId, "config"))) || {};
-                const configUnion = { ...config, ...configJsonObj };
+                const configUnion = { ...config, ...configJsonObj, ...{ annotation_defaultDrawView: action.payload.annotation_defaultDrawView === "hide" ? readerConfigInitialState.annotation_defaultDrawView : action.payload.annotation_defaultDrawView } };
                 yield* callTyped(() => diMainGet("publication-data").writeJsonObj(pubId, "config", configUnion));
             },
             (e) => debug(e),
