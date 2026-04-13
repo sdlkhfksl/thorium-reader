@@ -13,7 +13,7 @@ const nodeEnv = process.env.NODE_ENV || "development";
 const isDev = nodeEnv !== "production";
 console.log(`PREPROCESSOR nodeEnv: ${nodeEnv} ${isDev}`);
 
-const isContinuousIntegrationDeploy = process.env.GITHUB_TOKEN_RELEASE_PUBLISH ? true : false;
+const isContinuousIntegrationDeploy = process.env.RELEASE_TAG ? true : false;
 
 const rendererLibraryBaseUrl = isDev ? "http://localhost:" + portApp + "/" : "filex://0.0.0.0/";
 

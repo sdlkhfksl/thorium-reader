@@ -10,25 +10,40 @@ on:
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#permissions
 permissions:
     actions: none
+    artifact-metadata: none
+    attestations: none
     checks: none
-    contents: write
+    contents: none # <==========
     deployments: none
+    discussions: none
     id-token: none
     issues: none
+    models: none
     packages: none
     pages: none
     pull-requests: none
     repository-projects: none
     security-events: none
     statuses: none
-env:
-# secrets.GITHUB_TOKEN is restricted by default instead of permissive, so it does not allow release publishing. We can use a Personal Access Token with limited scope and expiration, or configure the token for this workflow using the 'permissions' key
-#  GITHUB_TOKEN_RELEASE_PUBLISH: ${{ secrets.RELEASE_PUBLISH }}
-  GITHUB_TOKEN_RELEASE_PUBLISH: ${{ secrets.GITHUB_TOKEN }}
-# Electron Builder workaround
-  USE_HARD_LINKS: 'false'
 jobs:
   build:
+    permissions:
+      actions: none
+      artifact-metadata: none
+      attestations: none
+      checks: none
+      contents: write # <==========
+      deployments: none
+      discussions: none
+      id-token: none
+      issues: none
+      models: none
+      packages: none
+      pages: none
+      pull-requests: none
+      repository-projects: none
+      security-events: none
+      statuses: none
 #    if: "!contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     if: "github.event_name == 'pull_request' || !contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ${{ matrix.runson }}
@@ -219,12 +234,16 @@ jobs:
       run: npm run build:prod
       # && npm run test SEE https://github.com/edrlab/thorium-reader/issues/1697
     - name: non-PR action (build and package) ARM
+      env:
+        USE_HARD_LINKS: 'false' # Electron Builder workaround
       #if: ${{ github.event_name != 'pull_request' && (matrix.osarch == 'linux-arm' || matrix.osarch == 'windows-arm' || matrix.osarch == 'macos-arm') }}
       if: ${{ github.event_name != 'pull_request' && endsWith(matrix.osarch, '-arm') }}
       #run: sed 's/--x64/--arm64/g' ./package.json > ./package.json.new && mv ./package.json.new ./package.json && npm run package:${{ matrix.packname }} && sed 's/--arm64/--x64/g' ./package.json > ./package.json.new && mv ./package.json.new ./package.json
       run: >
         node -e 'const path = require("path"); const fs = require("fs"); const filePath = path.join(process.cwd(), "package.json"); let fileStr = fs.readFileSync(filePath, { encoding: "utf8" }); fileStr = fileStr.replace(/--x64/g, "--arm64"); fs.writeFileSync(filePath, fileStr, { encoding: "utf8" });' && npm run package:${{ matrix.packname }}
     - name: non-PR action (build and package) INTEL
+      env:
+          USE_HARD_LINKS: 'false' # Electron Builder workaround
       #if: ${{ github.event_name != 'pull_request' && (matrix.osarch == 'linux-intel' || matrix.osarch == 'windows-intel' || matrix.osarch == 'macos-intel') }}
       if: ${{ github.event_name != 'pull_request' && endsWith(matrix.osarch, '-intel') }}
       run: >
@@ -232,6 +251,8 @@ jobs:
     #- run: ls -alsR release
     #- run: npm install @octokit/rest
     - name: GitHub Tagged Release Delete/ReCreate and Upload Build Artefacts
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       if: ${{ github.event_name != 'pull_request' }}
       run: node scripts/release-github.mjs
     # - name: Upload Artifact

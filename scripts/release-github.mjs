@@ -46,7 +46,7 @@ if (!process.env.RELEASE_TAG) {
     // return;
 }
 
-const ghtoken = process.env.GITHUB_TOKEN_RELEASE_PUBLISH || process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
+const ghtoken = process.env.GITHUB_TOKEN;
 if (!ghtoken) {
     console.log("Missing GITHUB_TOKEN! Abort.");
     process.exit(1);

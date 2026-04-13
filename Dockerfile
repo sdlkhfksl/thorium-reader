@@ -110,7 +110,7 @@ RUN chown -R notroot:notroot /THORIUM/ &&\
 USER notroot
 
 # use this only for dev/debug builds! (simulates CI)
-# ENV GITHUB_TOKEN_RELEASE_PUBLISH=xyz
+# ENV RELEASE_TAG=xyz
 
 # Electron Builder workaround
 # ENV USE_HARD_LINKS="false"
