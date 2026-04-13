@@ -138,9 +138,9 @@ jobs:
       if: ${{ !startsWith(matrix.osarch, 'windows-') }}
       run: uname -m && arch
     - name: Checkout
-      uses: actions/checkout@v4
-    #   with:
-    #     persist-credentials: false
+      uses: actions/checkout@v6
+      with:
+        persist-credentials: false
     # - name: Git config global dump (pre)
     #   run: 'git config --global --list || echo NO_GIT_GLOBAL_CONFIG || true'
     #   shell: bash
@@ -169,7 +169,7 @@ jobs:
     - name: Git config local dump (post)
       run: 'git config --list || echo NO_GIT_GLOBAL_CONFIG || true'
       shell: bash
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         node-version: '24'
         #check-latest: true
