@@ -743,7 +743,9 @@
             "skipDescription": "",
             "speed": "음성 속도",
             "stop": "읽기 종료",
-            "title": "소리내어 읽기"
+            "title": "소리내어 읽기",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "",

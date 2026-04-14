@@ -748,7 +748,9 @@
             "skipDescription": "跳過／忽略輔助內容，例如分頁符號、註腳／尾註等。",
             "speed": "語音朗讀速度",
             "stop": "停止朗讀",
-            "title": "語音朗讀"
+            "title": "語音朗讀",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "退出 Zen 模式",

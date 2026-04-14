@@ -1736,7 +1736,9 @@ declare namespace typed_i18n {
     readonly "skipDescription": string,
     readonly "speed": string,
     readonly "stop": string,
-    readonly "title": string
+    readonly "title": string,
+    readonly "useTTSHighlightsForMO": string,
+    readonly "useTTSHighlightsForMODescription": string
   },
   readonly "navigation": {
     readonly "ZenModeExit": string,
@@ -2049,7 +2051,9 @@ declare namespace typed_i18n {
   readonly "skipDescription": string,
   readonly "speed": string,
   readonly "stop": string,
-  readonly "title": string
+  readonly "title": string,
+  readonly "useTTSHighlightsForMO": string,
+  readonly "useTTSHighlightsForMODescription": string
 };
   (_: "reader.media-overlays.activate", __?: {}): string;
   (_: "reader.media-overlays.captions", __?: {}): string;
@@ -2067,6 +2071,8 @@ declare namespace typed_i18n {
   (_: "reader.media-overlays.speed", __?: {}): string;
   (_: "reader.media-overlays.stop", __?: {}): string;
   (_: "reader.media-overlays.title", __?: {}): string;
+  (_: "reader.media-overlays.useTTSHighlightsForMO", __?: {}): string;
+  (_: "reader.media-overlays.useTTSHighlightsForMODescription", __?: {}): string;
   (_: "reader.navigation", __?: {}): {
   readonly "ZenModeExit": string,
   readonly "ZenModeTitle": string,

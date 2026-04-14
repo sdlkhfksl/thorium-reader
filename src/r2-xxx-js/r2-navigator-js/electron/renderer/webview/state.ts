@@ -62,6 +62,8 @@ export interface IReadiumElectronWebviewWindowState {
     // HighlightDrawTypeOpacityMaskRuler
     // HighlightDrawTypeMarginBookmark
 
+    // mediaOverlaysUseTTSHighlights: boolean;
+
     ttsSkippabilityEnabled: boolean;
     ttsSentenceDetectionEnabled: boolean;
     ttsClickEnabled: boolean;
@@ -120,6 +122,8 @@ export interface IReadiumElectronBrowserWindow {
     // HighlightDrawTypeOpacityMask
     // HighlightDrawTypeOpacityMaskRuler
     // HighlightDrawTypeMarginBookmark
+
+    mediaOverlaysUseTTSHighlights: boolean;
 
     ttsSkippabilityEnabled: boolean;
     ttsSentenceDetectionEnabled: boolean;

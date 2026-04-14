@@ -773,7 +773,9 @@
             "skipDescription": "تخطي / تجاهل المحتوى الإضافي مثل فواصل الصفحات، الحواشي السفلية/التعليقات الختامية، الخ.",
             "speed": "سرعة القراءة بصوت عالٍ",
             "stop": "إيقاف القراءة بصوت عالٍ",
-            "title": "القراءة بصوت عالٍ"
+            "title": "القراءة بصوت عالٍ",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "الخروج من وضع القراءة المبسّطة",

@@ -753,7 +753,9 @@
             "skipDescription": "Ohita toissijainen sisältö kuten sivunvaihdot tai ala- ja loppuviitteet.",
             "speed": "Luennan nopeus",
             "stop": "Lopeta luenta",
-            "title": "Luenta"
+            "title": "Luenta",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "Poistu kokoruudun tilasta",

@@ -758,7 +758,9 @@
             "skipDescription": "Omettre les sauts de pages, notes de de bas de page etc.",
             "speed": "Vitesse de lecture",
             "stop": "Arrêt",
-            "title": "Lire à haute voix"
+            "title": "Lire à haute voix",
+            "useTTSHighlightsForMO": "Surlignage personalisé",
+            "useTTSHighlightsForMODescription": "Désactiver les styles de l'éditeur"
         },
         "navigation": {
             "ZenModeExit": "Sortir du mode Zen",

@@ -702,7 +702,7 @@ export const ReadingAudio = ({ useMO, ttsState, ttsPause, ttsResume }: { useMO: 
 
     // : Pick<ReaderConfig, "ttsEnableOverlayMode" | "mediaOverlaysEnableCaptionsMode" | "ttsAndMediaOverlaysDisableContinuousPlay" | "mediaOverlaysEnableSkippability" | "ttsEnableSentenceDetection">
     const config = useReaderConfigAll();
-    const { ttsHighlightStyle, ttsHighlightStyle_WORD, ttsHighlightColor, ttsHighlightColor_WORD, mediaOverlaysEnableCaptionsMode: moCaptions, ttsEnableOverlayMode: ttsCaptions, ttsAndMediaOverlaysDisableContinuousPlay: disableContinuousPlay, mediaOverlaysEnableSkippability: skippability, mediaOverlaysIgnoreAndUseTTS, ttsEnableSentenceDetection: splitTTStext } = config;
+    const { ttsHighlightStyle, ttsHighlightStyle_WORD, ttsHighlightColor, ttsHighlightColor_WORD, mediaOverlaysEnableCaptionsMode: moCaptions, ttsEnableOverlayMode: ttsCaptions, ttsAndMediaOverlaysDisableContinuousPlay: disableContinuousPlay, mediaOverlaysEnableSkippability: skippability, mediaOverlaysIgnoreAndUseTTS, mediaOverlaysUseTTSHighlights, ttsEnableSentenceDetection: splitTTStext } = config;
     const set = useSaveReaderConfigDebounced();
 
     const ttsTogglePlayResume = (func: () => void) => {
@@ -798,6 +798,16 @@ export const ReadingAudio = ({ useMO, ttsState, ttsPause, ttsResume }: { useMO: 
                 //     set({ ttsEnableSentenceDetection: !splitTTStext });
                 // });
                 set({ mediaOverlaysIgnoreAndUseTTS: !mediaOverlaysIgnoreAndUseTTS });
+            },
+        });
+        options.push({
+            id: "useTTSHighlightsForMO",
+            name: "useTTSHighlightsForMO",
+            label: `${__("reader.media-overlays.useTTSHighlightsForMO")}`,
+            description: `${__("reader.media-overlays.useTTSHighlightsForMODescription")}`,
+            checked: mediaOverlaysUseTTSHighlights,
+            onChange: () => {
+                set({ mediaOverlaysUseTTSHighlights: !mediaOverlaysUseTTSHighlights });
             },
         });
     }
@@ -911,7 +921,7 @@ export const ReadingAudio = ({ useMO, ttsState, ttsPause, ttsResume }: { useMO: 
     } satisfies React.CSSProperties;
 
     let ttsHighlightColor_WORD_HEX = rgbToHex(ttsHighlightColor_WORD_);
-    if (ttsHighlightColor_WORD_HEX === "#000000") {
+    if (useMO || ttsHighlightColor_WORD_HEX === "#000000") {
         ttsHighlightColor_WORD_HEX = "transparent";
     }
     const styleWord = {
@@ -994,7 +1004,8 @@ export const ReadingAudio = ({ useMO, ttsState, ttsPause, ttsResume }: { useMO: 
             </div>)}
         </div>
 
-        {!useMO ?
+        {
+        !useMO || mediaOverlaysUseTTSHighlights ?
         (
         <>
         <div style={{ border: "2px dotted var(--color-gray-250)", borderRadius: "1em", padding: 6 }}>
@@ -1051,14 +1062,14 @@ export const ReadingAudio = ({ useMO, ttsState, ttsPause, ttsResume }: { useMO: 
             })
             }
             </div>
-            <p style={{ marginBottom: 4, paddingBottom: 0, fontWeight: "bold", fontSize: "120%" }}>{__("tts.highlight.wordColor")}</p>
-            <div style={{width:"fit-content"}} className={stylesAnnotations.colorPicker} role="radiogroup">
+            <p style={{ textDecoration: useMO ? "line-through" : undefined, marginBottom: 4, paddingBottom: 0, fontWeight: "bold", fontSize: "120%" }}>{__("tts.highlight.wordColor")}</p>
+            <div style={{ filter: useMO ? "grayscale(100%)" : undefined, width:"fit-content" }} className={stylesAnnotations.colorPicker} role="radiogroup">
             {
             Object.entries(noteColorCodeToColorTranslatorKeySet_).map(([colorHex, translatorKey]) => {
                 const ttsHighlightColor_WORDHex = rgbToHex(ttsHighlightColor_WORD || readerConfigInitialState.ttsHighlightColor_WORD);
                 return (
                     <div key={`colorx_${colorHex}_key`}>
-                        <input type="radio" id={`ttscolorpickword${colorHex}`} name="ttscolorpickword" value={colorHex}
+                        <input disabled={ useMO ? true : undefined } type="radio" id={`ttscolorpickword${colorHex}`} name="ttscolorpickword" value={colorHex}
                             onChange={() => {
                                 ttsTogglePlayResume(() => {
                                     set({ ttsHighlightColor_WORD: hexToRgb(colorHex) });
@@ -1074,6 +1085,7 @@ export const ReadingAudio = ({ useMO, ttsState, ttsPause, ttsResume }: { useMO: 
                         />
                         <label aria-hidden={true} title={__(translatorKey)} htmlFor={`ttscolorpickword${colorHex}`}
                             style={{
+                                cursor: useMO ? "not-allowed" : undefined,
                                 background: colorHex === "#000000" ? "linear-gradient(90deg,rgba(255, 255, 255, 1) 0%, rgba(71, 71, 71, 1) 50%, rgba(0, 0, 0, 1) 100%)" : undefined,
                                 backgroundColor: colorHex === "#000000" ? undefined : colorHex,
                                 border: ttsHighlightColor_WORDHex === colorHex ? "1px solid var(--color-gray-900)" : "",
@@ -1186,7 +1198,8 @@ undefined,
 </details>
         </>
         )
-        : <></> }
+        : (<></>)
+        }
         </>
     );
 };

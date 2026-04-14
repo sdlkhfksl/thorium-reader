@@ -763,7 +763,9 @@
             "skipDescription": "Переход / игнорирование вспомогательного содержимого, такого как разрывы страниц, сноски/примечания и т. д.",
             "speed": "Чтение вслух скорость воспроизведения",
             "stop": "Остановить чтение вслух",
-            "title": "Чтение вслух"
+            "title": "Чтение вслух",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "Выйти из Zen режима",

@@ -753,7 +753,9 @@
             "skipDescription": "பேச் பிரேக்குகள், அடிக்குறிப்புகள் / இறுதி குறிப்புகள் போன்ற துணை உள்ளடக்கத்தை மேலே செல்லவும் / புறக்கணிக்கவும்.",
             "speed": "Readoloud பின்னணி வீதம்",
             "stop": "சத்தமாக வாசிப்பதை நிறுத்துங்கள்",
-            "title": "READOWLOUD"
+            "title": "READOWLOUD",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "சென் பயன்முறையில் வெளியேறவும்",

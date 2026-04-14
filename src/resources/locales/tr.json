@@ -753,7 +753,9 @@
             "skipDescription": "Sayfa geçişleri, dipnotlar/sonnotlar gibi tali içerikleri atla/yoksay.",
             "speed": "Sesli Okuma oynatım hızı",
             "stop": "Sesli Okumayı Durdur",
-            "title": "Sesli Okuma"
+            "title": "Sesli Okuma",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "Zen modundan çık",

@@ -748,7 +748,9 @@
             "skipDescription": "跳过/忽略附加内容，例如分页符、脚注/尾注等。",
             "speed": "语音朗读速度",
             "stop": "停止朗读",
-            "title": "语音朗读"
+            "title": "语音朗读",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "退出禅模式",

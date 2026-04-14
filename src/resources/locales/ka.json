@@ -753,7 +753,9 @@
             "skipDescription": "",
             "speed": "ტექსტის მეტყველების დაკვრის სისწრაფე",
             "stop": "ტექსტის მეტყველების შეჩერება",
-            "title": "ტექსტის მეტყველება"
+            "title": "ტექსტის მეტყველება",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "",

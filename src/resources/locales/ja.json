@@ -748,7 +748,9 @@
             "skipDescription": "改ページ、脚注や文末脚注などの補助コンテンツをスキップまたは無視します。",
             "speed": "再生速度（朗読）",
             "stop": "停止（朗読）",
-            "title": "朗読"
+            "title": "朗読",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "Zenモードを終了",

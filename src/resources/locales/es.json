@@ -758,7 +758,9 @@
             "skipDescription": "Saltar/ignorar contenido auxiliar como saltos de página, notas al pie/notas finales, etc.",
             "speed": "Velocidad de reproducción para lectura en voz alta",
             "stop": "Detener lectura en voz alta",
-            "title": "Lectura en voz alta"
+            "title": "Lectura en voz alta",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "Salir de modo Zen",
@@ -898,7 +900,7 @@
                     "Paper": "Papel",
                     "Sepia": "Sepia"
                 },
-                "title": "Tema de lectura"
+                "title": "Diseño"
             },
             "wordSpacing": "Espaciado de palabras"
         },
@@ -1214,7 +1216,7 @@
             "dark": "Oscuro",
             "description": "El diseño de la aplicación coincide con el sistema operativo.",
             "light": "Claro",
-            "title": "Tema de la aplicación"
+            "title": "Diseño de la aplicación"
         }
     },
     "tts": {

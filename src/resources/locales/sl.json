@@ -763,7 +763,9 @@
             "skipDescription": "Preskoči/prezri pomožno vsebino, kot so prelomi strani, sprotne/končne opombe itd.",
             "speed": "Hitrost glasovnega branja",
             "stop": "Prekini glasovno branje",
-            "title": "Glasovno branje"
+            "title": "Glasovno branje",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "Izhod iz Zen načina",

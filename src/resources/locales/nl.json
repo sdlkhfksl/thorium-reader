@@ -753,7 +753,9 @@
             "skipDescription": "Spring over/negeer aanvullende inhoud zoals pagina-einden, voetnoten/eindnoten, enz.",
             "speed": "Voorlezen snelheid",
             "stop": "Stop Voorlezen",
-            "title": "Voorlezen"
+            "title": "Voorlezen",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "Verlaat Zen modus",

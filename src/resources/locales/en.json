@@ -753,7 +753,9 @@
             "skipDescription": "Jump over / ignore auxiliary content such as pagebreaks, footnotes/endnotes, etc.",
             "speed": "Readaloud playback rate",
             "stop": "Stop Readaloud",
-            "title": "Readaloud"
+            "title": "Readaloud",
+            "useTTSHighlightsForMO": "Custom highlighting",
+            "useTTSHighlightsForMODescription": "Disable authored styles"
         },
         "navigation": {
             "ZenModeExit": "Exit Zen mode",

@@ -753,7 +753,9 @@
             "skipDescription": "Hop over ekstra-indhold så som sideskift, fodnoter/slutnoter, osv.",
             "speed": "Oplæsningshastighed",
             "stop": "Stop oplæsning",
-            "title": "Oplæsning"
+            "title": "Oplæsning",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "Forlad fokuseret læsetilstand",

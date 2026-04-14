@@ -758,7 +758,9 @@
             "skipDescription": "",
             "speed": "Brzina čitanja naglas",
             "stop": "Prekini čitanje naglas",
-            "title": "Čitanje naglas"
+            "title": "Čitanje naglas",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "",

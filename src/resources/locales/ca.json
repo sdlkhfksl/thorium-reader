@@ -758,7 +758,9 @@
             "skipDescription": "Salta sobre / ignora el contingut auxiliar com salts de pàgina, notes al peu/notes finals, etc.",
             "speed": "Velocitat de reproducció per la lectura en veu alta",
             "stop": "Detendre lectura en veu alta",
-            "title": "Lectura en veu alta"
+            "title": "Lectura en veu alta",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "",

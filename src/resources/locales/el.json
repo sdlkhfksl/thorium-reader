@@ -753,7 +753,9 @@
             "skipDescription": "Παράκαμψη βοηθητικού περιεχομένου, όπως αλλαγές σελίδας, υποσημειώσεις/σημειώσεις τέλους κ.λπ.",
             "speed": "Ρυθμός αναπαραγωγής Φωνητικού αναγνώστη",
             "stop": "Σταμάτημα Φωνητικού αναγνώστη",
-            "title": "Λειτουργία φωνητικού αναγνώστη (Readaloud)"
+            "title": "Λειτουργία φωνητικού αναγνώστη (Readaloud)",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "Έξοδο λειτουργίας Zen",

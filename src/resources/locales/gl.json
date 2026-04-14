@@ -753,7 +753,9 @@
             "skipDescription": "Saltar/ignorar contido auxiliar como saltos de páxina, notas ao pé/notas finais etc.",
             "speed": "Velocidade de reprodución para lectura en voz alta",
             "stop": "Deter lectura en voz alta",
-            "title": "Lectura en voz alta"
+            "title": "Lectura en voz alta",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "",

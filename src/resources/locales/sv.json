@@ -650,8 +650,8 @@
         "progression": {
             "title": "Läsförlopp"
         },
-        "read": "Läst",
-        "remainingTime": "Lån (återstående tid)",
+        "read": "Färdigläst",
+        "remainingTime": "Lån (tid kvar)",
         "renewButton": "Låna om",
         "returnButton": "Lämna tillbaka",
         "returnedLcp": "Den här LCP-skyddade publikationen är återlämnad.",
@@ -753,7 +753,9 @@
             "skipDescription": "Hoppa över sekundärt innehåll såsom sidbrytningar, fotnoter och slutnoter.",
             "speed": "Uppläsningshastighet",
             "stop": "Stoppa uppläsning",
-            "title": "Uppläsning"
+            "title": "Uppläsning",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "Lämna zenläge",

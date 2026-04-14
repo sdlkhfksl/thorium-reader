@@ -80,6 +80,7 @@ import {
     mediaOverlaysEnableCaptionsMode,
     mediaOverlaysEnableSkippability,
     highlightsClickListen,
+    mediaOverlaysUseTTSHighlights,
 } from "@r2-navigator-js/electron/renderer/index";
 import { Locator as R2Locator } from "@r2-navigator-js/electron/common/locator";
 
@@ -2769,6 +2770,7 @@ class Reader extends React.Component<IProps, IState> {
             );
             ttsOverlayEnable(this.props.readerConfig.ttsEnableOverlayMode);
             ttsSentenceDetectionEnable(this.props.readerConfig.ttsEnableSentenceDetection);
+            mediaOverlaysUseTTSHighlights(this.props.readerConfig.mediaOverlaysUseTTSHighlights);
             ttsAndMediaOverlaysManualPlayNext(this.props.readerConfig.ttsAndMediaOverlaysDisableContinuousPlay);
             ttsSkippabilityEnable(this.props.readerConfig.mediaOverlaysEnableSkippability);
         }

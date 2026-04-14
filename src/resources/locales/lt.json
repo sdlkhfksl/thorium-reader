@@ -758,7 +758,9 @@
             "skipDescription": "Peršokti / ignoruoti pagalbinį turinį, pvz. puslapio skirtukus, išnašas/galines išnašas ir t.t.",
             "speed": "„Readaloud“ atkūrimo sparta",
             "stop": "Sustabdyti „Readaloud“",
-            "title": "„Readaloud“"
+            "title": "„Readaloud“",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "Išeiti iš Zen režimo",

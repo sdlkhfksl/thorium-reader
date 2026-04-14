@@ -199,7 +199,7 @@
         "listTitle": "Vista a lista",
         "myCatalogs": "I miei cataloghi",
         "refreshTitle": "Ricarica",
-        "searchPlaceholder": "Ricerca",
+        "searchPlaceholder": "Cerca",
         "searchTitle": "Inizia una ricerca",
         "settings": "Impostazioni",
         "viewMode": "Modalità di visualizzazione"
@@ -758,7 +758,9 @@
             "skipDescription": "Salta/ignora i contenuti aggiuntivi come interruzioni di pagina, note a piè di pagina/note di chiusura, ecc.",
             "speed": "Velocità di riproduzione per la lettura ad alta voce",
             "stop": "Interrompi la lettura ad alta voce",
-            "title": "lettura ad alta voce"
+            "title": "lettura ad alta voce",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "Uscire dalla modalità Zen",
@@ -774,10 +776,10 @@
             "goToPlaceHolder": "Inserisci il numero della pagina",
             "goToTitle": "Vai alla pagina",
             "history": "Cronologia di navigazione",
-            "historyNext": "Vai avanti nella cronologia della sessione di lettura",
-            "historyPrevious": "Vai indietro nella cronologia della sessione di lettura",
+            "historyNext": "Vai avanti nella cronologia di navigazione",
+            "historyPrevious": "Torna indietro nella cronologia di navigazione",
             "infoTitle": "Informazioni",
-            "magnifyingGlassButton": "Cerca nella pubblicazione",
+            "magnifyingGlassButton": "Cerca pubblicazione",
             "openTableOfContentsTitle": "Navigazione",
             "page": "Pagina",
             "pdfscalemode": "Dimensioni della pagina o larghezza",
@@ -802,7 +804,7 @@
                 "founds_many": "{{- count}} risultato/i",
                 "founds_one": "{{- count}} risultato/i",
                 "founds_other": "{{- count}} risultato/i",
-                "input": "Testo da cercare",
+                "input": "testo ta cercare",
                 "next": "Prossimo",
                 "notFound": "Nessun risultato",
                 "previous": "Precedente",
@@ -893,7 +895,7 @@
                     "Contrast2": "Contrasto 2",
                     "Contrast3": "Contrasto 3",
                     "Contrast4": "Contrasto 4",
-                    "Neutral": "Neutro",
+                    "Neutral": "Neutrale",
                     "Night": "Notte",
                     "Paper": "Carta",
                     "Sepia": "Seppia"
@@ -1027,7 +1029,7 @@
                     "name": "Focus su \"Segnalibri\""
                 },
                 "FocusReaderNavigationSearch": {
-                    "description": "Sposta il focus della tastiera sulla sezione \"Cerca\" del pannello di navigazione della finestra di navigazione",
+                    "description": "Sposta il focus della tastiera sulla sezione \"Cerca\" del pannello di navigazione della finestra del lettore",
                     "name": "Focus su \"Cerca\""
                 },
                 "FocusReaderNavigationTOC": {

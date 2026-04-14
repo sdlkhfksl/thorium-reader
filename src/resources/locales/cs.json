@@ -763,7 +763,9 @@
             "skipDescription": "",
             "speed": "",
             "stop": "",
-            "title": ""
+            "title": "",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "Opustit zenový mód",

@@ -218,6 +218,7 @@ export interface IEventPayload_R2_EVENT_MEDIA_OVERLAY_HIGHLIGHT {
     classActive: string | undefined;
     classActivePlayback: string | undefined;
     captionsMode: boolean | undefined;
+    useTTSHighlights: boolean | undefined;
     speech: string | undefined;
     speechRate: number | undefined;
 }

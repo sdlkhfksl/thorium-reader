@@ -753,7 +753,9 @@
             "skipDescription": "Saltatu / baztertu eduki laguntzaileak, hala nola orrialde-jauziak, oin-oharrak/amaiera-oharrak, etab.",
             "speed": "Ozen irakurtzeko erreprodukzio-abiadura",
             "stop": "Gelditu ozenki irakurtzea",
-            "title": "Ozenki irakurtzea"
+            "title": "Ozenki irakurtzea",
+            "useTTSHighlightsForMO": "",
+            "useTTSHighlightsForMODescription": ""
         },
         "navigation": {
             "ZenModeExit": "",
