@@ -117,6 +117,7 @@ import {
 } from "./readium-css";
 import { clearCurrentSelection, convertRangeInfo, getCurrentSelectionInfo, convertRange, setSelectionChangeAction } from "./selection";
 import { ReadiumElectronWebviewWindow } from "./state";
+import { convertTextFragmentToRanges, parseTextFragmentDirective } from "./textFragment";
 
 const IS_DEV = (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "dev");
 
@@ -5455,15 +5456,37 @@ if (!win.READIUM2.isAudio) {
 
                 win.document.documentElement.classList.add(activeClassPlayback);
 
-                const targetEl = win.document.getElementById(payload.id);
-                if (targetEl) {
-                    if (payload.useTTSHighlights) {
+                let range: Range | undefined;
+                const isTextFragment = payload.id.startsWith(":~:text=");
+                if (isTextFragment) {
+                    console.log("====> TEXT FRAGMENT str: ", payload.id);
+                    try {
+                        const textFragment = parseTextFragmentDirective(payload.id.substring(":~:text=".length));
+                        console.log("====> TEXT FRAGMENT struct: ", JSON.stringify(textFragment, null, 4));
+                        const ranges = convertTextFragmentToRanges(textFragment, win.document);
+                        console.log("====> TEXT FRAGMENT DOM RANGES OK: ", ranges.length);
+                        range = ranges?.length > 0 ? ranges[0] : undefined;
+                    } catch (err) {
+                        console.log("====> TEXT FRAGMENT DOM RANGES NOK: ", err);
+                    }
+                }
+                let targetEl = isTextFragment ? undefined : win.document.getElementById(payload.id);
+                if (targetEl || !!range) {
+                    if (!!range) {
+                        const ancestor = range.commonAncestorContainer;
+                        if (ancestor?.nodeType === 1) { // Node.ELEMENT_NODE
+                            targetEl = ancestor as HTMLElement;
+                        }
+                    }
+                    if (payload.useTTSHighlights || !!range) {
                         const ttsHighlightStyle = typeof win.READIUM2?.ttsHighlightStyle !== "undefined" ? win.READIUM2.ttsHighlightStyle : HighlightDrawTypeBackground;
                         if (ttsHighlightStyle !== HighlightDrawTypeNONE) {
-                            const range = new Range(); // document.createRange()
-                            range.selectNode(targetEl);
-                            // range.setStart(el, 0);
-                            // range.setEnd(el, 0);
+                            if (!range) {
+                                range = new Range(); // document.createRange()
+                                range.selectNode(targetEl);
+                                // range.setStart(el, 0);
+                                // range.setEnd(el, 0);
+                            }
 
                             const ttsColor: IColor = win.READIUM2?.ttsHighlightColor || {
                                 blue: 116, // 204,
@@ -5498,12 +5521,12 @@ if (!win.READIUM2.isAudio) {
                                 false, // mouse / pointer interaction
                             );
                         }
-                    } else {
+                    } else if (targetEl) {
                         targetEl.classList.add(activeClass);
                     }
 
                     let text: string | null = null;
-                    if (payload.captionsMode || payload.speech) {
+                    if (targetEl  && (payload.captionsMode || payload.speech)) {
                         text = targetEl.textContent;
                     }
                     if (payload.speech) {
@@ -5615,17 +5638,19 @@ if (!win.READIUM2.isAudio) {
                     }
 
                     debug(".hashElement = 7");
-                    // underscore special link will prioritise hashElement!
-                    win.READIUM2.hashElement = targetEl;
-                    win.READIUM2.locationHashOverride = targetEl;
+                    if (targetEl) {
+                        // underscore special link will prioritise hashElement!
+                        win.READIUM2.hashElement = targetEl;
+                        win.READIUM2.locationHashOverride = targetEl;
 
-                    if (
-                        // !isPaginated(win.document) &&
-                        !isVisible(false, targetEl, undefined)) {
+                        if (
+                            // !isPaginated(win.document) &&
+                            !isVisible(false, targetEl, undefined)) {
 
-                        if (DEBUG_TRACE) debug("R2_EVENT_MEDIA_OVERLAY_HIGHLIGHT: scrollElementIntoView()...");
-                        // CONTEXT: R2_EVENT_MEDIA_OVERLAY_HIGHLIGHT()
-                        scrollElementIntoView(targetEl, false, true, undefined /*, false */);
+                            if (DEBUG_TRACE) debug("R2_EVENT_MEDIA_OVERLAY_HIGHLIGHT: scrollElementIntoView()...");
+                            // CONTEXT: R2_EVENT_MEDIA_OVERLAY_HIGHLIGHT()
+                            scrollElementIntoView(targetEl, false, true, undefined /*, false */);
+                        }
                     }
 
                     scrollToHashDebounced.clear();

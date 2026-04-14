@@ -27,6 +27,17 @@ import { TextFragment } from "../../common/selection";
 const FORCE_WORD_ALIGNMENT = false;
 const USE_SEGMENTER = true;
 
+const TEXT_FRAGMENT_REGEXP = /^(?:(.+?)-,)?(?:(.+?))(?:,([^-]+?))?(?:,-(.+?))?$/;
+// :~:text=
+export const parseTextFragmentDirective = (textFragment: string) => {
+    return {
+        prefix: decodeURIComponent(textFragment.replace(TEXT_FRAGMENT_REGEXP, "$1")),
+        textStart: decodeURIComponent(textFragment.replace(TEXT_FRAGMENT_REGEXP, "$2")),
+        textEnd: decodeURIComponent(textFragment.replace(TEXT_FRAGMENT_REGEXP, "$3")),
+        suffix: decodeURIComponent(textFragment.replace(TEXT_FRAGMENT_REGEXP, "$4")),
+    };
+};
+
 // type ElementWithoutTextContent = Omit<Element, "textContent">;
 // type NodeWithoutTextContent = Omit<Element, "textContent">;
 // const isElement = (node: NodeWithoutTextContent): node is ElementWithoutTextContent => {
