@@ -163,7 +163,7 @@ function* toggleSettingsOrMenu(action: readerLocalActionToggleMenu.TAction | rea
             if (currentDialogOpen && currentDialogType === dialogType) {
                 yield* putTyped(dialogActions.updateRequest.build(data));
             } else {
-                yield* putTyped(dialogActions.openRequest.build(dialogType, data));;
+                yield* putTyped(dialogActions.openRequest.build(dialogType, data));
             }
         } else {
             yield* putTyped(dialogActions.closeRequest.build());
@@ -185,7 +185,7 @@ function* toggleSettingsOrMenu(action: readerLocalActionToggleMenu.TAction | rea
             if (currentDockOpen && currentDockType === dockType) {
                 yield* putTyped(dockActions.updateRequest.build(data));
             } else {
-                yield* putTyped(dockActions.openRequest.build(dockType, data));;
+                yield* putTyped(dockActions.openRequest.build(dockType, data));
             }
         } else {
             yield* putTyped(dockActions.closeRequest.build());

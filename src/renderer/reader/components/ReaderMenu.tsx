@@ -2805,7 +2805,7 @@ const TabTitle = ({ value }: { value: string }) => {
             break;
         case "tab-search":
             title = searchText ? __("reader.marks.searchResult", { searchText: searchText.slice(0, 20) })
-                : (__("reader.marks.search"));;
+                : (__("reader.marks.search"));
             break;
         case "tab-gotopage":
             title = (__("reader.navigation.goToTitle"));

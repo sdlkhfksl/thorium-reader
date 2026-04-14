@@ -52,7 +52,7 @@ function parsePrintRanges(input: string) {
 }
 
 function convertRangestoNumberArray(ranges: number[][], pdfPageRange: [start: number, end: number]): Array<number> {
-    const set = new Set<number>();;
+    const set = new Set<number>();
     for (const range of ranges) {
 
         if (range) {
