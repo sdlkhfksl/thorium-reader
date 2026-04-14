@@ -67,6 +67,7 @@ import { noteColorCodeToColorTranslatorKeySet } from "readium-desktop/common/red
 import { trimNormaliseWhitespaceAndCollapse } from "readium-desktop/common/string";
 
 const noteColorCodeToColorTranslatorKeySet_ = {
+    ["#000000"]: "publication.accessibility.accessibilityHazard.none" as TTranslatorKeyParameter,
     [rgbToHex(readerConfigInitialState.ttsHighlightColor)]: "Dark Yellow" as TTranslatorKeyParameter,
     [rgbToHex(readerConfigInitialState.ttsHighlightColor_WORD)]: "Dark Orange" as TTranslatorKeyParameter,
     ...noteColorCodeToColorTranslatorKeySet,
@@ -874,10 +875,14 @@ export const ReadingAudio = ({ useMO, ttsState, ttsPause, ttsResume }: { useMO: 
     const ttsHighlightStyle_WORD_ = (typeof ttsHighlightStyle_WORD !== "undefined" && ttsHighlightStyle_WORD !== null) ? ttsHighlightStyle_WORD : readerConfigInitialState.ttsHighlightStyle_WORD;
     const ttsHighlightColor_WORD_ = ttsHighlightColor_WORD || readerConfigInitialState.ttsHighlightColor_WORD;
 
+    let ttsHighlightColor_HEX = rgbToHex(ttsHighlightColor_);
+    if (ttsHighlightColor_HEX === "#000000") {
+        ttsHighlightColor_HEX = "transparent";
+    }
     const styleSentence = {
         background:
             ttsHighlightStyle_ === HighlightDrawTypeBackground ?
-            rgbToHex(ttsHighlightColor_) :
+            ttsHighlightColor_HEX :
             undefined,
         textDecorationLine:
             ttsHighlightStyle_ === HighlightDrawTypeUnderline ?
@@ -885,7 +890,7 @@ export const ReadingAudio = ({ useMO, ttsState, ttsPause, ttsResume }: { useMO: 
             undefined,
         textDecorationColor:
             ttsHighlightStyle_ === HighlightDrawTypeUnderline ?
-            rgbToHex(ttsHighlightColor_) :
+            ttsHighlightColor_HEX :
             undefined,
         textDecorationThickness: "3px",
         outlineWidth: "3px",
@@ -900,14 +905,19 @@ export const ReadingAudio = ({ useMO, ttsState, ttsPause, ttsResume }: { useMO: 
             undefined,
         outlineColor:
             ttsHighlightStyle_ === HighlightDrawTypeOutline ?
-            rgbToHex(ttsHighlightColor_) :
+            ttsHighlightColor_HEX :
             undefined,
         color: "black",
     } satisfies React.CSSProperties;
+
+    let ttsHighlightColor_WORD_HEX = rgbToHex(ttsHighlightColor_WORD_);
+    if (ttsHighlightColor_WORD_HEX === "#000000") {
+        ttsHighlightColor_WORD_HEX = "transparent";
+    }
     const styleWord = {
         background:
             ttsHighlightStyle_WORD_ === HighlightDrawTypeBackground ?
-            rgbToHex(ttsHighlightColor_WORD_) :
+            ttsHighlightColor_WORD_HEX :
             undefined,
         textDecorationLine:
             ttsHighlightStyle_WORD_ === HighlightDrawTypeUnderline ?
@@ -915,7 +925,7 @@ export const ReadingAudio = ({ useMO, ttsState, ttsPause, ttsResume }: { useMO: 
             undefined,
         textDecorationColor:
             ttsHighlightStyle_WORD_ === HighlightDrawTypeUnderline ?
-            rgbToHex(ttsHighlightColor_WORD_) :
+            ttsHighlightColor_WORD_HEX :
             undefined,
         textDecorationThickness: "3px",
         outlineWidth: "3px",
@@ -926,7 +936,7 @@ export const ReadingAudio = ({ useMO, ttsState, ttsPause, ttsResume }: { useMO: 
             undefined,
         outlineColor:
             ttsHighlightStyle_WORD_ === HighlightDrawTypeOutline ?
-            rgbToHex(ttsHighlightColor_WORD_) :
+            ttsHighlightColor_WORD_HEX :
             undefined,
         color: "black",
     } satisfies React.CSSProperties;
@@ -1017,13 +1027,22 @@ export const ReadingAudio = ({ useMO, ttsState, ttsPause, ttsResume }: { useMO: 
                             onChange={() => {
                                 ttsTogglePlayResume(() => {
                                     set({ ttsHighlightColor: hexToRgb(colorHex) });
+                                    // if (colorHex === "#000000") {
+                                    //     set({ ttsHighlightColor: hexToRgb(colorHex), ttsHighlightStyle: HighlightDrawTypeNONE });
+                                    // } else {
+                                    //     set({ ttsHighlightColor: hexToRgb(colorHex), ttsHighlightStyle_WORD: ttsHighlightStyle_PREVIOUS || readerConfigInitialState.ttsHighlightStyle });
+                                    // }
                                 });
                             }}
                             checked={ttsHighlightColorHex === colorHex}
                             aria-label={__(translatorKey)}
                         />
                         <label aria-hidden={true} title={__(translatorKey)} htmlFor={`ttscolorpick${colorHex}`}
-                            style={{ backgroundColor: colorHex, border: ttsHighlightColorHex === colorHex ? "1px solid var(--color-gray-900)" : "" }}
+                            style={{
+                                background: colorHex === "#000000" ? "linear-gradient(90deg,rgba(255, 255, 255, 1) 0%, rgba(71, 71, 71, 1) 50%, rgba(0, 0, 0, 1) 100%)" : undefined,
+                                backgroundColor: colorHex === "#000000" ? undefined : colorHex,
+                                border: ttsHighlightColorHex === colorHex ? "1px solid var(--color-gray-900)" : "",
+                            }}
                         >
                             {ttsHighlightColorHex === colorHex ? <SVG ariaHidden svg={DoubleCheckIcon} /> : <></>}
                         </label>
@@ -1043,13 +1062,22 @@ export const ReadingAudio = ({ useMO, ttsState, ttsPause, ttsResume }: { useMO: 
                             onChange={() => {
                                 ttsTogglePlayResume(() => {
                                     set({ ttsHighlightColor_WORD: hexToRgb(colorHex) });
+                                    // if (colorHex === "#000000") {
+                                    //     set({ ttsHighlightColor_WORD: hexToRgb(colorHex), ttsHighlightStyle_WORD: HighlightDrawTypeNONE });
+                                    // } else {
+                                    //     set({ ttsHighlightColor_WORD: hexToRgb(colorHex), ttsHighlightStyle_WORD: ttsHighlightStyle_WORD_PREVIOUS || readerConfigInitialState.ttsHighlightStyle_WORD });
+                                    // }
                                 });
                             }}
                             checked={ttsHighlightColor_WORDHex === colorHex}
                             aria-label={__(translatorKey)}
                         />
                         <label aria-hidden={true} title={__(translatorKey)} htmlFor={`ttscolorpickword${colorHex}`}
-                            style={{ backgroundColor: colorHex, border: ttsHighlightColor_WORDHex === colorHex ? "1px solid var(--color-gray-900)" : "" }}
+                            style={{
+                                background: colorHex === "#000000" ? "linear-gradient(90deg,rgba(255, 255, 255, 1) 0%, rgba(71, 71, 71, 1) 50%, rgba(0, 0, 0, 1) 100%)" : undefined,
+                                backgroundColor: colorHex === "#000000" ? undefined : colorHex,
+                                border: ttsHighlightColor_WORDHex === colorHex ? "1px solid var(--color-gray-900)" : "",
+                            }}
                         >
                             {ttsHighlightColor_WORDHex === colorHex ? <SVG ariaHidden svg={DoubleCheckIcon} /> : <></>}
                         </label>

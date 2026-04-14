@@ -5,6 +5,8 @@
 // that can be found in the LICENSE file exposed on Github (readium) in the project repository.
 // ==LICENSE-END==
 
+import { rgbToHex } from "readium-desktop/common/rgb";
+import { HighlightDrawTypeNONE } from "@r2-navigator-js/electron/common/highlight";
 import { computeReadiumCssJsonMessage } from "readium-desktop/common/computeReadiumCssJsonMessage";
 import { takeSpawnEvery } from "readium-desktop/common/redux/sagas/takeSpawnEvery";
 
@@ -53,7 +55,7 @@ function* readerConfigChanged(action: readerActions.setConfig.TAction): SagaGene
                 if (yield* selectTyped((state: IReaderRootState) => state.dock.open && (state.dock.type === DockTypeName.ReaderMenu || state.dock.type === DockTypeName.ReaderSettings))) {
                     const {data, type} = yield* selectTyped((state: IReaderRootState) => state.dock);
                     const dialogType = type === DockTypeName.ReaderMenu ? DialogTypeName.ReaderMenu : DialogTypeName.ReaderSettings;
-                    yield* putTyped(dialogActions.openRequest.build(dialogType, data));;
+                    yield* putTyped(dialogActions.openRequest.build(dialogType, data));
                     yield* putTyped(dockActions.closeRequest.build());
                 }
             }
@@ -64,7 +66,7 @@ function* readerConfigChanged(action: readerActions.setConfig.TAction): SagaGene
                 if (yield* selectTyped((state: IReaderRootState) => state.dialog.open && (state.dialog.type === DialogTypeName.ReaderMenu || state.dialog.type === DialogTypeName.ReaderSettings))) {
                     const {data, type} = yield* selectTyped((state: IReaderRootState) => state.dialog);
                     const dockType = type === DialogTypeName.ReaderMenu ? DockTypeName.ReaderMenu : DockTypeName.ReaderSettings;
-                    yield* putTyped(dockActions.openRequest.build(dockType, data as IReaderDialogOrDockSettingsMenuState));;
+                    yield* putTyped(dockActions.openRequest.build(dockType, data as IReaderDialogOrDockSettingsMenuState));
                     yield* putTyped(dialogActions.closeRequest.build());
                 }
             }
@@ -84,11 +86,15 @@ function* readerConfigChanged(action: readerActions.setConfig.TAction): SagaGene
     }
 
     if (isNotNil(payload.ttsHighlightStyle) || isNotNil(payload.ttsHighlightStyle_WORD) || isNotNil(payload.ttsHighlightColor) || isNotNil(payload.ttsHighlightColor_WORD)) {
+        const ttsHighlightStyle_SENTENCE = typeof readerConfig.ttsHighlightStyle === "undefined" || readerConfig.ttsHighlightStyle === null ? readerConfigInitialState.ttsHighlightStyle : (rgbToHex(readerConfig.ttsHighlightColor) === "#000000" ? HighlightDrawTypeNONE : readerConfig.ttsHighlightStyle);
+        const ttsHighlightColor_SENTENCE = !readerConfig.ttsHighlightColor ? readerConfigInitialState.ttsHighlightColor : readerConfig.ttsHighlightColor;
+        const ttsHighlightStyle_WORD = typeof readerConfig.ttsHighlightStyle_WORD === "undefined" || readerConfig.ttsHighlightStyle_WORD === null ? readerConfigInitialState.ttsHighlightStyle_WORD : (rgbToHex(readerConfig.ttsHighlightColor_WORD) === "#000000" ? HighlightDrawTypeNONE : readerConfig.ttsHighlightStyle_WORD);
+        const ttsHighlightColor_WORD = !readerConfig.ttsHighlightColor_WORD ? readerConfigInitialState.ttsHighlightColor_WORD : readerConfig.ttsHighlightColor_WORD;
         ttsHighlightStyle(
-            typeof readerConfig.ttsHighlightStyle === "undefined" || readerConfig.ttsHighlightStyle === null ? readerConfigInitialState.ttsHighlightStyle : readerConfig.ttsHighlightStyle,
-            !readerConfig.ttsHighlightColor ? readerConfigInitialState.ttsHighlightColor : readerConfig.ttsHighlightColor,
-            typeof readerConfig.ttsHighlightStyle_WORD === "undefined" || readerConfig.ttsHighlightStyle_WORD === null ? readerConfigInitialState.ttsHighlightStyle_WORD : readerConfig.ttsHighlightStyle_WORD,
-            !readerConfig.ttsHighlightColor_WORD ? readerConfigInitialState.ttsHighlightColor_WORD : readerConfig.ttsHighlightColor_WORD,
+            ttsHighlightStyle_SENTENCE,
+            ttsHighlightColor_SENTENCE,
+            ttsHighlightStyle_WORD,
+            ttsHighlightColor_WORD,
         );
     }
 

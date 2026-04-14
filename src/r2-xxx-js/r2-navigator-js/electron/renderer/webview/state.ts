@@ -53,6 +53,7 @@ export interface IReadiumElectronWebviewWindowState {
     ttsHighlightColor: IColor | undefined;
     ttsHighlightStyle_WORD: number | undefined;
     ttsHighlightColor_WORD: IColor | undefined;
+    // HighlightDrawTypeNONE
     // HighlightDrawTypeBackground
     // HighlightDrawTypeUnderline
     // HighlightDrawTypeStrikethrough
@@ -111,6 +112,7 @@ export interface IReadiumElectronBrowserWindow {
 
     ttsHighlightStyle_WORD: number | undefined;
     ttsHighlightColor_WORD: IColor | undefined;
+    // HighlightDrawTypeNONE
     // HighlightDrawTypeBackground
     // HighlightDrawTypeUnderline
     // HighlightDrawTypeStrikethrough

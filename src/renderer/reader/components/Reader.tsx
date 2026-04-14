@@ -6,6 +6,8 @@
 // ==LICENSE-END==
 
 // import debounce from "debounce";
+import { rgbToHex } from "readium-desktop/common/rgb";
+import { HighlightDrawTypeNONE } from "@r2-navigator-js/electron/common/highlight";
 import debug_ from "debug";
 import * as stylesReader from "readium-desktop/renderer/assets/styles/reader-app.scss";
 import * as stylesReaderFooter from "readium-desktop/renderer/assets/styles/components/readerFooter.scss";
@@ -2755,11 +2757,15 @@ class Reader extends React.Component<IProps, IState> {
         const miniLocatorExtended = minimizeLocatorExtended(locatorExtended);
 
         if (!this.props.isDivina && !this.props.isPdf && this.ttsOverlayEnableNeedsSync) {
+            const ttsHighlightStyle_SENTENCE = rgbToHex(this.props.readerConfig.ttsHighlightColor) === "#000000" ? HighlightDrawTypeNONE : this.props.readerConfig.ttsHighlightStyle;
+            const ttsHighlightColor_SENTENCE = this.props.readerConfig.ttsHighlightColor;
+            const ttsHighlightStyle_WORD = rgbToHex(this.props.readerConfig.ttsHighlightColor_WORD) === "#000000" ? HighlightDrawTypeNONE : this.props.readerConfig.ttsHighlightStyle_WORD;
+            const ttsHighlightColor_WORD = this.props.readerConfig.ttsHighlightColor_WORD;
             ttsHighlightStyle(
-                this.props.readerConfig.ttsHighlightStyle,
-                this.props.readerConfig.ttsHighlightColor,
-                this.props.readerConfig.ttsHighlightStyle_WORD,
-                this.props.readerConfig.ttsHighlightColor_WORD,
+                ttsHighlightStyle_SENTENCE,
+                ttsHighlightColor_SENTENCE,
+                ttsHighlightStyle_WORD,
+                ttsHighlightColor_WORD,
             );
             ttsOverlayEnable(this.props.readerConfig.ttsEnableOverlayMode);
             ttsSentenceDetectionEnable(this.props.readerConfig.ttsEnableSentenceDetection);

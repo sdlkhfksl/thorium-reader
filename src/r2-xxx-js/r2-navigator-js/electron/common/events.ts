@@ -316,6 +316,7 @@ export interface IEventPayload_R2_EVENT_TTS_HIGHLIGHT_STYLE {
     ttsHighlightStyle_WORD: number | undefined;
     ttsHighlightColor_WORD: IColor | undefined;
 
+    // HighlightDrawTypeNONE
     // HighlightDrawTypeBackground
     // HighlightDrawTypeUnderline
     // HighlightDrawTypeStrikethrough

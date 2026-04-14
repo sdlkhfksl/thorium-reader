@@ -60,6 +60,7 @@ export const readerConfigInitialState: ReaderConfig = {
 
     ttsHighlightStyle: HighlightDrawTypeBackground,
     ttsHighlightStyle_WORD: HighlightDrawTypeUnderline,
+    // HighlightDrawTypeNONE
     // HighlightDrawTypeBackground
     // HighlightDrawTypeUnderline
     // HighlightDrawTypeStrikethrough
