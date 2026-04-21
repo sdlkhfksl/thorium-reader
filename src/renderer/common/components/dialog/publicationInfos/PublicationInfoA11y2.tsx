@@ -77,11 +77,11 @@ export const PublicationInfoA11y2: React.FC<IProps> = ({publicationViewMaybeOpds
     // https://w3c.github.io/publ-a11y/a11y-meta-display-guide/2.0/draft/techniques/epub-metadata/index.html#visual-adjustments
     const all_textual_content_can_be_modified = findStrInArray(a11y_accessibilityFeature, "displayTransformability");
 
-    // https://w3c.github.io/publ-a11y/a11y-meta-display-guide/2.0/draft/techniques/epub-metadata/index.html#supports-nonvisual-reading
+    // https://www.w3.org/community/reports/publishingcg/CG-FINAL-epub-techniques-20250422/#variables-setup-0
     const all_necessary_content_textual = (findStrInArray(a11y_accessMode, "textual") && a11y_accessMode.length === 1)
         || findStrInArrayArray(a11y_accessModeSufficient, "textual");
     const audio_only_content = findStrInArray(a11y_accessMode, "auditory") && a11y_accessMode.length === 1;
-    const some_sufficient_text = findStrInArray(a11y_accessMode, "textual") && findStrInArrayArray(a11y_accessModeSufficient, "textual");
+    const some_sufficient_text = findStrInArray(a11y_accessMode, "textual") || findStrInArrayArray(a11y_accessModeSufficient, "textual");
     const textual_alternatives = findStrInArray(a11y_accessibilityFeature, ["longDescription", "alternativeText", "describedMath", "transcript"]);
     const visual_only_content = (findStrInArray(a11y_accessMode, "visual") && a11y_accessMode.length === 1)
         && !findStrInArrayArray(a11y_accessModeSufficient, "textual");
