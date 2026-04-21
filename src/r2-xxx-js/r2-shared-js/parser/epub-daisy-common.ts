@@ -763,7 +763,8 @@ export const setPublicationDirection = (publication: Publication, opf: OPF) => {
         }
     }
 
-    if (publication.Metadata.Language && publication.Metadata.Language.length &&
+    if (publication.Metadata.Language &&
+        publication.Metadata.Language.length === 1 && // https://github.com/edrlab/thorium-reader/issues/3519
         (!publication.Metadata.Direction || publication.Metadata.Direction === DirectionEnum.Auto)) {
 
         const lang = publication.Metadata.Language[0].toLowerCase();
