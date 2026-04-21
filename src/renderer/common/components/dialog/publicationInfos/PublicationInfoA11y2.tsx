@@ -29,7 +29,16 @@ export interface IProps {
     publicationViewMaybeOpds: TPublication;
 }
 
-const findStrInArrayArray = (array: (string[])[] | string[] | undefined, str: string): boolean => Array.isArray(array) && array.findIndex((a) => (Array.isArray(a) ? a : [a]).findIndex((b) => b === str) > -1) > -1;
+const findStrInArrayArray = (array: (string[])[] | string[] | undefined, str: string): boolean => {
+    return Array.isArray(array) &&
+        array.findIndex((a) => {
+            const arr = Array.isArray(a) ? a : [a];
+            const i = arr.findIndex((b) => {
+                return b === str;
+            });
+            return arr.length === 1 && i > -1;
+        }) > -1;
+};
 const findStrInArray = (array: string[] | undefined, str: string | string[]): boolean => Array.isArray(array) && !!array.find((a) => Array.isArray(str) ? str.includes(a) : a === str);
 
 
