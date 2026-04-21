@@ -40,13 +40,13 @@
       "description": "Lightweight and flexible command-line JSON processor",
       "install_id": "jq",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=6201e203d09599479a3b3450ed24fa81537ebc4e",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b12141ef619e0a9c1c84dc8c684040326f27cdcc",
       "name": "jq-1.8.1",
       "pname": "jq",
-      "rev": "6201e203d09599479a3b3450ed24fa81537ebc4e",
-      "rev_count": 972949,
-      "rev_date": "2026-04-01T09:47:46Z",
-      "scrape_date": "2026-04-02T18:01:19.616778Z",
+      "rev": "b12141ef619e0a9c1c84dc8c684040326f27cdcc",
+      "rev_count": 982522,
+      "rev_date": "2026-04-18T21:33:21Z",
+      "scrape_date": "2026-04-21T06:03:36.263415Z",
       "stabilities": [
         "unstable"
       ],
@@ -55,6 +55,8 @@
       "outputs_to_install": [
         "bin",
         "bin",
+        "bin",
+        "man",
         "man",
         "man"
       ],
@@ -76,13 +78,13 @@
       "description": "Lightweight and flexible command-line JSON processor",
       "install_id": "jq",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=6201e203d09599479a3b3450ed24fa81537ebc4e",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b12141ef619e0a9c1c84dc8c684040326f27cdcc",
       "name": "jq-1.8.1",
       "pname": "jq",
-      "rev": "6201e203d09599479a3b3450ed24fa81537ebc4e",
-      "rev_count": 972949,
-      "rev_date": "2026-04-01T09:47:46Z",
-      "scrape_date": "2026-04-02T18:32:56.432064Z",
+      "rev": "b12141ef619e0a9c1c84dc8c684040326f27cdcc",
+      "rev_count": 982522,
+      "rev_date": "2026-04-18T21:33:21Z",
+      "scrape_date": "2026-04-21T06:36:58.600239Z",
       "stabilities": [
         "unstable"
       ],
@@ -91,6 +93,8 @@
       "outputs_to_install": [
         "bin",
         "bin",
+        "bin",
+        "man",
         "man"
       ],
       "outputs": {
@@ -111,13 +115,13 @@
       "description": "Lightweight and flexible command-line JSON processor",
       "install_id": "jq",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=6201e203d09599479a3b3450ed24fa81537ebc4e",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b12141ef619e0a9c1c84dc8c684040326f27cdcc",
       "name": "jq-1.8.1",
       "pname": "jq",
-      "rev": "6201e203d09599479a3b3450ed24fa81537ebc4e",
-      "rev_count": 972949,
-      "rev_date": "2026-04-01T09:47:46Z",
-      "scrape_date": "2026-04-02T19:02:34.567284Z",
+      "rev": "b12141ef619e0a9c1c84dc8c684040326f27cdcc",
+      "rev_count": 982522,
+      "rev_date": "2026-04-18T21:33:21Z",
+      "scrape_date": "2026-04-21T07:08:28.710336Z",
       "stabilities": [
         "unstable"
       ],
@@ -125,6 +129,8 @@
       "version": "1.8.1",
       "outputs_to_install": [
         "bin",
+        "bin",
+        "man",
         "man"
       ],
       "outputs": {
@@ -145,19 +151,22 @@
       "description": "Lightweight and flexible command-line JSON processor",
       "install_id": "jq",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=6201e203d09599479a3b3450ed24fa81537ebc4e",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b12141ef619e0a9c1c84dc8c684040326f27cdcc",
       "name": "jq-1.8.1",
       "pname": "jq",
-      "rev": "6201e203d09599479a3b3450ed24fa81537ebc4e",
-      "rev_count": 972949,
-      "rev_date": "2026-04-01T09:47:46Z",
-      "scrape_date": "2026-04-02T19:36:53.792445Z",
+      "rev": "b12141ef619e0a9c1c84dc8c684040326f27cdcc",
+      "rev_count": 982522,
+      "rev_date": "2026-04-18T21:33:21Z",
+      "scrape_date": "2026-04-21T07:45:02.461683Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
       "version": "1.8.1",
       "outputs_to_install": [
+        "bin",
+        "bin",
+        "bin",
         "bin",
         "bin",
         "man"
@@ -180,19 +189,22 @@
       "description": "Event-driven I/O framework for the V8 JavaScript engine",
       "install_id": "nodejs_24",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=6201e203d09599479a3b3450ed24fa81537ebc4e",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b12141ef619e0a9c1c84dc8c684040326f27cdcc",
       "name": "nodejs-24.14.0",
       "pname": "nodejs_24",
-      "rev": "6201e203d09599479a3b3450ed24fa81537ebc4e",
-      "rev_count": 972949,
-      "rev_date": "2026-04-01T09:47:46Z",
-      "scrape_date": "2026-04-02T18:01:26.991050Z",
+      "rev": "b12141ef619e0a9c1c84dc8c684040326f27cdcc",
+      "rev_count": 982522,
+      "rev_date": "2026-04-18T21:33:21Z",
+      "scrape_date": "2026-04-21T06:03:43.890509Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
       "version": "24.14.0",
       "outputs_to_install": [
+        "out",
+        "out",
+        "out",
         "out"
       ],
       "outputs": {
@@ -209,19 +221,21 @@
       "description": "Event-driven I/O framework for the V8 JavaScript engine",
       "install_id": "nodejs_24",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=6201e203d09599479a3b3450ed24fa81537ebc4e",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b12141ef619e0a9c1c84dc8c684040326f27cdcc",
       "name": "nodejs-24.14.0",
       "pname": "nodejs_24",
-      "rev": "6201e203d09599479a3b3450ed24fa81537ebc4e",
-      "rev_count": 972949,
-      "rev_date": "2026-04-01T09:47:46Z",
-      "scrape_date": "2026-04-02T18:33:12.019256Z",
+      "rev": "b12141ef619e0a9c1c84dc8c684040326f27cdcc",
+      "rev_count": 982522,
+      "rev_date": "2026-04-18T21:33:21Z",
+      "scrape_date": "2026-04-21T06:37:14.584334Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
       "version": "24.14.0",
       "outputs_to_install": [
+        "out",
+        "out",
         "out"
       ],
       "outputs": {
@@ -238,19 +252,21 @@
       "description": "Event-driven I/O framework for the V8 JavaScript engine",
       "install_id": "nodejs_24",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=6201e203d09599479a3b3450ed24fa81537ebc4e",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b12141ef619e0a9c1c84dc8c684040326f27cdcc",
       "name": "nodejs-24.14.0",
       "pname": "nodejs_24",
-      "rev": "6201e203d09599479a3b3450ed24fa81537ebc4e",
-      "rev_count": 972949,
-      "rev_date": "2026-04-01T09:47:46Z",
-      "scrape_date": "2026-04-02T19:02:41.808108Z",
+      "rev": "b12141ef619e0a9c1c84dc8c684040326f27cdcc",
+      "rev_count": 982522,
+      "rev_date": "2026-04-18T21:33:21Z",
+      "scrape_date": "2026-04-21T07:08:36.434877Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
       "version": "24.14.0",
       "outputs_to_install": [
+        "out",
+        "out",
         "out"
       ],
       "outputs": {
@@ -267,19 +283,21 @@
       "description": "Event-driven I/O framework for the V8 JavaScript engine",
       "install_id": "nodejs_24",
       "license": "MIT",
-      "locked_url": "https://github.com/flox/nixpkgs?rev=6201e203d09599479a3b3450ed24fa81537ebc4e",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=b12141ef619e0a9c1c84dc8c684040326f27cdcc",
       "name": "nodejs-24.14.0",
       "pname": "nodejs_24",
-      "rev": "6201e203d09599479a3b3450ed24fa81537ebc4e",
-      "rev_count": 972949,
-      "rev_date": "2026-04-01T09:47:46Z",
-      "scrape_date": "2026-04-02T19:37:11.730533Z",
+      "rev": "b12141ef619e0a9c1c84dc8c684040326f27cdcc",
+      "rev_count": 982522,
+      "rev_date": "2026-04-18T21:33:21Z",
+      "scrape_date": "2026-04-21T07:45:21.166505Z",
       "stabilities": [
         "unstable"
       ],
       "unfree": false,
       "version": "24.14.0",
       "outputs_to_install": [
+        "out",
+        "out",
         "out"
       ],
       "outputs": {
