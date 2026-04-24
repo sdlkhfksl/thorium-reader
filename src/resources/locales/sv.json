@@ -1250,8 +1250,8 @@
         },
         "dontShow": "Visa inte igen",
         "resources": {
-            "discord": "Discord: https://discord.gg/2GnubQbE",
-            "website": "Webbsida: https://www.thoriumreader.com"
+            "discord": "Discord: {{- url}}",
+            "website": "Webbsida: {{- url}}"
         },
         "tab": {
             "home": "Hem",

@@ -1250,8 +1250,8 @@
         },
         "dontShow": "Niet meer laten zien, verberg",
         "resources": {
-            "discord": "Discord: https://discord.gg/2GnubQbE",
-            "website": "Website: https://www.thoriumreader.com"
+            "discord": "Discord: {{- url}}",
+            "website": "Website: {{- url}}"
         },
         "tab": {
             "home": "Startpagina",
