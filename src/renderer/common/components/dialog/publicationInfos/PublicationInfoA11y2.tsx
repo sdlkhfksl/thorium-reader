@@ -72,7 +72,8 @@ export const PublicationInfoA11y2: React.FC<IProps> = ({publicationViewMaybeOpds
     
     // (@property="schema:accessModeSufficient" and contains(normalize-space(), "textual"))]. 
     // parsed as [["textual", "visual"], ["auditory", "visual"]] and mapped to ["textual,visual", "auditory,visual"]
-    const a11y_accessModeSufficient = a11y_accessModeSufficient_array_array.map((value) => Array.isArray(value) ? value.join(",") : value);
+    const a11y_accessModeSufficient = (Array.isArray(a11y_accessModeSufficient_array_array) ? a11y_accessModeSufficient_array_array : [])
+        .map((value) => Array.isArray(value) ? value.join(",") : value);
     const a11y_conformsTo = Array.isArray(a11y_conformsTo_) ? a11y_conformsTo_ : a11y_conformsTo_ ? [a11y_conformsTo_] : [];
     const a11y_certifierReport = Array.isArray(a11y_certifierReport_) ? a11y_certifierReport_ : a11y_certifierReport_ ? [a11y_certifierReport_] : [];
     const a11y_certifiedBy = Array.isArray(a11y_certifiedBy_) ? a11y_certifiedBy_ : a11y_certifiedBy_ ? [a11y_certifiedBy_] : [];
