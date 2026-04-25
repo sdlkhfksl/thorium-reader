@@ -5,18 +5,23 @@
 // that can be found in the LICENSE file exposed on Github (readium) in the project repository.
 // ==LICENSE-END==
 
-import { diMainGet } from "readium-desktop/main/di";
-// eslint-disable-next-line local-rules/typed-redux-saga-use-typed-effects
-import { call } from "redux-saga/effects";
-import { SagaGenerator, call as callTyped } from "typed-redux-saga";
 import { shell } from "electron";
+import { diMainGet } from "readium-desktop/main/di";
+import { SagaGenerator, call as callTyped } from "typed-redux-saga";
 
 export function* openPublicationFolder(identifier?: string): SagaGenerator<void> {
 
-    const publicationStorage = diMainGet("publication-storage");
-    const vaultPath = yield* callTyped(() => publicationStorage.getVaultPath()); // userVault || defaultVault
-    
-    const folderPath = (yield* callTyped(() => publicationStorage.findPublicationPath(identifier))) || vaultPath;
+    let folderPath: string;
 
-    yield call(() => shell.openPath(folderPath));
+    if (!identifier) {
+        folderPath = yield* callTyped(() => diMainGet("publication-directory").getDirectoryPath());
+    } else {
+        try {
+            folderPath = yield* callTyped(() => diMainGet("publication-storage").findPublicationPath(identifier));
+        } catch {
+            folderPath = yield* callTyped(() => diMainGet("publication-directory").getDirectoryPath());
+        }
+    }
+
+    yield* callTyped(() => shell.openPath(folderPath));
 }
