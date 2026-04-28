@@ -13,7 +13,7 @@
 const UUID_V4_CANONICAL_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const UUID_V4_FORMAT_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
-export const uuidv4 = () => crypto.randomUUID();
+export const uuidv4 = (): string => crypto.randomUUID();
 
 export const isUUIDv4 = (uuid: string | undefined) => UUID_V4_CANONICAL_REGEX.test(uuid);
 
