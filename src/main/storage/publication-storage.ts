@@ -861,7 +861,7 @@ export class PublicationStorage {
                                                 ? ContentType.lcppdf
                                                 : ContentType.Epub
                             ),
-                    size: getFileSize(dstPath),
+                    size: getFileSize(bookDstPath),
                 });
             };
 
