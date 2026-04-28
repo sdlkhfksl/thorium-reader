@@ -10,7 +10,7 @@ import { BrowserWindow } from "electron";
 import { Action } from "readium-desktop/common/models/redux";
 import { ok } from "readium-desktop/common/utils/assert";
 import { saveLibraryWindowInDi } from "readium-desktop/main/di";
-import { v4 as uuidv4 } from "uuid";
+import { uuidv4 } from "readium-desktop/utils/uuid";
 
 export const ID = "WIN_SESSION_REGISTER_LIBRARY";
 

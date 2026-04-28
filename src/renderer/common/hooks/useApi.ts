@@ -7,7 +7,7 @@
 
 import * as React from "react";
 import { ReactReduxContext } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
+import { uuidv4 } from "readium-desktop/utils/uuid";
 import { TApiMethod, TApiMethodName } from "readium-desktop/common/api/api.type";
 import { TModuleApi } from "readium-desktop/common/api/moduleApi.type";
 import { TMethodApi } from "readium-desktop/common/api/methodApi.type";

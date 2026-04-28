@@ -373,7 +373,6 @@
     "unzipper": "^0.12.3",
     "urijs": "^1.19.11",
     "use-sync-external-store": "^1.6.0",
-    "uuid": "^14.0.0",
     "validator": "^13.15.35",
     "xpath": "^0.0.34",
     "yargs": "^18.0.0",
