@@ -8,6 +8,8 @@
 import * as fs from "fs";
 import * as path from "path";
 
+import { canonicalizeUUIDv4, isUUIDv4 } from "readium-desktop/utils/uuid";
+
 // export function rmDirSync(dirPath: string): void {
 //     let filenames = [];
 
@@ -38,6 +40,12 @@ export function getFileSize(filePath: string): number {
 export function getFilePathNormalize(filePath: string): string {
     const resolved = path.resolve(filePath);
     return process.platform === "win32" ? resolved.toLowerCase() : resolved;
+}
+
+export function getCanonicalUUIDv4FileNameFromFs(fileName: string): string | undefined {
+    return process.platform === "win32" ?
+        canonicalizeUUIDv4(fileName) :
+        isUUIDv4(fileName) ? fileName : undefined;
 }
 
 export const rmrf = async (dirOrFile: string) => {

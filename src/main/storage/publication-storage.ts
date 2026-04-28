@@ -13,7 +13,7 @@ import { acceptedExtensionObject, isAcceptedExtension, publicationExtensionStore
 import { File } from "readium-desktop/common/models/file";
 import { PublicationView } from "readium-desktop/common/views/publication";
 import { ContentType } from "readium-desktop/utils/contentType";
-import { getFilePathNormalize, getFileSize, rmrf } from "readium-desktop/utils/fs";
+import { getCanonicalUUIDv4FileNameFromFs, getFilePathNormalize, getFileSize, rmrf } from "readium-desktop/utils/fs";
 import { findMimeTypeWithExtension } from "readium-desktop/utils/mimeTypes";
 
 import { PublicationParsePromise } from "@r2-shared-js/parser/publication-parser";
@@ -26,6 +26,7 @@ import { IReaderStateReaderPersistence } from "readium-desktop/common/redux/stat
 import { diMainGet } from "../di";
 import { PublicationDocument } from "../db/document/publication";
 import { computeFileHash, extractCrc32OnZip } from "../tools/crc";
+import { assertUUIDv4 } from "readium-desktop/utils/uuid";
 
 const debug = debug_("readium-desktop:main/storage/pub-storage");
 
@@ -67,13 +68,6 @@ export interface IPublicationStorageRecoverablePublication {
     identifier: string;
     filePath: string;
 }
-
-const isUUIDv4 = (uuid: string) => /^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/.test(uuid);
-const assertUUIDv4 = (uuid: string) => {
-    if (!isUUIDv4(uuid)) {
-        throw new Error("not an uuidv4 identifier !");
-    }
-};
 
 const toFilePathArray = (filePath: string | undefined): string[] | undefined => filePath ? [filePath] : undefined;
 
@@ -453,12 +447,13 @@ export class PublicationStorage {
             }
 
             for (const file of files) {
+                const identifier = getCanonicalUUIDv4FileNameFromFs(file.name);
                 if (
-                    isUUIDv4(file.name) &&
+                    identifier &&
                     file.isDirectory()
                 ) {
                     entries.push({
-                        identifier: file.name,
+                        identifier,
                         directoryPath: path.join(directoryPath, file.name),
                     });
                 }
