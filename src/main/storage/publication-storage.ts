@@ -9,12 +9,11 @@ import { dialog } from "electron";
 import * as fs from "fs";
 import { injectable } from "inversify";
 import * as path from "path";
-import { acceptedExtensionObject, isAcceptedExtension, publicationExtensionStoredOnDisk } from "readium-desktop/common/extension";
+import { acceptedExtensionObject, getExtensionWithoutDot, isAcceptedExtension, normalizeExtension } from "readium-desktop/common/extension";
 import { File } from "readium-desktop/common/models/file";
 import { PublicationView } from "readium-desktop/common/views/publication";
-import { ContentType } from "readium-desktop/utils/contentType";
 import { getCanonicalUUIDv4FileNameFromFs, getFilePathNormalize, getFileSize, rmrf } from "readium-desktop/utils/fs";
-import { findMimeTypeWithExtension } from "readium-desktop/utils/mimeTypes";
+import { findExtWithMimeType, findMimeTypeWithExtension, mimeTypes } from "readium-desktop/utils/mimeTypes";
 
 import { PublicationParsePromise } from "@r2-shared-js/parser/publication-parser";
 import { streamToBufferPromise } from "@r2-utils-js/_utils/stream/BufferUtils";
@@ -99,6 +98,14 @@ function isUserDirectoryConfig(value: unknown): value is UserDirectoryConfig {
         && directory[0].length > 0;
 }
 
+const getStoredPublicationFileMimeTypeFromExtension = (ext: string): string => {
+    const normalizedExt = normalizeExtension(ext);
+    if (normalizedExt === acceptedExtensionObject.daisy) {
+        return mimeTypes["zip"];
+    }
+    return findMimeTypeWithExtension(normalizedExt) || "";
+};
+
 // Store pubs in a repository on filesystem
 // Each file of publication is stored in a directory whose name is the
 // publication uuid
@@ -146,6 +153,38 @@ export class PublicationStorage {
 
     public get userDirectory(): string | undefined {
         return this._userDirectory;
+    }
+
+    public getStorablePublicationExtension(ext: string): string {
+        const normalizedExt = normalizeExtension(ext);
+        switch (normalizedExt) {
+            case acceptedExtensionObject.audiobook:
+            case acceptedExtensionObject.audiobookLcp:
+            case acceptedExtensionObject.audiobookLcpAlt:
+            case acceptedExtensionObject.divina:
+            case acceptedExtensionObject.webpub:
+            case acceptedExtensionObject.pdfLcp:
+            case acceptedExtensionObject.daisy:
+                return normalizedExt;
+            default:
+                return acceptedExtensionObject.epub; // includes .epub3 and .pnld
+        }
+    }
+
+    public isStorablePublicationExtension(ext: string): boolean {
+        switch (normalizeExtension(ext)) {
+            case acceptedExtensionObject.epub:
+            case acceptedExtensionObject.audiobook:
+            case acceptedExtensionObject.audiobookLcp:
+            case acceptedExtensionObject.audiobookLcpAlt:
+            case acceptedExtensionObject.divina:
+            case acceptedExtensionObject.webpub:
+            case acceptedExtensionObject.pdfLcp:
+            case acceptedExtensionObject.daisy:
+                return true;
+            default:
+                return false;
+        }
     }
 
     // Storage directory configuration
@@ -598,7 +637,7 @@ export class PublicationStorage {
                 }
                 debug(`${file.name} from ${file.parentPath}`);
                 const ext = path.extname(file.name);
-                if (publicationExtensionStoredOnDisk.includes(ext)) {
+                if (this.isStorablePublicationExtension(ext)) {
                     const filePath = path.join(file.parentPath, file.name);
                     const stats = await fs.promises.stat(filePath);
                     if (stats.isFile() && stats.size > 10) {
@@ -959,32 +998,6 @@ export class PublicationStorage {
         return recoverablePublications;
     }
 
-    // Stored publication file metadata
-
-    private getStoredPublicationContentType(ext: string): string {
-        const normalizedExt = ext.startsWith(".") ? ext : `.${ext}`;
-        if (normalizedExt === acceptedExtensionObject.audiobook) {
-            return ContentType.AudioBookPacked;
-        }
-        if (normalizedExt === acceptedExtensionObject.audiobookLcp || normalizedExt === acceptedExtensionObject.audiobookLcpAlt) {
-            return ContentType.AudioBookPackedLcp;
-        }
-        if (normalizedExt === acceptedExtensionObject.divina) {
-            return ContentType.DivinaPacked;
-        }
-        if (normalizedExt === acceptedExtensionObject.webpub) {
-            return ContentType.webpubPacked;
-        }
-        if (normalizedExt === acceptedExtensionObject.pdfLcp) {
-            return ContentType.lcppdf;
-        }
-        if (normalizedExt === acceptedExtensionObject.daisy) {
-            return ContentType.Zip;
-        }
-
-        return findMimeTypeWithExtension(normalizedExt) || ContentType.Epub;
-    }
-
     public async getStoredPublicationFiles(identifier: string): Promise<File[]> {
 
         assertUUIDv4(identifier);
@@ -998,20 +1011,20 @@ export class PublicationStorage {
                 continue;
             }
 
-            const extWithDot = path.extname(file.name).toLowerCase();
+            const extWithDot = normalizeExtension(path.extname(file.name));
             if (
-                !publicationExtensionStoredOnDisk.includes(extWithDot)
+                !this.isStorablePublicationExtension(extWithDot)
                 && !file.name.toLowerCase().startsWith("cover.")
             ) {
                 continue;
             }
 
-            const ext = extWithDot.slice(1);
+            const ext = getExtensionWithoutDot(extWithDot);
             const filePath = path.join(publicationDirectoryPath, file.name);
             publicationFiles.push({
                 url: `${URL_PROTOCOL_STORE}://${identifier}/${file.name}`,
                 ext,
-                contentType: this.getStoredPublicationContentType(extWithDot),
+                contentType: getStoredPublicationFileMimeTypeFromExtension(extWithDot),
                 size: getFileSize(filePath),
             });
         }
@@ -1028,43 +1041,9 @@ export class PublicationStorage {
     ): Promise<File> {
 
         const extension = path.extname(srcPath);
-        const isAudioBook = new RegExp(`\\${acceptedExtensionObject.audiobook}$`, "i").test(extension);
-        const isAudioBookLcp = new RegExp(`\\${acceptedExtensionObject.audiobookLcp}$`, "i").test(extension);
-        const isAudioBookLcpAlt = new RegExp(`\\${acceptedExtensionObject.audiobookLcpAlt}$`, "i").test(extension);
-        const isWebpub = new RegExp(`\\${acceptedExtensionObject.webpub}$`, "i").test(extension);
-        const isDivina = new RegExp(`\\${acceptedExtensionObject.divina}$`, "i").test(extension);
-        const isLcpPdf = new RegExp(`\\${acceptedExtensionObject.pdfLcp}$`, "i").test(extension);
-        const isDaisy = new RegExp(`\\${acceptedExtensionObject.daisy}$`, "i").test(extension);
+        const ext = getExtensionWithoutDot(this.getStorablePublicationExtension(extension));
 
-        const ext = isAudioBook
-            ? acceptedExtensionObject.audiobook
-            : (
-                isAudioBookLcp
-                    ? acceptedExtensionObject.audiobookLcp
-                    : (
-                        isAudioBookLcpAlt
-                            ? acceptedExtensionObject.audiobookLcpAlt
-                            : (
-                                isDivina
-                                    ? acceptedExtensionObject.divina
-                                    : (
-                                        isWebpub
-                                            ? acceptedExtensionObject.webpub
-                                            : (
-                                                isLcpPdf
-                                                    ? acceptedExtensionObject.pdfLcp
-                                                    : (
-                                                        isDaisy
-                                                            ? acceptedExtensionObject.daisy
-                                                            : acceptedExtensionObject.epub // includes .epub3 and .pnld
-                                                    )
-                                            )
-                                    )
-                            )
-                    )
-            );
-
-        const filename = `book${ext}`;
+        const filename = `book.${ext}`;
         const bookDstPath = path.join(
             dstPath,
             filename,
@@ -1076,20 +1055,7 @@ export class PublicationStorage {
                 resolve({
                     url: `${URL_PROTOCOL_STORE}://${identifier}/${filename}`,
                     ext,
-                    contentType:
-                        isAudioBook
-                            ? ContentType.AudioBookPacked
-                            : (
-                                (isAudioBookLcp || isAudioBookLcpAlt)
-                                    ? ContentType.AudioBookPackedLcp
-                                    : isDivina
-                                        ? ContentType.DivinaPacked
-                                        : isWebpub
-                                            ? ContentType.webpubPacked
-                                            : isLcpPdf
-                                                ? ContentType.lcppdf
-                                                : ContentType.Epub
-                            ),
+                    contentType: getStoredPublicationFileMimeTypeFromExtension(ext),
                     size: getFileSize(bookDstPath),
                 });
             };
@@ -1136,7 +1102,8 @@ export class PublicationStorage {
             return null;
         }
 
-        const coverType: string = coverLink.TypeLink;
+        const coverTypeExt = findExtWithMimeType(coverLink.TypeLink);
+        const coverType = findMimeTypeWithExtension(coverTypeExt);
         const zipStream = await zip.entryStreamPromise(coverLink.Href);
         const zipBuffer = await streamToBufferPromise(zipStream.stream);
 
@@ -1144,8 +1111,10 @@ export class PublicationStorage {
         r2Publication.freeDestroy();
 
         // Remove start dot in extensoion
-        const coverExt = path.extname(coverLink.Href).slice(1);
-        const coverFilename = "cover." + coverExt;
+        const coverExt = getExtensionWithoutDot(path.extname(coverLink.Href));
+        const ext = coverTypeExt || coverExt;
+        const contentType = coverType || findMimeTypeWithExtension(coverExt);
+        const coverFilename = `cover.${ext}`;
         const coverDstPath = path.join(
             dstPath,
             coverFilename,
@@ -1157,8 +1126,8 @@ export class PublicationStorage {
         // Return cover file information
         return {
             url: `${URL_PROTOCOL_STORE}://${identifier}/${coverFilename}`,
-            ext: coverExt,
-            contentType: coverType,
+            ext,
+            contentType,
             size: getFileSize(coverDstPath),
         };
     }
