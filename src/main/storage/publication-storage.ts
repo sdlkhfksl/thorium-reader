@@ -447,10 +447,14 @@ export class PublicationStorage {
             identifier, srcPath, publicationDirectoryPath);
         files.push(bookFile);
 
-        const coverFile = await this.storePublicationCover(
-            identifier, srcPath, publicationDirectoryPath);
-        if (coverFile) {
-            files.push(coverFile);
+        try {
+            const coverFile = await this.storePublicationCover(
+                identifier, srcPath, publicationDirectoryPath);
+            if (coverFile) {
+                files.push(coverFile);
+            }
+        } catch (e) {
+            debug(e);
         }
 
         return files;
@@ -529,16 +533,18 @@ export class PublicationStorage {
             throw new Error("no filePath !");
         }
         const publicationPath = await this.getPublicationEpubPath(publicationView.identifier);
-        fs.copyFile(publicationPath, filePath, async (err) => {
-            if (err) {
-                await dialog.showMessageBox({
-                    type: "error",
-                    message: err.message,
-                    title: err.name,
-                    buttons: ["OK"],
-                });
-            }
-        });
+        try {
+            await fs.promises.copyFile(publicationPath, filePath /*, constants.COPYFILE_EXCL */);
+        } catch (err: any) {
+
+            // TODO: Toast!? i18n!?
+            await dialog.showMessageBox({
+                type: "error",
+                message: err?.message,
+                title: err?.name,
+                buttons: ["OK"],
+            });
+        }
     }
 
     // Publication location lookup and cache
@@ -1049,20 +1055,13 @@ export class PublicationStorage {
             filename,
         );
 
-        const file = await new Promise<File>((resolve, _reject) => {
-            const writeStream = fs.createWriteStream(bookDstPath);
-            const fileResolve = () => {
-                resolve({
-                    url: `${URL_PROTOCOL_STORE}://${identifier}/${filename}`,
-                    ext,
-                    contentType: getStoredPublicationFileMimeTypeFromExtension(ext),
-                    size: getFileSize(bookDstPath),
-                });
-            };
-
-            writeStream.on("finish", fileResolve);
-            fs.createReadStream(srcPath).pipe(writeStream);
-        });
+        await fs.promises.copyFile(srcPath, bookDstPath);
+        const file: File = {
+            url: `${URL_PROTOCOL_STORE}://${identifier}/${filename}`,
+            ext,
+            contentType: getStoredPublicationFileMimeTypeFromExtension(ext),
+            size: getFileSize(bookDstPath),
+        };
         this.setPublicationLocationCache(identifier, {
             directoryPath: dstPath,
             epubPath: bookDstPath,
@@ -1121,7 +1120,7 @@ export class PublicationStorage {
         );
 
         // Write cover to fs
-        fs.writeFileSync(coverDstPath, zipBuffer);
+        await fs.promises.writeFile(coverDstPath, zipBuffer);
 
         // Return cover file information
         return {
