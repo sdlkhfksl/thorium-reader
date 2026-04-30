@@ -45,7 +45,7 @@ jobs:
       security-events: none
       statuses: none
 #    if: "!contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
-    if: "github.event_name == 'pull_request' || !contains(github.event.head_commit.message, 'skip ci')"
+    if: "github.event_name == 'pull_request' || !contains(github.event.head_commit.message, 'skip ci') && github.ref_name == 'develop' && github.repository_owner == 'edrlab'"
     runs-on: ${{ matrix.runson }}
     strategy:
       fail-fast: false
