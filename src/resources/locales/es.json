@@ -2,7 +2,6 @@
     "accessibility": {
         "bookMenu": "Menú",
         "closeDialog": "Cerrar",
-        "importFile": "Añadir un libro",
         "leftSlideButton": "Desplazar lista a la izquierda",
         "mainContent": "Contenido principal",
         "rightSlideButton": "Desplazar lista a la derecha",

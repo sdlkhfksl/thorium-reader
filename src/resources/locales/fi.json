@@ -2,7 +2,6 @@
     "accessibility": {
         "bookMenu": "Valikko",
         "closeDialog": "Sulje",
-        "importFile": "Tuo julkaisu",
         "leftSlideButton": "Siirry listalla vasemmalle",
         "mainContent": "Pääsisältö",
         "rightSlideButton": "Siirry listalla oikealle",
