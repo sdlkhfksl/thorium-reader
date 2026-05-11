@@ -508,7 +508,7 @@ export class PublicationStorage {
                 await fs.promises.stat(publicationPath);
             } catch (e: any) {
                 if (e?.code !== "ENOENT") {
-                    accessError = new Error(`Failed to access publication storage at ${publicationPath}: ${e.message || e}`);
+                    accessError = new Error(`Failed to access publication storage at ${publicationPath}: ${e?.message || e}`);
                 }
                 continue;
             }
@@ -517,7 +517,7 @@ export class PublicationStorage {
                 await rmrf(publicationPath);
                 removedAtLeastOne = true;
             } catch (e: any) {
-                throw new Error(`Failed to remove publication storage at ${publicationPath}: ${e.message || e}`);
+                throw new Error(`Failed to remove publication storage at ${publicationPath}: ${e?.message || e}`);
             }
         }
 
