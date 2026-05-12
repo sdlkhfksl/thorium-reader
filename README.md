@@ -71,7 +71,7 @@ More information on translation process can be found in the dedicated [translati
 
 ### Install dependencies
 
-* `npm ci --ignore-scripts --foreground-scripts --min-release-age=3` (or `npm install --ignore-scripts --foreground-scripts --min-release-age=3` if `package-lock.json` needs to be updated): initialize local `node_modules` packages from dependencies declared in `package.json`
+* `npm ci --ignore-scripts --foreground-scripts --min-release-age=3 --allow-git=root` (or `npm install --ignore-scripts --foreground-scripts --min-release-age=3 --allow-git=root` if `package-lock.json` needs to be updated): initialize local `node_modules` packages from dependencies declared in `package.json`
 * in case of failure to NPM "install" because of "Divina player" SHA integrity mismatch, please try running the following command in your shell: `node scripts/package-lock-patch.js && cat package-lock.json | grep -i divina-player-js`
 
 ### Start application in development environment
