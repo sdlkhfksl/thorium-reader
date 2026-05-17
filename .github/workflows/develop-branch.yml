@@ -302,8 +302,8 @@ jobs:
         include-hidden-files: false
         archive: true
         path: |
-          release/*.exe
-          !release/*.appx
+          release/*.deb
+          release/*.AppImage
         if-no-files-found: error
 ###########################
     - name: Upload Artifact (MacOS)
@@ -446,4 +446,5 @@ jobs:
 #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #run: ls -alsR release ; node scripts/release-github.mjs
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: ls -alsR release ; gh release delete ${{ matrix.release_tag }} --cleanup-tag --yes ; gh release create ${{ matrix.release_tag }} --target=develop --latest=false --prerelease ./release/*.* --title="${{ matrix.release_tag }} automated test build (beta)" --notes="Expand the 'assets' below to reveal the download links.\n\n(build job: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+      run: >
+        ls -alsR release ; gh release delete ${{ matrix.release_tag }} --cleanup-tag --yes ; gh release create ${{ matrix.release_tag }} --target=develop --latest=false --prerelease --title="${{ matrix.release_tag }} automated test build (beta)" --notes="Expand the 'assets' below to reveal the download links.\n\n(build job: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" "./release/*.*"
