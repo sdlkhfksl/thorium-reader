@@ -102,7 +102,7 @@ jobs:
             packname: linux
             release_tag: latest-linux-arm
     env:
-      RELEASE_TAG: ${{ matrix.release_tag }}
+      RELEASE_TAG: ${{ matrix.release_tag }} # MUST keep for WebPack config, detection of CI build
     steps:
 ###########################
     - name: Checking graceful shell command failure
@@ -408,8 +408,8 @@ jobs:
             runson: ubuntu-latest # ubuntu-22.04 #ubuntu-latest is ubuntu-24.04
             packname: linux
             release_tag: latest-linux-arm
-    env:
-      RELEASE_TAG: ${{ matrix.release_tag }}
+#    env:
+#      RELEASE_TAG: ${{ matrix.release_tag }} # ONLY NEEDED in scripts/release-github.mjs
     steps:
 ###########################
     - name: Download Artifact
