@@ -325,6 +325,13 @@ jobs:
           !release/*.app
         if-no-files-found: error
 ###########################
+    - name: Rename Windows ARM64 .exe
+      # if: startsWith(matrix.osarch, 'windows-') && endsWith(matrix.osarch, '-arm') # runner.os == 'Windows'
+      if: ${{ matrix.osarch == 'windows-arm' }}
+      run: >
+        cd release && ls -als && (for filename in *.exe ; do mv "$filename" "${filename%.*}-arm64.${filename##*.}" ; done) && ls -als && cd -
+      shell: bash
+###########################
     - name: Upload Artifact (Windows)
       #if: ${{ matrix.osarch == 'windows-intel' || matrix.osarch == 'windows-arm' }}
       if: startsWith(matrix.osarch, 'windows-')
@@ -411,6 +418,14 @@ jobs:
 #    env:
 #      RELEASE_TAG: ${{ matrix.release_tag }} # ONLY NEEDED in scripts/release-github.mjs
     steps:
+###########################
+    - name: Checkout
+# https://github.com/actions/checkout/commits/v6.0.2
+# https://github.com/actions/checkout/commits/de0fac2e4500dabe0009e67214ff5f5447ce83dd
+# https://github.com/actions/checkout/compare/v6.0.2...de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      with:
+        persist-credentials: false
 ###########################
     - name: Download Artifact
 # https://github.com/actions/download-artifact/commits/v8.0.1
