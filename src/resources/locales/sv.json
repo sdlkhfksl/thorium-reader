@@ -562,10 +562,6 @@
                 "compact": "Förinspelade ljudklipp",
                 "descriptive": "Innehåller förinspelade ljudklipp"
             },
-            "ways-of-reading-prerecorded-audio-no-metadata": {
-                "compact": "Information om förinspelat ljud saknas",
-                "descriptive": "Information om förinspelat ljud saknas"
-            },
             "ways-of-reading-prerecorded-audio-only": {
                 "compact": "Endast förinspelat ljud",
                 "descriptive": "Bok med ljud utan textalternativ"

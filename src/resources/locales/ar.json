@@ -582,10 +582,6 @@
                 "compact": "مقاطع الصوت المسجّلة مسبقًا",
                 "descriptive": "مقاطع الصوت المسجّلة مسبقًا مدمجة في المحتوى"
             },
-            "ways-of-reading-prerecorded-audio-no-metadata": {
-                "compact": "لا توجد معلومات عن الصوت المسجّل مسبقًا",
-                "descriptive": "لا توجد معلومات عن الصوت المسجّل مسبقًا"
-            },
             "ways-of-reading-prerecorded-audio-only": {
                 "compact": "الصوت المسجّل مسبقًا فقط",
                 "descriptive": "كتاب صوتي بدون بديل نصي"

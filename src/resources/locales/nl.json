@@ -562,10 +562,6 @@
                 "compact": "Vooraf opgenomen audio fragmenten",
                 "descriptive": "Vooraf opgenomen audio fragmenten zijn opgenomen in de inhoud"
             },
-            "ways-of-reading-prerecorded-audio-no-metadata": {
-                "compact": "Geen informatie over vooraf opgenomen audio beschikbaar",
-                "descriptive": "Geen informatie over vooraf opgenomen audio beschikbaar"
-            },
             "ways-of-reading-prerecorded-audio-only": {
                 "compact": "Alleen vooraf opgenomen audio",
                 "descriptive": "Luisterboek zonder tekst alternatief"

@@ -562,10 +562,6 @@
                 "compact": "Prerecorded audio clips",
                 "descriptive": "Prerecorded audio clips are embedded in the content"
             },
-            "ways-of-reading-prerecorded-audio-no-metadata": {
-                "compact": "No information about prerecorded audio is available",
-                "descriptive": "No information about prerecorded audio is available"
-            },
             "ways-of-reading-prerecorded-audio-only": {
                 "compact": "Prerecorded audio only",
                 "descriptive": "Audiobook with no text alternative"

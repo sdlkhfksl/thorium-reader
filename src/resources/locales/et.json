@@ -562,10 +562,6 @@
                 "compact": "Eelsalvestatud heliklipid",
                 "descriptive": "Sisusse on lõimitud eelsalvestatud heliklipid"
             },
-            "ways-of-reading-prerecorded-audio-no-metadata": {
-                "compact": "Puudub teave eelsalvestatud helilise sisu kohta",
-                "descriptive": "Puudub teave eelsalvestatud helilise sisu kohta"
-            },
             "ways-of-reading-prerecorded-audio-only": {
                 "compact": "Sisu koosneb ainult lõimitud eelsalvestatud heliklippidest",
                 "descriptive": "Heliraamat ilma tekstilise alternatiivita"

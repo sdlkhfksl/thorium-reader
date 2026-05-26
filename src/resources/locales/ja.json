@@ -557,10 +557,6 @@
                 "compact": "録音済みの音声クリップ",
                 "descriptive": "録音済みの音声クリップがコンテンツに埋め込まれています"
             },
-            "ways-of-reading-prerecorded-audio-no-metadata": {
-                "compact": "録音済みの音声についての情報はありません",
-                "descriptive": "録音済みの音声についての情報はありません"
-            },
             "ways-of-reading-prerecorded-audio-only": {
                 "compact": "録音済み音声のみ",
                 "descriptive": "代替テキストのないオーディオブック"

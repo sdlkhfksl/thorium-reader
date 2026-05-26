@@ -562,10 +562,6 @@
                 "compact": "Önceden kaydedilmiş ses klipleri",
                 "descriptive": "Önceden kaydedilmiş ses klipleri içeriğe gömülüdür"
             },
-            "ways-of-reading-prerecorded-audio-no-metadata": {
-                "compact": "Önceden kaydedilmiş ses klipleri hakkında bilgi mevcut değil",
-                "descriptive": "Önceden kaydedilmiş ses klipleri hakkında bilgi mevcut değil"
-            },
             "ways-of-reading-prerecorded-audio-only": {
                 "compact": "Sadece önceden kaydedilmiş ses klipleri",
                 "descriptive": "Sesli kitapta metin alternatifi bulunmuyor"

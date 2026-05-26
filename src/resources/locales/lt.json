@@ -572,10 +572,6 @@
                 "compact": "Iš anksto įrašyti garso įrašai",
                 "descriptive": "Turinyje įterpti iš anksto įrašyti garso įrašai"
             },
-            "ways-of-reading-prerecorded-audio-no-metadata": {
-                "compact": "Informacijos apie iš anksto įrašytus garso įrašus nėra",
-                "descriptive": "Informacijos apie iš anksto įrašytus garso įrašus nėra"
-            },
             "ways-of-reading-prerecorded-audio-only": {
                 "compact": "Tik iš anksto įrašytas garsas",
                 "descriptive": "Garsinė knyga be teksto alternatyvos"

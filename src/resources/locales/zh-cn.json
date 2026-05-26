@@ -557,10 +557,6 @@
                 "compact": "预录的音频片段",
                 "descriptive": "内容中嵌入了预录的音频片段"
             },
-            "ways-of-reading-prerecorded-audio-no-metadata": {
-                "compact": "关于预录音频的信息不可用",
-                "descriptive": "关于预录音频的信息不可用"
-            },
             "ways-of-reading-prerecorded-audio-only": {
                 "compact": "仅包含预录音频",
                 "descriptive": "有声书，无文本替代"

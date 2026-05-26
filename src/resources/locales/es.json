@@ -567,10 +567,6 @@
                 "compact": "Clips de audio pregrabados",
                 "descriptive": "En el contenido se integran clips de audio pregrabados"
             },
-            "ways-of-reading-prerecorded-audio-no-metadata": {
-                "compact": "No hay información disponible sobre audio pregrabado",
-                "descriptive": "No hay información disponible sobre audio pregrabado"
-            },
             "ways-of-reading-prerecorded-audio-only": {
                 "compact": "Solo audio pregrabado",
                 "descriptive": "Audiolibro sin texto alternativo"

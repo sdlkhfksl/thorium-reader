@@ -562,10 +562,6 @@
                 "compact": "Sisältää äänitteitä",
                 "descriptive": "Sisällössä on äänitettyjä osuuksia"
             },
-            "ways-of-reading-prerecorded-audio-no-metadata": {
-                "compact": "Ei tietoa äänitteistä",
-                "descriptive": "Ei tietoa äänitteistä"
-            },
             "ways-of-reading-prerecorded-audio-only": {
                 "compact": "Sisältää vain ääntä",
                 "descriptive": "Äänikirja, jossa ei ole tekstiä"
