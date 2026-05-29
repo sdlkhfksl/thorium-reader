@@ -647,6 +647,7 @@
         "expiredLcp": "Denne bog kan ikke læses, da LCP-licensen er udløbet.",
         "incorrectPassphrase": "Intet gemt nøgleord passer til bogen, eller det indtastede nøgleord er forkert.",
         "lcpEnd": "Slut",
+        "lcpNotSupported": "",
         "lcpRightsCopy": "Kopierede bogstaver",
         "lcpRightsPrint": "Printede sider",
         "lcpStart": "Start",

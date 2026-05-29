@@ -647,6 +647,7 @@
         "expiredLcp": "Bu eserin LCP lisans süresi doldu.",
         "incorrectPassphrase": "Eserle eşleşen kayıtlı bir şifre yok veya girilen şifre hatalı.",
         "lcpEnd": "Son",
+        "lcpNotSupported": "",
         "lcpRightsCopy": "Kopyalanmış karakterler",
         "lcpRightsPrint": "Basılı sayfalar",
         "lcpStart": "Başlat",

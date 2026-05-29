@@ -647,6 +647,7 @@
         "expiredLcp": "Den här boken går inte att läsa eftersom LCP-licensen har löpt ut.",
         "incorrectPassphrase": "Inget sparat lösenord passar för publikationen, eller det angivna lösenordet är fel.",
         "lcpEnd": "Slut",
+        "lcpNotSupported": "",
         "lcpRightsCopy": "Kopiera tecken",
         "lcpRightsPrint": "Kopiera utskrift",
         "lcpStart": "Start",

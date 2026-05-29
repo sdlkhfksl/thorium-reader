@@ -652,6 +652,7 @@
         "expiredLcp": "Questa pubblicazione non può essere letta perché la licenza LCP è scaduta.",
         "incorrectPassphrase": "Nessuna passphrase memorizzata è associata alla pubblicazione, oppure la passphrase inserita è errata.",
         "lcpEnd": "Fine",
+        "lcpNotSupported": "",
         "lcpRightsCopy": "Caratteri copiati",
         "lcpRightsPrint": "Pagine stampate",
         "lcpStart": "Inizio",

@@ -647,6 +647,7 @@
         "expiredLcp": "This publication's LCP license is expired.",
         "incorrectPassphrase": "No stored passphrase fits the publication, or the entered passphrase is wrong.",
         "lcpEnd": "End",
+        "lcpNotSupported": "WARNING: this is a pre-release version of Thorium Desktop reader which does not support production LCP licenses, and only supports LCP 'basic profile' decryption without certificate validation.",
         "lcpRightsCopy": "Copied characters",
         "lcpRightsPrint": "Printed pages",
         "lcpStart": "Start",

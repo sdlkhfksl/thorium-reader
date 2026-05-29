@@ -806,7 +806,7 @@ export class LcpManager {
             )
             || __TH__IS_CI__) { // !__TH__IS_DEV__ && __TH__IS_PACKAGED__
             try {
-                dialog.showErrorBox("LCP", "Warning: this is a pre-release version of Thorium Desktop reader which does not support production LCP licenses, and only supports LCP 'basic profile' decryption (no certificate validation).");
+                dialog.showErrorBox("LCP", this.translator.translate("publication.lcpNotSupported"));
             } catch {
                 // ignore
             }
