@@ -270,6 +270,9 @@
       ],
       "icon": "dist/assets/icons/icon.ico"
     },
+    "toolsets": {
+      "nsis": "1.2.1"
+    },
     "nsis": {
       "oneClick": false,
       "perMachine": false,
