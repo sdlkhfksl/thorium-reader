@@ -88,7 +88,7 @@
         "lastRead": "Last Read",
         "login": "Login",
         "logout": "Logout",
-        "missing": "",
+        "missing": "Missing files",
         "missingUnavailableDescription": "This publication cannot be opened because its stored files are unavailable. Re-import it, or go to Settings and then Storage to add or change the additional storage.",
         "moreInfo": "Publication Details",
         "myBooks": "My publications",
