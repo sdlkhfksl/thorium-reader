@@ -6,7 +6,7 @@
 #echo "::add-mask::$SECRET_THING"
 #echo "SECRET_THING=$SECRET_THING" >> $GITHUB_ENV
 
-name: Release App
+name: GitHub Release
 
 #on:
 #  release:
