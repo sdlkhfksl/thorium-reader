@@ -360,6 +360,7 @@ jobs:
         # APPLEIDKEYCHAIN: ${{ secrets.S6 }}
         # APPLEIDKEYCHAIN: ${{ case(startsWith(matrix.osarch, 'macos-'), secrets.S6, '*x*x*x*') }}
 #        APPLEIDKEYCHAIN: ${{ case(runner.os == 'macOS', secrets.S6, '*x*x*x*') }}
+        SKIP_NOTARIZE: "1"
         # CSC_KEYCHAIN: ${{ secrets.CSC_KEYCHAIN }}
         # CSC_NAME: ${{ secrets.CSC_NAME }}
         # CSC_LINK: ${{ secrets.CSC_LINK }}
@@ -496,11 +497,11 @@ jobs:
             release_tag: latest-windows-arm
           - osarch: macos-intel
             runson: ubuntu-latest # macos-latest #macos-14-arm64
-            packname: 'mac:skip-notarize'
+            packname: 'mac'
             release_tag: latest-macos-intel
           - osarch: macos-arm
             runson: ubuntu-latest # macos-latest #macos-14-arm64
-            packname: 'mac:skip-notarize'
+            packname: 'mac'
             release_tag: latest-macos-arm
           - osarch: linux-intel
             runson: ubuntu-latest # ubuntu-22.04 #ubuntu-latest is ubuntu-24.04
