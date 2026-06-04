@@ -64,7 +64,7 @@ jobs:
 #   if: "!contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
 #   if: ${{ github.ref == 'refs/heads/develop' }}
 #   if: "github.event_name != 'pull_request'"
-    if: "!contains(github.event.head_commit.message, 'skip ci') && github.ref_name == 'develop' && github.repository_owner == 'edrlab' && github.repository == 'edrlab/thorium-reader'"
+    if: "!contains(github.event.head_commit.message, 'skip ci') && github.repository_owner == 'edrlab' && github.repository == 'edrlab/thorium-reader'"
     runs-on: ${{ matrix.runson }}
     strategy:
       fail-fast: false
@@ -479,7 +479,7 @@ jobs:
 #   if: "!contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
 #   if: ${{ github.ref == 'refs/heads/develop' }}
 #   if: "github.event_name != 'pull_request'"
-    if: "!contains(github.event.head_commit.message, 'skip ci') && github.ref_name == 'develop' && github.repository_owner == 'edrlab' && github.repository == 'edrlab/thorium-reader'"
+    if: "!contains(github.event.head_commit.message, 'skip ci') && github.repository_owner == 'edrlab' && github.repository == 'edrlab/thorium-reader'"
     runs-on: ${{ matrix.runson }}
     strategy:
       fail-fast: false
