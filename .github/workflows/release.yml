@@ -559,4 +559,4 @@ jobs:
 # GH_TOKEN: ${{ github.token }}
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: >
-        ls -alsR release ; (gh release create ${{ github.ref_name }} --target=develop --latest=false --prerelease --title="Thorium Desktop reader ${{ github.ref_name }}" --notes="Expand the 'Assets' below to reveal the download links (build job: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" || echo OK || true) ; gh release upload ${{ github.ref_name }} "./release/*.*" --clobber
+        ls -alsR release ; (gh release create ${{ github.ref_name }} --target=develop --latest=false --prerelease --draft --title="Thorium Desktop reader ${{ github.ref_name }}" --notes="Expand the 'Assets' below to reveal the download links (build job: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" || echo OK || true) ; gh release upload ${{ github.ref_name }} "./release/*.*" --clobber
