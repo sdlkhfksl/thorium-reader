@@ -291,6 +291,9 @@ jobs:
     - name: non-PR action (build) ARM
       #if: ${{ matrix.osarch == 'linux-arm' || matrix.osarch == 'windows-arm' || matrix.osarch == 'macos-arm' }}
       if: ${{ endsWith(matrix.osarch, '-arm') }}
+      env:
+        THORIUM_TELEMETRY_SECRET: ${{ secrets.S9 }}
+        THORIUM_TELEMETRY_SECRET_DATA: ${{ secrets.S10 }}
       #run: sed 's/--x64/--arm64/g' ./package.json > ./package.json.new && mv ./package.json.new ./package.json && npm run package:${{ matrix.packname }} && sed 's/--arm64/--x64/g' ./package.json > ./package.json.new && mv ./package.json.new ./package.json
       run: >
         node -e 'const path = require("path"); const fs = require("fs"); const filePath = path.join(process.cwd(), "package.json"); let fileStr = fs.readFileSync(filePath, { encoding: "utf8" }); fileStr = fileStr.replace(/--x64/g, "--arm64"); fs.writeFileSync(filePath, fileStr, { encoding: "utf8" });' && npm run pre-package:${{ matrix.packname }}
@@ -298,6 +301,9 @@ jobs:
     - name: non-PR action (build) INTEL
       #if: ${{ matrix.osarch == 'linux-intel' || matrix.osarch == 'windows-intel' || matrix.osarch == 'macos-intel' }}
       if: ${{ endsWith(matrix.osarch, '-intel') }}
+      env:
+        THORIUM_TELEMETRY_SECRET: ${{ secrets.S9 }}
+        THORIUM_TELEMETRY_SECRET_DATA: ${{ secrets.S10 }}
       run: >
         node -e 'const path = require("path"); const fs = require("fs"); const filePath = path.join(process.cwd(), "package.json"); let fileStr = fs.readFileSync(filePath, { encoding: "utf8" }); fileStr = fileStr.replace(/--arm64/g, "--x64"); fs.writeFileSync(filePath, fileStr, { encoding: "utf8" });' && npm run pre-package:${{ matrix.packname }}
 #- run: ls -alsR release
