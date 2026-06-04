@@ -124,59 +124,6 @@ jobs:
 #      RELEASE_TAG: ${{ matrix.release_tag }} # MUST keep for WebPack config, detection of CI build
     steps:
 ###########################
-    - name: MacOS KeyChain init
-      if: startsWith(matrix.osarch, 'macos-') #runner.os == 'macOS'
-      run: |
-        CODESIGN_KEYCHAIN_PATH=$RUNNER_TEMP/codesign.keychain-db
-        echo KEYCHAIN_CREATE
-        security create-keychain -p "${{ github.run_id }}" "$CODESIGN_KEYCHAIN_PATH"
-        echo KEYCHAIN_DEFAULT
-        security default-keychain -s "$CODESIGN_KEYCHAIN_PATH"
-        echo KEYCHAIN_SETTINGS
-        security set-keychain-settings -lut 21600 "$CODESIGN_KEYCHAIN_PATH"
-        echo KEYCHAIN_UNLOCK
-        security unlock-keychain -p "${{ github.run_id }}" "$CODESIGN_KEYCHAIN_PATH"
-        echo KEYCHAIN_LIST1
-        security list-keychain || echo OK || true
-        echo KEYCHAIN_LIST2
-        security list-keychain -d user -s "$CODESIGN_KEYCHAIN_PATH" || echo OK || true
-        echo KEYCHAIN_FIND1
-        security find-identity -v -p codesigning -s "$CODESIGN_KEYCHAIN_PATH" || echo OK || true
-        echo KEYCHAIN_FIND2
-        security find-identity -v -p codesigning || echo OK || true
-        CODESIGN_P12_PATH=$RUNNER_TEMP/code-sign.p12
-        echo KEYCHAIN_P12_B64
-        echo -n "$CODESIGN_P12_B64" | base64 --decode -o "$CODESIGN_P12_PATH"
-        echo KEYCHAIN_P12_IMPORT
-        security import "$CODESIGN_P12_PATH" -P "$CODESIGN_P12_PASS" -A -t cert -f pkcs12 -k "$CODESIGN_KEYCHAIN_PATH" -T /usr/bin/codesign -T /usr/bin/pkgbuild
-        echo KEYCHAIN_P12_PARTITION
-        security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${{ github.run_id }}" "$CODESIGN_KEYCHAIN_PATH"
-        echo KEYCHAIN_P12_DELETE
-        rm -f "$CODESIGN_P12_PATH" || echo OK || true
-        echo KEYCHAIN_LIST1
-        security list-keychain || echo OK || true
-        echo KEYCHAIN_LIST2
-        security list-keychain -d user -s "$CODESIGN_KEYCHAIN_PATH" || echo OK || true
-        echo KEYCHAIN_FIND1
-        security find-identity -v -p codesigning -s "$CODESIGN_KEYCHAIN_PATH" || echo OK || true
-        echo KEYCHAIN_FIND2
-        security find-identity -v -p codesigning || echo OK || true
-        echo KEYCHAIN_NOTARY_STORE_CREDS
-        xcrun notarytool store-credentials "$APPLEIDKEYCHAIN" --apple-id "$APPLE_ID" --team-id "$APPLE_ID_TEAM" --password "$APPLE_ID_PASS" --keychain "$CODESIGN_KEYCHAIN_PATH"
-        echo KEYCHAIN_LIST1
-        security list-keychain || echo OK || true
-        echo KEYCHAIN_LIST2
-        security list-keychain -d user -s "$CODESIGN_KEYCHAIN_PATH" || echo OK || true
-      env:
-        CODESIGN_P12_B64: ${{ secrets.S1 }} # base64 -i file.p12 -o env.txt
-        CODESIGN_P12_PASS: ${{ secrets.S3 }}
-        APPLE_ID: ${{ secrets.S2 }}
-        APPLE_ID_PASS: ${{ secrets.S5 }}
-        APPLE_ID_TEAM: ${{ secrets.S4 }}
-        APPLEIDKEYCHAIN: ${{ secrets.S6 }}
-    # https://www.electron.build/code-signing.html
-###########################
-###########################
     - name: Checking graceful shell command failure
       run: |-
         pwdx || echo OK || true
@@ -412,8 +359,8 @@ jobs:
         USE_HARD_LINKS: 'false' # Electron Builder workaround
         # APPLEIDKEYCHAIN: ${{ secrets.S6 }}
         # APPLEIDKEYCHAIN: ${{ case(startsWith(matrix.osarch, 'macos-'), secrets.S6, '*x*x*x*') }}
-#        APPLEIDKEYCHAIN: ${{ case(runner.os == 'macOS', secrets.S6, '*x*x*x*') }}
-        SKIP_NOTARIZE: "1"
+        APPLEIDKEYCHAIN: ${{ case(runner.os == 'macOS', secrets.S6, '*x*x*x*') }}
+#        SKIP_NOTARIZE: "1"
         # CSC_KEYCHAIN: ${{ secrets.CSC_KEYCHAIN }}
         # CSC_NAME: ${{ secrets.CSC_NAME }}
         # CSC_LINK: ${{ secrets.CSC_LINK }}
