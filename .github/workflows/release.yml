@@ -106,11 +106,11 @@ jobs:
             release_tag: latest-windows-arm
           - osarch: macos-intel
             runson: macos-latest #macos-14-arm64
-            packname: 'mac:skip-notarize'
+            packname: 'mac'
             release_tag: latest-macos-intel
           - osarch: macos-arm
             runson: macos-latest #macos-14-arm64
-            packname: 'mac:skip-notarize'
+            packname: 'mac'
             release_tag: latest-macos-arm
           - osarch: linux-intel
             runson: ubuntu-22.04 #ubuntu-latest is ubuntu-24.04
