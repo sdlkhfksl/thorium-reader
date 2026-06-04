@@ -19,12 +19,6 @@ on:
       # https://github.com/edrlab/thorium-reader/settings/rules
       - "v*" # excludes slash /
 
-name: develop branch, build + lint + package + upload test release
-on:
-  push:
-    branches: [ develop ]
-    tags-ignore:
-      - '*'
 # https://docs.github.com/en/actions/security-guides/automatic-token-authentication#permissions-for-the-github_token
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#permissions
 permissions:
