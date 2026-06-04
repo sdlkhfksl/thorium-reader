@@ -24,7 +24,8 @@ permissions:
     security-events: none
     statuses: none
 jobs:
-  build:
+  build_job:
+    timeout-minutes: 20
     permissions:
       actions: none
       artifact-metadata: none
@@ -362,8 +363,8 @@ jobs:
     #
     #
 ###########################
-  release:
-    needs: build
+  release_job:
+    needs: build_job
     permissions:
       actions: none
       artifact-metadata: none
