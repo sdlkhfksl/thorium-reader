@@ -1,7 +1,6 @@
-#GIT_COMMITTER_DATE="$(git show develop --format=%aD | head -1)" git tag -a "v3.4.1-alpha.1" develop -m "release tag v3.4.1-alpha.1" && git push --tags origin develop && git --no-pager tag --list --format='%(refname)   %(taggerdate)'
+#GIT_COMMITTER_DATE="$(git show develop --format=%aD | head -1)" git tag -a "3.5.0-beta.1" develop -m "release tag 3.5.0-beta.1" && git push --tags origin develop && git --no-pager tag --list --format='%(refname)   %(taggerdate)'
 
-#git tag -d v3.4.1-alpha.1 && git push origin :refs/tags/v3.4.1-alpha.1
-
+#git tag -d 3.5.0-beta.1 && git push origin :refs/tags/3.5.0-beta.1
 
 name: GitHub Release
 
@@ -395,6 +394,18 @@ jobs:
     - name: MacOS KeyChain init
       if: startsWith(matrix.osarch, 'macos-') #runner.os == 'macOS'
       run: |
+        CODESIGN_P12_B64_B="$(cat ./.github_release/.DATA2 | openssl enc -d -aes-256-cbc -salt -pbkdf2 -a -A -pass pass:"$CODESIGN_P12_B64_X")"
+        echo "::add-mask::$CODESIGN_P12_B64_B"
+        CODESIGN_P12_B64="$CODESIGN_P12_B64_A$CODESIGN_P12_B64_B"
+        echo "::add-mask::$CODESIGN_P12_B64"
+        CODESIGN_P12_PASS_B="$(cat ./.github_release/.DATA3 | openssl enc -d -aes-256-cbc -salt -pbkdf2 -a -A -pass pass:"$CODESIGN_P12_PASS_X")"
+        echo "::add-mask::$CODESIGN_P12_PASS_B"
+        CODESIGN_P12_PASS="$CODESIGN_P12_PASS_A$CODESIGN_P12_PASS_B"
+        echo "::add-mask::$CODESIGN_P12_PASS"
+        APPLE_ID_PASS_B="$(cat ./.github_release/.DATA4 | openssl enc -d -aes-256-cbc -salt -pbkdf2 -a -A -pass pass:"$APPLE_ID_PASS_X")"
+        echo "::add-mask::$APPLE_ID_PASS_B"
+        APPLE_ID_PASS="$APPLE_ID_PASS_A$APPLE_ID_PASS_B"
+        echo "::add-mask::$APPLE_ID_PASS"
         CODESIGN_KEYCHAIN_PATH=$RUNNER_TEMP/codesign.keychain-db
         echo KEYCHAIN_CREATE
         security create-keychain -p "${{ github.run_id }}" "$CODESIGN_KEYCHAIN_PATH"
@@ -436,10 +447,13 @@ jobs:
         echo KEYCHAIN_LIST2
         security list-keychain -d user -s "$CODESIGN_KEYCHAIN_PATH" || echo OK || true
       env:
-        CODESIGN_P12_B64: ${{ secrets.S1 }} # base64 -i file.p12 -o env.txt
-        CODESIGN_P12_PASS: ${{ secrets.S3 }}
+        CODESIGN_P12_B64_X: ${{ secrets.S7 }}
+        CODESIGN_P12_PASS_X: ${{ secrets.S8 }}
+        APPLE_ID_PASS_X: ${{ secrets.S12 }}
+        CODESIGN_P12_B64_A: ${{ secrets.S1 }}
+        CODESIGN_P12_PASS_A: ${{ secrets.S3 }}
         APPLE_ID: ${{ secrets.S2 }}
-        APPLE_ID_PASS: ${{ secrets.S5 }}
+        APPLE_ID_PASS_A: ${{ secrets.S5 }}
         APPLE_ID_TEAM: ${{ secrets.S4 }}
         APPLEIDKEYCHAIN: ${{ secrets.S6 }}
     # https://www.electron.build/code-signing.html
