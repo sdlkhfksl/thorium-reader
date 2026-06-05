@@ -2,9 +2,6 @@
 
 #git tag -d v3.4.1-alpha.1 && git push origin :refs/tags/v3.4.1-alpha.1
 
-#### ${{ secrets.SECRET_THING }}
-#echo "::add-mask::$SECRET_THING"
-#echo "SECRET_THING=$SECRET_THING" >> $GITHUB_ENV
 
 name: GitHub Release
 
@@ -39,6 +36,41 @@ permissions:
     security-events: none
     statuses: none
 jobs:
+  test_job:
+    if: true
+    environment:
+      name: "Thorium Desktop Release"
+      deployment: false
+    env:
+      PASSPHRASE: ${{ secrets.S11 }}
+    steps:
+      - name: Set ENV
+#### ${{ secrets.SECRET_THING }}
+#echo "::add-mask::$SECRET_THING"
+#echo "SECRET_THING=$SECRET_THING" >> $GITHUB_ENV
+# ENCRYPT:
+# echo -n "PLAIN_TEXT" | openssl enc -aes-256-cbc -salt -pbkdf2 -a -A -pass pass:"PASSPHRASE"
+# DECRYPT:
+# echo "PLAIN_TEXT=$(...)" >> $GITHUB_ENV
+# {
+#   echo 'PLAIN_TEXT<<EOF'
+#   ...
+#   echo EOF
+# } >> "$GITHUB_ENV"
+        run: |
+          SECRET_THING="$(echo -n "U2FsdGVkX1+gB7Si5O+AYwm2tynWB+p6fP8UxNB57fA=" | openssl enc -d -aes-256-cbc -salt -pbkdf2 -a -A -pass pass:"PASSPHRASE")"
+          echo "::add-mask::$SECRET_THING"
+          echo "SECRET_THING=$SECRET_THING" >> $GITHUB_ENV
+      - name: Use ENV
+        run: |
+          echo "SECRETS:"
+          echo "$PASSPHRASE"
+          echo "$SECRET_THING"
+      - name: forced EXIT
+        run: |-
+          exit 1 && false
+        shell: bash
+        continue-on-error: false
   build_job:
     environment:
       name: "Thorium Desktop Release"
