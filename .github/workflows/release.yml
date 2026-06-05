@@ -69,11 +69,20 @@ jobs:
 ############################################
       - name: Set ENV
         run: |
+          echo "$GITHUB_ENV"
+          cat $GITHUB_ENV
           SECRET_THING="$(cat ./.github_release/.DATA1 | openssl enc -d -aes-256-cbc -salt -pbkdf2 -a -A -pass pass:"$PASSPHRASE")"
           echo "NOT MASKED:"
           echo "$SECRET_THING"
           echo "::add-mask::$SECRET_THING"
+          echo "$SECRET_THING"
           echo "SECRET_THING=$SECRET_THING" >> $GITHUB_ENV
+          echo "$SECRET_THING"
+          OTHER_SECRET_THING="$SECRET_THING$APPLEIDKEYCHAIN"
+          echo "::add-mask::$OTHER_SECRET_THING"
+          echo "$OTHER_SECRET_THING"
+          echo "OTHER_SECRET_THING=$OTHER_SECRET_THING" >> $GITHUB_ENV
+          echo "$OTHER_SECRET_THING"
 #### ${{ secrets.SECRET_THING }}
 #echo "::add-mask::$SECRET_THING"
 #echo "SECRET_THING=$SECRET_THING" >> $GITHUB_ENV
@@ -89,11 +98,14 @@ jobs:
 ############################################
       - name: Use ENV
         run: |
+          echo "$GITHUB_ENV"
+          cat $GITHUB_ENV
           echo "MASKED SECRETS:"
           echo "$PASSPHRASE"
           echo "$APPLEIDKEYCHAIN"
           echo "$SECRET_THING"
           echo "$SECRET_THING$APPLEIDKEYCHAIN"
+          echo "$OTHER_SECRET_THING"
 ############################################
       - name: forced EXIT
         run: |-
