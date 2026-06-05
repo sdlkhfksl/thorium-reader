@@ -36,6 +36,18 @@ permissions:
     security-events: none
     statuses: none
 jobs:
+###########################
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+###########################
   test_job:
     runs-on: ubuntu-latest
     if: true
@@ -44,8 +56,24 @@ jobs:
       deployment: false
     env:
       PASSPHRASE: ${{ secrets.S11 }}
+      APPLEIDKEYCHAIN: ${{ secrets.S6 }}
     steps:
+############################################
+      - name: Checkout
+# https://github.com/actions/checkout/commits/v6.0.2
+# https://github.com/actions/checkout/commits/de0fac2e4500dabe0009e67214ff5f5447ce83dd
+# https://github.com/actions/checkout/compare/v6.0.2...de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          persist-credentials: false
+############################################
       - name: Set ENV
+        run: |
+          SECRET_THING="$(cat ./.github_release/.DATA1 | openssl enc -d -aes-256-cbc -salt -pbkdf2 -a -A -pass pass:"$PASSPHRASE")"
+          echo "NOT MASKED:"
+          echo "$SECRET_THING"
+          echo "::add-mask::$SECRET_THING"
+          echo "SECRET_THING=$SECRET_THING" >> $GITHUB_ENV
 #### ${{ secrets.SECRET_THING }}
 #echo "::add-mask::$SECRET_THING"
 #echo "SECRET_THING=$SECRET_THING" >> $GITHUB_ENV
@@ -58,20 +86,32 @@ jobs:
 #   ...
 #   echo EOF
 # } >> "$GITHUB_ENV"
-        run: |
-          SECRET_THING="$(echo -n "U2FsdGVkX1+gB7Si5O+AYwm2tynWB+p6fP8UxNB57fA=" | openssl enc -d -aes-256-cbc -salt -pbkdf2 -a -A -pass pass:"$PASSPHRASE")"
-          echo "::add-mask::$SECRET_THING"
-          echo "SECRET_THING=$SECRET_THING" >> $GITHUB_ENV
+############################################
       - name: Use ENV
         run: |
-          echo "SECRETS:"
+          echo "MASKED SECRETS:"
           echo "$PASSPHRASE"
+          echo "$APPLEIDKEYCHAIN"
           echo "$SECRET_THING"
+          echo "$SECRET_THING$APPLEIDKEYCHAIN"
+############################################
       - name: forced EXIT
         run: |-
           exit 1 && false
         shell: bash
         continue-on-error: false
+###########################
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+###########################
   build_job:
     environment:
       name: "Thorium Desktop Release"
