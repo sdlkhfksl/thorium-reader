@@ -198,7 +198,9 @@
       "preload.js",
       "main.js",
       "package.json",
-      "fonts"
+      "package-lock.json",
+      "*.js",
+      "*.wasm"
     ],
     "asarUnpack": [
       "**/*.node",
