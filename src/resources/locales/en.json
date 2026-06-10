@@ -1245,6 +1245,11 @@
         "session": {
             "title": "Enable session saving"
         },
+        "sharedComputer": {
+            "lcpAutoDeleteExpiredPublications": "Automatically remove expired publications and associated user data",
+            "lcpAutoDeleteExpiredPublicationsDescription": "Ensures that expired loans are automatically deleted (including personal annotations, reading bookmarks, etc.). This is useful in 'shared computers' environments such as library or university rooms.",
+            "title": "Shared computer mode"
+        },
         "storage": {
             "actions": {
                 "addDirectory": "Select an additional storage",

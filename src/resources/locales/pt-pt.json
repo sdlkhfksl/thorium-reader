@@ -1251,6 +1251,11 @@
         "session": {
             "title": "Ativar guardar sessão"
         },
+        "sharedComputer": {
+            "lcpAutoDeleteExpiredPublications": "",
+            "lcpAutoDeleteExpiredPublicationsDescription": "",
+            "title": ""
+        },
         "storage": {
             "actions": {
                 "addDirectory": "Selecionar um armazenamento adicional",

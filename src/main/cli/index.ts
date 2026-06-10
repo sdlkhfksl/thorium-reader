@@ -22,11 +22,17 @@ import { appActions } from "../redux/actions";
 import { getOpenFileFromCliChannel, getOpenTitleFromCliChannel } from "../event";
 import { isOpenUrl, setOpenUrl } from "./url";
 import { globSync } from "glob";
+import { type Store } from "redux";
+import { settingsActions } from "readium-desktop/common/redux/actions";
 import { PublicationView } from "readium-desktop/common/views/publication";
 import { isAcceptedExtension } from "readium-desktop/common/extension";
 import { FORCE_PROD_DB_IN_DEV, USER_DATA_FOLDER } from "readium-desktop/common/constant";
-import { PersistRootState } from "../redux/states";
+import { PersistRootState, RootState } from "../redux/states";
 import { appendFileSyncWithRotation } from "readium-desktop/utils/log";
+import {
+    isSharedComputerCliSwitch,
+    SHARED_COMPUTER_CLI_OPTION,
+} from "./options";
 
 // Logger
 const debug = debug_("readium-desktop:cli:process");
@@ -71,12 +77,34 @@ let __appStarted = false;
 let __returnCode = 0;
 let __pendingCmd = 0;
 
+interface ISharedComputerCliArgv {
+    sharedComputer?: unknown;
+    [SHARED_COMPUTER_CLI_OPTION]?: unknown;
+}
+
+const sharedComputerCliOptionIsEnabled = (argv: ISharedComputerCliArgv) =>
+    argv.sharedComputer === true || argv[SHARED_COMPUTER_CLI_OPTION] === true;
+
+const createStoreFromDiWithCliSettings = async (argv: ISharedComputerCliArgv): Promise<Store<RootState>> => {
+    const store = await createStoreFromDi();
+    if (sharedComputerCliOptionIsEnabled(argv)) {
+        // The command-line flag is a runtime override: it forces the mode without persisting the lock itself.
+        debug("CLI shared computer mode forced");
+        store.dispatch(settingsActions.lcpAutoDeleteExpiredPublicationsForced.build(true));
+    }
+    return store;
+};
+
 // yargs configuration
 const yargsInit = () =>
     yargs() // hideBin(process.argv)
         .scriptName(_APP_NAME)
         .version(_APP_VERSION)
         .usage("$0 <cmd> [args]")
+        .option(SHARED_COMPUTER_CLI_OPTION, {
+            describe: "force shared computer mode for this session",
+            type: "boolean",
+        })
         .command("opds <title> <url>",
             "import opds feed",
             (y) =>
@@ -95,7 +123,7 @@ const yargsInit = () =>
 
                 debug("CLI opds import", argv);
 
-                const store = await createStoreFromDi();
+                const store = await createStoreFromDiWithCliSettings(argv);
                 const sagaMiddleware = diMainGet("saga-middleware");
                 __pendingCmd++;
 
@@ -146,7 +174,7 @@ const yargsInit = () =>
 
                 debug("CLI import publication", argv);
 
-                const store = await createStoreFromDi();
+                const store = await createStoreFromDiWithCliSettings(argv);
                 const sagaMiddleware = diMainGet("saga-middleware");
                 __pendingCmd++;
 
@@ -215,7 +243,7 @@ const yargsInit = () =>
                 debug("CLI read", argv);
                 __appStarted = true;
                 await Promise.all([
-                    createStoreFromDi().then((store) => store.dispatch(appActions.initRequest.build())),
+                    createStoreFromDiWithCliSettings(argv).then((store) => store.dispatch(appActions.initRequest.build())),
                     app.whenReady(),
                 ]);
 
@@ -250,7 +278,7 @@ const yargsInit = () =>
 
                 __appStarted = true;
                 await Promise.all([
-                    createStoreFromDi().then((store) => store.dispatch(appActions.initRequest.build())),
+                    createStoreFromDiWithCliSettings(argv).then((store) => store.dispatch(appActions.initRequest.build())),
                     app.whenReady(),
                 ]);
 
@@ -343,6 +371,7 @@ export function commandLineMainEntry(
             debug("arg", arg);
             if (arg === "-r" ||
                 arg.includes("--require") ||
+                // arg.includes("--no") // DO NOT UNCOMMENT THIS, see "shared-computer" (`--shared-computer` and `--no-shared-computer`)
                 // https://www.electronjs.org/docs/latest/api/command-line-switches
                 arg.includes("--debug") ||
                 arg.includes("--log") ||
@@ -416,7 +445,7 @@ export function commandLineMainEntry(
 const knownOption = (str: string) => [
     "--help",
     "--version",
-].includes(str);
+].includes(str) || isSharedComputerCliSwitch(str);
 
 
 // Catch all unhandled rejection promise from CLI command
