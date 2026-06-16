@@ -83,7 +83,7 @@ jobs:
             packname: win
             release_tag: latest-windows-intel
           - osarch: windows-arm
-            runson: win11-vs2026-arm64 # https://github.com/actions/runner-images/blob/main/images/windows/Windows11-VS2026-Arm64-Readme.md
+            runson: windows-11-vs2026-arm # win11-vs2026-arm64 # https://github.com/actions/runner-images/blob/main/images/windows/Windows11-VS2026-Arm64-Readme.md
             packname: win
             release_tag: latest-windows-arm
           - osarch: macos-intel
@@ -99,7 +99,7 @@ jobs:
             packname: linux
             release_tag: latest-linux-intel
           - osarch: linux-arm
-            runson: ubuntu-22.04 #ubuntu-latest is ubuntu-24.04
+            runson: ubuntu-22.04-arm #ubuntu-latest is ubuntu-24.04
             packname: linux
             release_tag: latest-linux-arm
     steps:
