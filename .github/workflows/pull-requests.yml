@@ -83,7 +83,7 @@ jobs:
             packname: win
             release_tag: latest-windows-intel
           - osarch: windows-arm
-            runson: windows-2025
+            runson: win11-vs2026-arm64 # https://github.com/actions/runner-images/blob/main/images/windows/Windows11-VS2026-Arm64-Readme.md
             packname: win
             release_tag: latest-windows-arm
           - osarch: macos-intel
@@ -110,14 +110,36 @@ jobs:
       shell: cmd
       continue-on-error: true
 ###########################
-    - name: Microsoft Windows dumpbin to PATH
+    - name: Microsoft Windows Visual Studio lookup
       if: startsWith(matrix.osarch, 'windows-')
+      run: >
+        dir /A "C:\Program Files\Microsoft Visual Studio" && dir /A "C:\Program Files\Microsoft Visual Studio\18" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\Hostx64" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\HostArm64" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\HostArm64\arm64"
+      shell: cmd
+###########################
+    - name: Microsoft Windows dumpbin to PATH (ARM)
+      #if: startsWith(matrix.osarch, 'windows-')
+      if: ${{ matrix.osarch == 'windows-arm' }}
+      run: >
+        $VS_ROOT = "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC"; Get-ChildItem -Path $VS_ROOT -Force; $VS_VERSION = (Get-ChildItem -Path $VS_ROOT | Sort-Object Name -Descending | Select-Object -First 1).Name; $VS_BIN = "$VS_ROOT\$VS_VERSION\bin\HostArm64\arm64"; echo $VS_BIN >> $env:GITHUB_PATH; echo $VS_BIN
+      shell: powershell
+###########################
+    - name: Microsoft Windows dumpbin to PATH (INTEL)
+      #if: startsWith(matrix.osarch, 'windows-')
+      if: ${{ matrix.osarch == 'windows-intel' }}
       run: >
         $VS_ROOT = "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC"; Get-ChildItem -Path $VS_ROOT -Force; $VS_VERSION = (Get-ChildItem -Path $VS_ROOT | Sort-Object Name -Descending | Select-Object -First 1).Name; $VS_BIN = "$VS_ROOT\$VS_VERSION\bin\Hostx64\x64"; echo $VS_BIN >> $env:GITHUB_PATH; echo $VS_BIN
       shell: powershell
 ###########################
-    - name: Microsoft Windows dumpbin check
-      if: startsWith(matrix.osarch, 'windows-')
+    - name: Microsoft Windows dumpbin check (ARM)
+      #if: startsWith(matrix.osarch, 'windows-')
+      if: ${{ matrix.osarch == 'windows-arm' }}
+      run: >
+        dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC" && dumpbin /headers "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\HostArm64\arm64\dumpbin.exe" | findstr /i machine
+      shell: cmd
+###########################
+    - name: Microsoft Windows dumpbin check (INTEL)
+      #if: startsWith(matrix.osarch, 'windows-')
+      if: ${{ matrix.osarch == 'windows-intel' }}
       run: >
         dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC" && dumpbin /headers "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64\dumpbin.exe" | findstr /i machine
       shell: cmd
