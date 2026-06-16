@@ -113,6 +113,12 @@ jobs:
       shell: cmd
       continue-on-error: true
 ###########################
+    - name: Microsoft Windows Visual Studio lookup
+      if: startsWith(matrix.osarch, 'windows-')
+      run: >
+        dir /A "C:\Program Files\Microsoft Visual Studio" && dir /A "C:\Program Files\Microsoft Visual Studio\2026" && dir /A "C:\Program Files\Microsoft Visual Studio\2026\Enterprise" && dir /A "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\VC" && dir /A "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\VC\Tools" && dir /A "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\VC\Tools\MSVC"
+      shell: cmd
+###########################
     - name: Microsoft Windows dumpbin to PATH
       if: startsWith(matrix.osarch, 'windows-')
       run: >
