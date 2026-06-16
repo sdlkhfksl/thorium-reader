@@ -65,8 +65,9 @@ jobs:
 # windows-latest is currently windows-2022, but becomes windows-2025 in September 2025 (windows-2022 remains supported for 3 years)
 #       https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
 # windows-2025 is beta / public preview
-#       https://github.com/actions/runner-images/blob/main/images/windows/Windows2025-Readme.md
 #       https://github.com/actions/runner-images/issues/11228
+# ah, windows-2025 / windows-2025-vs2026 now on Visual Studio 2026 (was 2022)
+#       https://github.com/actions/runner-images/blob/main/images/windows/Windows2025-Readme.md
 # windows-11-preview_aarch64 ?
 #       https://github.com/actions/partner-runner-images/issues/19#issuecomment-2569992032
 # macos-latest is currently macos-14-arm64
@@ -115,23 +116,23 @@ jobs:
     - name: Microsoft Windows dumpbin to PATH
       if: startsWith(matrix.osarch, 'windows-')
       run: >
-        $VS_ROOT = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC"; Get-ChildItem -Path $VS_ROOT -Force; $VS_VERSION = (Get-ChildItem -Path $VS_ROOT | Sort-Object Name -Descending | Select-Object -First 1).Name; $VS_BIN = "$VS_ROOT\$VS_VERSION\bin\Hostx64\x64"; echo $VS_BIN >> $env:GITHUB_PATH; echo $VS_BIN
+        $VS_ROOT = "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\VC\Tools\MSVC"; Get-ChildItem -Path $VS_ROOT -Force; $VS_VERSION = (Get-ChildItem -Path $VS_ROOT | Sort-Object Name -Descending | Select-Object -First 1).Name; $VS_BIN = "$VS_ROOT\$VS_VERSION\bin\Hostx64\x64"; echo $VS_BIN >> $env:GITHUB_PATH; echo $VS_BIN
       shell: powershell
 ###########################
     - name: Microsoft Windows dumpbin check
       if: startsWith(matrix.osarch, 'windows-')
       run: >
-        dir /A "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC" && dumpbin /headers "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\dumpbin.exe" | findstr /i machine
+        dir /A "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\VC\Tools\MSVC" && dumpbin /headers "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\dumpbin.exe" | findstr /i machine
       shell: cmd
 ###########################
 # - name: Microsoft Windows msbuild to PATH
 #   if: startsWith(matrix.osarch, 'windows-')
 #   uses: microsoft/setup-msbuild@v2
-# "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin"
-# "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools"
-# "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\bin\amd64"
-# "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64"
-# "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64"
+# "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\MSBuild\Current\Bin"
+# "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\Common7\Tools"
+# "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\VC\bin\amd64"
+# "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64"
+# "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64"
     #- run: exit 1
 #    - run: echo 'RELEASE_TAG:' ${{ env.RELEASE_TAG }}
 #    - run: 'echo "GITHUB_RUN_NUMBER: ${{ github.run_number }}"'
