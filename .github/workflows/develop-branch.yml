@@ -116,7 +116,7 @@ jobs:
     - name: Microsoft Windows Visual Studio lookup
       if: startsWith(matrix.osarch, 'windows-')
       run: >
-        dir /A "C:\Program Files\Microsoft Visual Studio" && dir /A "C:\Program Files\Microsoft Visual Studio\18" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC"
+        dir /A "C:\Program Files\Microsoft Visual Studio" && dir /A "C:\Program Files\Microsoft Visual Studio\18" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\Hostx64" && dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64"
       shell: cmd
 ###########################
     - name: Microsoft Windows dumpbin to PATH
@@ -128,7 +128,7 @@ jobs:
     - name: Microsoft Windows dumpbin check
       if: startsWith(matrix.osarch, 'windows-')
       run: >
-        dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC" && dumpbin /headers "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\dumpbin.exe" | findstr /i machine
+        dir /A "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC" && dumpbin /headers "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64\dumpbin.exe" | findstr /i machine
       shell: cmd
 ###########################
 # - name: Microsoft Windows msbuild to PATH
@@ -139,6 +139,7 @@ jobs:
 # "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\bin\amd64"
 # "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64"
 # "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64"
+# "C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\14.51.36231\bin\Hostx64\x64"
     #- run: exit 1
 #    - run: echo 'RELEASE_TAG:' ${{ env.RELEASE_TAG }}
 #    - run: 'echo "GITHUB_RUN_NUMBER: ${{ github.run_number }}"'
