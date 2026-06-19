@@ -9,7 +9,7 @@ import * as stylesReader from "readium-desktop/renderer/assets/styles/reader-app
 import * as React from "react";
 import SVG from "readium-desktop/renderer/common/components/SVG";
 import * as DoneIcon from "readium-desktop/renderer/assets/icons/done.svg";
-import { IPdfPlayerColumn, IPdfPlayerScale, IPdfPlayerView } from "src/renderer/reader/pdf/common/pdfReader.type";
+import { IPdfPlayerColumn, IPdfPlayerScale, IPdfPlayerView } from "readium-desktop/renderer/reader/pdf/common/pdfReader.type";
 import { useTranslator } from "readium-desktop/renderer/common/hooks/useTranslator";
 
 interface IState {
