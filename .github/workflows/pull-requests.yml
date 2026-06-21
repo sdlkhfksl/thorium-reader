@@ -22,7 +22,8 @@ permissions:
     security-events: none
     statuses: none
 jobs:
-  ci:
+  pr-build-job:
+    timeout-minutes: 30
     permissions:
       actions: none
       artifact-metadata: none
