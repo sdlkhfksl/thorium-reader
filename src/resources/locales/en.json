@@ -1252,11 +1252,6 @@
             "lcpAutoDeleteExpiredPublicationsDescription": "Ensures that expired loans are automatically deleted (including personal annotations, reading bookmarks, etc.). This is useful in 'shared computers' environments such as library or university rooms.",
             "title": "Shared computer mode"
         },
-        "window": {
-            "minimizeLibraryToTray": "Minimize the library to the system tray",
-            "minimizeLibraryToTrayDescription": "When enabled, minimizing the library window keeps Thorium running in the Windows notification area.",
-            "title": "Window behavior"
-        },
         "storage": {
             "actions": {
                 "addDirectory": "Select an additional storage",
@@ -1312,6 +1307,11 @@
             "description": "Application theme matches operating system.",
             "light": "Light",
             "title": "Application Theme"
+        },
+        "window": {
+            "minimizeLibraryToTray": "Minimize the library to the system tray",
+            "minimizeLibraryToTrayDescription": "When enabled, minimizing the library window keeps Thorium running in the Windows notification area.",
+            "title": "Window behavior"
         }
     },
     "tts": {

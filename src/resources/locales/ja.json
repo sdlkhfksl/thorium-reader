@@ -45,7 +45,9 @@
             "title": "{{- appName}} ソフトウェアの更新。"
         },
         "window": {
-            "showLibrary": "蔵書/本棚を表示"
+            "showLibrary": "蔵書/本棚を表示",
+            "trayHint": "",
+            "trayTooltip": ""
         }
     },
     "catalog": {
@@ -1299,6 +1301,11 @@
             "description": "アプリケーションのテーマは、OS（オペレーティングシステム）と一致するようにします。",
             "light": "ライト（明色）",
             "title": "アプリケーション テーマ"
+        },
+        "window": {
+            "minimizeLibraryToTray": "",
+            "minimizeLibraryToTrayDescription": "",
+            "title": ""
         }
     },
     "tts": {
