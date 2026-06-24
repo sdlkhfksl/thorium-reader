@@ -75,7 +75,9 @@ class FeedList extends React.Component<IProps, IState> {
 
         this.unsubscribeAction = subscribeToAction(opdsActions.refresh.ID, (_action) => {
             // console.log("Refresh opds feed list requested by the action ID=", opdsActions.refresh.ID);
-            this.loadFeeds();
+
+            // void the Promise as we don't need the async/await guarantee
+            void this.loadFeeds();
         });
     }
 
@@ -145,10 +147,10 @@ class FeedList extends React.Component<IProps, IState> {
                                 </Link>
                                 <button onClick={() => {
                                     apiAction("opds/deleteFeed", item.identifier).then(() => {
-                                        apiAction("opds/addFeed", { 
-                                            title: item.title, 
-                                            url: item.url, 
-                                            favorite: !item.favorite, 
+                                        apiAction("opds/addFeed", {
+                                            title: item.title,
+                                            url: item.url,
+                                            favorite: !item.favorite,
                                         }).catch((err) => {
                                             console.error("Error to fetch api opds/addFeed", err);
                                         });
@@ -246,7 +248,7 @@ class FeedList extends React.Component<IProps, IState> {
     private async loadFeeds() {
         try {
             const feedsResult = await apiAction("opds/findAllFeeds");
-            
+
             this.setState({ feedsResult });
             if (this.props.setFeedsResult) {
                 this.props.setFeedsResult(feedsResult);
