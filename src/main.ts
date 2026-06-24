@@ -113,7 +113,7 @@ app.commandLine.appendSwitch("enable-speech-dispatcher");
 initSessionsNoHTTP();
 
 if (__TH__IS_VSCODE_LAUNCH__) {
-    createStoreFromDi().then((store) => store.dispatch(appActions.initRequest.build()));
+    createStoreFromDi().then((store) => store.dispatch(appActions.initRequest.build())).catch((err) => { debug(err); });
 } else {
     commandLineMainEntry(); // call main fct
 }
