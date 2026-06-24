@@ -13,6 +13,9 @@ import { settingsActions } from "readium-desktop/common/redux/actions";
 const initialState: ISettingsState = {
     enableAPIAPP: false,
     minimizeLibraryToTray: false,
+    keepLibraryWindowInBackgroundOnReaderOpen: false,
+    keepLibraryWindowInBackgroundOnReaderClose: false,
+    oneReaderWindowPerPublication: false,
     lcpAutoDeleteExpiredPublications: false,
     lcpAutoDeleteExpiredPublicationsForced: false,
 };
@@ -21,7 +24,10 @@ function settingsReducer_(
     state: ISettingsState = initialState,
     action:
         settingsActions.enableAPIAPP.TAction |
+        settingsActions.keepLibraryWindowInBackgroundOnReaderClose.TAction |
+        settingsActions.keepLibraryWindowInBackgroundOnReaderOpen.TAction |
         settingsActions.minimizeLibraryToTray.TAction |
+        settingsActions.oneReaderWindowPerPublication.TAction |
         settingsActions.libraryView.TAction |
         settingsActions.lcpAutoDeleteExpiredPublications.TAction |
         settingsActions.lcpAutoDeleteExpiredPublicationsForced.TAction,
@@ -38,6 +44,24 @@ function settingsReducer_(
                 ...initialState,
                 ...state,
                 minimizeLibraryToTray: action.payload.minimizeLibraryToTray,
+            };
+        case settingsActions.keepLibraryWindowInBackgroundOnReaderClose.ID:
+            return {
+                ...initialState,
+                ...state,
+                keepLibraryWindowInBackgroundOnReaderClose: action.payload.keepLibraryWindowInBackgroundOnReaderClose,
+            };
+        case settingsActions.keepLibraryWindowInBackgroundOnReaderOpen.ID:
+            return {
+                ...initialState,
+                ...state,
+                keepLibraryWindowInBackgroundOnReaderOpen: action.payload.keepLibraryWindowInBackgroundOnReaderOpen,
+            };
+        case settingsActions.oneReaderWindowPerPublication.ID:
+            return {
+                ...initialState,
+                ...state,
+                oneReaderWindowPerPublication: action.payload.oneReaderWindowPerPublication,
             };
         case settingsActions.libraryView.ID:
             return {

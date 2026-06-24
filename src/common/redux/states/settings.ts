@@ -8,6 +8,9 @@
 export interface ISettingsState {
     enableAPIAPP: boolean; // false by default
     minimizeLibraryToTray: boolean; // false by default
+    keepLibraryWindowInBackgroundOnReaderOpen: boolean; // false by default
+    keepLibraryWindowInBackgroundOnReaderClose: boolean; // false by default
+    oneReaderWindowPerPublication: boolean; // false by default
     lcpAutoDeleteExpiredPublications: boolean; // false by default
     // Runtime-only command-line override. It is intentionally excluded from persisted state.
     lcpAutoDeleteExpiredPublicationsForced: boolean; // false by default
@@ -29,6 +32,15 @@ export interface ILibraryViewSettingsState {
 
 export const settingsMinimizeLibraryToTrayIsEnabled = (settings?: Partial<ISettingsState>) =>
     settings?.minimizeLibraryToTray === true;
+
+export const settingsKeepLibraryWindowInBackgroundOnReaderOpenIsEnabled = (settings?: Partial<ISettingsState>) =>
+    settings?.keepLibraryWindowInBackgroundOnReaderOpen === true;
+
+export const settingsKeepLibraryWindowInBackgroundOnReaderCloseIsEnabled = (settings?: Partial<ISettingsState>) =>
+    settings?.keepLibraryWindowInBackgroundOnReaderClose === true;
+
+export const settingsOneReaderWindowPerPublicationIsEnabled = (settings?: Partial<ISettingsState>) =>
+    settings?.oneReaderWindowPerPublication === true;
 
 export const settingsLcpAutoDeleteExpiredPublicationsIsEnabled = (settings?: Partial<ISettingsState>) =>
     settings?.lcpAutoDeleteExpiredPublications === true ||
