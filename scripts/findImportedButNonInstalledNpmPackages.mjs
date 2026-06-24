@@ -4,11 +4,6 @@ import path from "path";
 const importedNpmPackages = new Set();
 
 const ignoreds = [
-    /^tsc-alias$/,
-    /^taze$/,
-    /^tslib$/,
-    /^i18next-locales-sync$/,
-    /^@typescript\/native-preview$/,
     /^@r2-.+-js\/.+$/,
     /^r2-.+-js$/,
     /^r2-utils-js\/dist\/es8-es2017\/src\/_utils\/JsonUtils$/,
@@ -19,6 +14,11 @@ const ignoreds = [
     /^reflect-metadata$/,
     /^regenerator-runtime$/, // import "regenerator-runtime/runtime" without 'from'
     // BUILD TOOLS not used in source code:
+    /^tsc-alias$/,
+    /^taze$/,
+    /^tslib$/,
+    /^i18next-locales-sync$/,
+    /^@typescript\/native-preview$/,
     /^jest.*/,
     /^stylelint.*/,
     /^@types\/.+$/,
