@@ -27,6 +27,7 @@
   "scripts": {
     "__postinstall": "node -e \"const path = require('path'); const fs = require('fs'); const filePath = path.join(process.cwd(), 'node_modules/ts-loader/dist/index.js'); let fileStr = fs.readFileSync(filePath, { encoding: 'utf8' }); fileStr = fileStr.replace(/, rootDir: undefined/, ''); fs.writeFileSync(filePath, fileStr, { encoding: 'utf8' });\"",
     "clean": "rimraf dist && rimraf release",
+    "icons:update": "bash ./scripts/update-icons.sh",
     "test": "cross-env JEST_TESTS=1 jest --config=jest.config.js --verbose --runInBand --bail=1 --no-cache \"test\"",
     "testFile": "cross-env JEST_TESTS=1 jest --config=jest.config.js --verbose --runInBand --bail=1 --no-cache ",
     "test:pdf-annotations:harness:install": "playwright install chromium",
